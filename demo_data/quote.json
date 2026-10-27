@@ -1,0 +1,21 @@
+{
+  "job_title": "Front brakes",
+  "car": "2017 Mazda 3",
+  "customer": "Mia",
+  "items": [
+    {"name": "Front brake pads", "kind": "part", "status": "needed_now", "evidence": "Pads at 2 mm (photo taken)",
+     "price": null, "hours": null, "rate": null, "warranty": null,
+     "options": [
+       {"tier": "Economy", "price": 90, "warranty": "12 months", "brand": null},
+       {"tier": "OEM", "price": 160, "warranty": "12 months / 20,000 km", "brand": null},
+       {"tier": "Premium", "price": 210, "warranty": "24 months", "brand": null}
+     ]},
+    {"name": "Front rotors (pair)", "kind": "part", "status": "can_wait", "evidence": "22.4 mm (minimum 22 mm)",
+     "price": 240, "hours": null, "rate": null, "warranty": null, "options": []},
+    {"name": "Brake fluid flush", "kind": "service", "status": "optional", "evidence": "Last change unknown",
+     "price": 90, "hours": null, "rate": null, "warranty": null, "options": []},
+    {"name": "Labour", "kind": "labour", "status": "needed_now", "evidence": null,
+     "price": 135, "hours": 1.5, "rate": 90, "warranty": "12 months workmanship", "options": []}
+  ],
+  "missing_info": ["Brand and part number for each pad option", "Rotor brand and warranty"]
+}

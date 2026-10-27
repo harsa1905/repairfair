@@ -1,0 +1,14 @@
+# Secrets: the OpenAI key lives here and must never be committed
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editors and OS
+.claude/
+.vscode/
+Thumbs.db
+.DS_Store

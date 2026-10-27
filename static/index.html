@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepairFair · Standard quote prototype</title>
+  <link rel="icon" href="/static/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="/static/logo.svg" alt="" class="logo">
+      <div>
+        <div class="wordmark">Repair<span>Fair</span></div>
+        <div class="tagline">The standard quote · working prototype</div>
+      </div>
+    </div>
+    <div class="legend" aria-label="Urgency colours">
+      <span class="chip needed_now"><i></i>Needed now</span>
+      <span class="chip can_wait"><i></i>Can wait</span>
+      <span class="chip optional"><i></i>Optional</span>
+    </div>
+    <div class="controls">
+      <span id="aiBadge" class="pill">Checking AI…</span>
+      <label class="switch"><input type="checkbox" id="demoMode"><span class="track"><span class="knob"></span></span>Demo mode</label>
+      <button id="resetBtn" class="btn-ghost">↺ Reset</button>
+    </div>
+  </header>
+
+  <div class="viewport" id="viewport">
+    <main class="stage" id="stage">
+      <section class="side">
+        <div class="side-label"><span class="role ws">Workshop</span>builds the quote with AI</div>
+        <div class="phone ws-phone">
+          <div class="island"></div>
+          <div class="status"><span class="clock">9:41</span><span class="sig"><svg width="17" height="11" viewBox="0 0 17 11" aria-hidden="true"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" aria-hidden="true"><path d="M7.5 2.1c2.2 0 4.2.8 5.7 2.2l1.1-1.2A9.9 9.9 0 0 0 7.5.5 9.9 9.9 0 0 0 .7 3.1l1.1 1.2a8.3 8.3 0 0 1 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.2a6.6 6.6 0 0 0-9 0l1.1 1.2c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 1 .2 1.3.5L7.5 10.8 6.2 9c.3-.3.8-.5 1.3-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="18" height="8" rx="1.8"/><path d="M23 4v4c.8-.3 1.4-1.1 1.4-2S23.8 4.3 23 4z" opacity=".45"/></svg></span></div>
+          <div class="app-head">
+            <img src="/static/logo.svg" alt="" class="mini-logo">
+            <div><div class="ah1">RepairFair for workshops</div><div class="ah2" id="wsTitle">City Auto</div></div>
+          </div>
+          <div class="tabs" id="wsTabs">
+            <button class="tab on" data-tab="quote">Quote</button>
+            <button class="tab" data-tab="history">Job history</button>
+          </div>
+          <div class="screen" id="ws"></div>
+          <div class="toast" id="wsToast"></div>
+        </div>
+      </section>
+
+      <div class="flow" aria-hidden="true">
+        <div class="lane"><span class="dotline"></span><span class="packet" id="packetOut">✉</span></div>
+        <div class="flow-label">text link</div>
+        <div class="lane back"><span class="dotline"></span><span class="packet back" id="packetBack">✓</span></div>
+        <div class="flow-label">approval</div>
+      </div>
+
+      <section class="side">
+        <div class="side-label"><span class="role dr">Driver</span>no app, opens a text link</div>
+        <div class="phone dr-phone">
+          <div class="island"></div>
+          <div class="status"><span class="clock" id="drClock">9:52</span><span class="sig"><svg width="17" height="11" viewBox="0 0 17 11" aria-hidden="true"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg><svg width="15" height="11" viewBox="0 0 15 11" aria-hidden="true"><path d="M7.5 2.1c2.2 0 4.2.8 5.7 2.2l1.1-1.2A9.9 9.9 0 0 0 7.5.5 9.9 9.9 0 0 0 .7 3.1l1.1 1.2a8.3 8.3 0 0 1 5.7-2.2zm0 3.2c1.3 0 2.5.5 3.4 1.3l1.1-1.2a6.6 6.6 0 0 0-9 0l1.1 1.2c.9-.8 2.1-1.3 3.4-1.3zm0 3.2c.5 0 1 .2 1.3.5L7.5 10.8 6.2 9c.3-.3.8-.5 1.3-.5z"/></svg><svg width="25" height="12" viewBox="0 0 25 12" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="18" height="8" rx="1.8"/><path d="M23 4v4c.8-.3 1.4-1.1 1.4-2S23.8 4.3 23 4z" opacity=".45"/></svg></span></div>
+          <div class="dr-top" id="drTop"></div>
+          <div class="screen dr-screen" id="dr"></div>
+          <div class="dock" id="drDock"></div>
+          <div class="banner-slot" id="drBanner"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="note">University of Sydney student prototype · The AI only organises what the mechanic types. It never invents prices, brands or warranties. Names and prices are illustrative.</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

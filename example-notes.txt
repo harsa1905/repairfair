@@ -1,0 +1,57 @@
+REPAIRFAIR DEMO: EXAMPLE NOTES
+Copy a "Quote" block into the Mechanic's notes box, and the matching "Extra" block into the Found extra work box.
+
+==================== EXAMPLE 1: Brakes (the default) ====================
+--- Quote ---
+2017 Mazda 3, customer Mia.
+Front pads at 2mm, need doing now (photo taken). Pad options: economy $90 12 months, OEM $160 12 months/20,000 km, premium ceramic $210 24 months.
+Front rotors 22.4mm, min 22mm, can wait till next service, $240 a pair.
+Brake fluid last change unknown, optional flush $90.
+Labour 1.5 hrs at $90/hr, 12 month workmanship warranty.
+
+--- Extra ---
+Found a cracked rear brake hose (photo taken), needs doing now, shouldn't drive like this.
+Hose options: economy $45 12 months, OEM $70 12 months.
+Labour 0.5 hr at $90/hr.
+
+==================== EXAMPLE 2: EV (Tesla tyres) ====================
+--- Quote ---
+2021 Tesla Model 3, customer Priya.
+Front tyres at 2.5mm tread, need replacing now (photo taken).
+Front tyre options for the pair: economy $420 12 months, OEM-spec $640 12 months, premium EV-rated $760 with 50,000 km tread warranty.
+Wheel alignment $120, recommended with new tyres.
+12V battery tested weak, can wait but will need replacing within 6 months, $250.
+Cabin air filter dirty, optional, $60.
+Labour 1 hr at $110/hr for fitting and balancing.
+
+--- Extra ---
+Rear brake calipers sticking from corrosion (common on EVs because regen means the brakes are barely used), photo taken, needs doing now.
+Caliper options: economy fix (clean and lubricate the existing calipers) $180 3 months, OEM replacement calipers $420 a pair 12 months.
+Labour 1 hr at $110/hr.
+
+==================== EXAMPLE 3: Logbook service with extras ====================
+--- Quote ---
+2019 Toyota Corolla, customer Sam, 60,000 km logbook service.
+Logbook service $355 (published capped price), needed now.
+Air filter dirty (photo taken), can wait, $45.
+Fuel injector cleaning, optional, $89.
+Wiper blades worn, optional, $40.
+Coolant flush offered $150 but not due in the manufacturer's schedule until 160,000 km, optional.
+
+--- Extra ---
+Front sway bar link worn, clunking over bumps (photo taken), needed now.
+Options: economy $60 6 months, OEM $110 12 months.
+Labour 0.8 hr at $120/hr.
+
+==================== EXAMPLE 4: Older car with a used-parts option ====================
+--- Quote ---
+2009 Toyota Corolla, customer Ben, 245,000 km.
+Alternator not charging (tested at 12.1V, photo of test taken), needs doing now or the battery will go flat.
+Alternator options: used from a recycler $180 3 months, aftermarket new $320 12 months, OEM genuine $560 24 months.
+Drive belt cracked, can wait, $65.
+Labour 1.2 hrs at $95/hr.
+
+--- Extra ---
+Battery failed load test after running flat (photo taken), needs doing now.
+Battery options: economy $190 24 months, premium $280 36 months.
+Labour 0.3 hr at $95/hr.
