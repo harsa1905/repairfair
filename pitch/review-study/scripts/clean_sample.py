@@ -119,6 +119,7 @@ def main():
                 dropped["outside the 21 councils"] += 1
                 continue
             title = p.get("title") or ""
+            stars = p.get("reviews_per_rating") or {}
             kept.append({
                 "place_id": pid,
                 "data_id": p.get("data_id", ""),
@@ -132,6 +133,8 @@ def main():
                 "lon": lon,
                 "review_count": p.get("review_count", 0),
                 "rating": p.get("review_rating", ""),
+                # Star breakdown of all the workshop's reviews, used to estimate prevalence.
+                **{f"stars_{s}": stars.get(str(s), 0) for s in range(1, 6)},
             })
 
     fields = list(kept[0].keys()) if kept else []
