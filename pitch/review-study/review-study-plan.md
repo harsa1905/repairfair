@@ -34,7 +34,7 @@ New research for the demo-day pitch (Wed 4 Nov). Until this study is done, none 
    - drop dealerships, tyre-only, panel/smash, glass, detailing and parts shops;
    - keep chains but flag them.
 3. **Sample:** 15 workshops per region, chosen at random with a fixed seed (2026), 90 in total. If a region has fewer than 15, take all of them and say so.
-4. **Reviews:** download reviews for the 90 workshops, then keep each one's **newest 100** so the time window is similar across workshops.
+4. **Reviews:** download the **newest 60** reviews for each of the 90 workshops, so the time window is similar across workshops (see Runs).
 5. **Privacy at import:**
    - delete reviewer names, profile links and photos immediately;
    - give each review an ID (`R0001`…);
@@ -71,11 +71,28 @@ New research for the demo-day pitch (Wed 4 Nov). Until this study is done, none 
 - Ethics: aggregated public reviews with no reviewer names. **The team has the go-ahead (confirmed by Sameep, 30 Oct).**
 - The coding is AI-assisted. The human check measures how reliable it is, and the result is disclosed.
 
-## Runs
-Both runs use the official Windows release (`google_maps_scraper-1.18.1-windows-amd64.exe`) with `DISABLE_TELEMETRY=1`. The tool sends anonymous usage statistics unless that is set.
+## Runs (updated 30 Oct after testing)
+Testing showed that the scraper's extended-reviews option is now blocked by Google (HTTP 403). Without it, the scraper gives only 5 "most relevant" reviews per workshop. So:
 
-1. **List the workshops:** `-input queries.txt -results places.json -json -depth 2 -c 4 -lang en -exit-on-inactivity 3m`. Expect about 600–900 places in about 10 minutes.
-2. **Reviews for the sample:** `-input sample-links.txt -results reviews.json -json -extra-reviews -c 2 -lang en -exit-on-inactivity 5m`. 90 workshops, up to about 300 reviews each; we keep the newest 100.
+1. **List the workshops, free:** gosom/google-maps-scraper v1.18.1, official Windows release, run with `DISABLE_TELEMETRY=1`:
+   `-input queries.txt -results ../raw/places.json -json -depth 2 -c 4 -lang en -exit-on-inactivity 3m`
+   - Tested on one suburb: 20 workshops in about 20 seconds.
+   - Then `scripts/clean_sample.py` keeps repair workshops, places each in its council (ABS 2025 boundaries), maps councils to regions, and draws **15 per region** (seed 2026).
+   - The script also drops workshops that are closed or have fewer than 10 reviews.
+2. **Reviews, Firecrawl Maps:** the **newest 60** reviews per sampled workshop (`sort=newest`, `count=60`):
+   - one request per workshop at 10 credits, so **90 workshops = 900 credits** on a fresh free account (1,000 a month);
+   - requests sent in batches of 10;
+   - each batch's results are saved with a manifest of workshop IDs;
+   - then `scripts/prep_reviews.py` strips reviewer details, assigns review IDs, flags keywords and writes the coding batches.
+
+**Change from the original plan:** the **newest 60** reviews, not the newest 100. One request returns at most 60, and 60 per workshop keeps us within the free credits.
+
+### Run-day checklist
+- [ ] Firecrawl connector in this session switched to the new account (done by Sameep).
+- [ ] Firecrawl Maps provider terms accepted in that account's dashboard, if it asks.
+- [ ] Listing run, then `clean_sample.py`. Check `listing_summary.json`: at least 15 workshops per region?
+- [ ] Reviews in 9 batches of 10 workshops; check none is missing.
+- [ ] `prep_reviews.py`, then Claude's coding, then the 60-review check sheet for the two teammates.
 
 ## Timeline
 | When | What | Who |
