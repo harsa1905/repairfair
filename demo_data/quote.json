@@ -4,6 +4,7 @@
   "customer": "Mia",
   "items": [
     {"name": "Front brake pads", "kind": "part", "status": "needed_now", "evidence": "Pads at 2 mm (photo taken)",
+     "why": "Your front pads are worn to 2 mm, so braking is weaker and they can start damaging the rotors.",
      "price": null, "hours": null, "rate": null, "warranty": null,
      "options": [
        {"tier": "Economy", "price": 90, "warranty": "12 months", "brand": null},
@@ -11,10 +12,13 @@
        {"tier": "Premium", "price": 210, "warranty": "24 months", "brand": null}
      ]},
     {"name": "Front rotors (pair)", "kind": "part", "status": "can_wait", "evidence": "22.4 mm (minimum 22 mm)",
+     "why": "Your rotors are 22.4 mm, just above the 22 mm minimum. Safe for now, but due at your next service.",
      "price": 240, "hours": null, "rate": null, "warranty": null, "options": []},
     {"name": "Brake fluid flush", "kind": "service", "status": "optional", "evidence": "Last change unknown",
+     "why": "There's no record of the last fluid change. Old brake fluid absorbs water, which can make the pedal feel soft.",
      "price": null, "hours": null, "rate": null, "warranty": null, "options": []},
     {"name": "Labour", "kind": "labour", "status": "needed_now", "evidence": null,
+     "why": "1.5 hours to fit the new pads and check the brakes, with a 12-month workmanship warranty.",
      "price": 135, "hours": 1.5, "rate": 90, "warranty": "12 months workmanship", "options": []}
   ],
   "missing_info": ["Price for the brake fluid flush", "Brand and part number for each pad option", "Rotor brand and warranty"]

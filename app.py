@@ -37,6 +37,7 @@ Return JSON only, in exactly this shape:
       "kind": "part" | "labour" | "service",
       "status": "needed_now" | "can_wait" | "optional" | "to_confirm",
       "evidence": "measurement or photo note from the notes, else null",
+      "why": "one plain-English sentence for the driver on why this item is on the quote, else null",
       "price": number or null,          // for items without part options
       "hours": number or null,          // labour only
       "rate": number or null,           // labour only, dollars per hour
@@ -60,6 +61,9 @@ Rules:
 - missing_info: the most important things still to confirm, at most 4, most important first. Start with missing prices
   for items needed now, then missing brands or part numbers for the main parts (e.g. "Brand and part number for the pad options"),
   then missing warranties.
+- why: explain to a driver who isn't a mechanic, in under 25 words, why this item is recommended at its status, using only
+  what the mechanic observed (e.g. "Your front pads are worn to 2 mm, so braking is weaker and they can damage the rotors.").
+  Don't add measurements, limits, prices or brands that aren't in the notes. For labour, say what the time covers.
 - Part tiers: "Used" = second-hand or recycled part; "Economy" = budget aftermarket; "OEM" = genuine or same as factory;
   "Premium" = better than OEM. Only include tiers the mechanic mentions.
 - Labour is its own item with kind "labour", hours and rate, and its warranty if given.
@@ -100,7 +104,7 @@ def normalise(raw):
         if kind == "labour" and price is None and hours is not None and rate is not None:
             price = round(hours * rate, 2)
         items.append({"name": _str(it["name"]), "kind": kind, "status": status,
-                      "evidence": _str(it.get("evidence")), "price": price, "hours": hours, "rate": rate,
+                      "evidence": _str(it.get("evidence")), "why": (_str(it.get("why")) or "")[:220] or None, "price": price, "hours": hours, "rate": rate,
                       "warranty": _str(it.get("warranty")), "brand": _str(it.get("brand")),
                       "part_no": _str(it.get("part_no")), "options": opts})
     # Labour belongs to the job: if any part is needed now and the AI left labour unclear, mark labour needed now too

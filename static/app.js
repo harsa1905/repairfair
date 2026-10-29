@@ -253,6 +253,7 @@ function wsCard(it, i, group) {
   } else b += `<div class="edrow"><span>Price</span>${numIn(it.price, "price", d)}</div>`;
   if (!it.options.length && (it.brand || it.part_no)) b += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(" · "))}</div>`;
   if (warrantyOf(it) && !it.options.length) b += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
+  b += `<label class="why-ed"><span>${esc(customer())} reads (“${whyLabel(it)}”)</span><textarea rows="3" data-act="why" ${d} placeholder="Explain it in plain words for ${esc(customer())}">${esc(it.why || "")}</textarea></label>`;
   return `<div class="card u-${it.status} ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${esc(it.name)}<span class="edtag">Edited</span>${it.fromBook ? '<span class="bktag">Price book</span>' : ""}</span>${sel}</div>${b}</div>`;
 }
 
@@ -372,12 +373,15 @@ function wsBookTab() {
 }
 
 // ---------- driver ----------
+const whyLabel = (it) => (it.kind === "labour" ? "What does this cover?"
+  : { needed_now: "Why is this needed now?", can_wait: "Why can this wait?", optional: "Why is this suggested?" }[it.status] || "Why is this on the quote?");
 function drCard(it, i, group, toggle = true) {
   let h = `<div class="card u-${it.status} ${toggle && !it.approved ? "off" : ""}"><div class="ch"><span class="it">${esc(it.name)}</span>
     ${it.options.length ? `<span class="chip ${it.status}"><i></i>${STATUS[it.status]}</span>` : `<span class="price">${money(it.price)}</span>`}</div>`;
   if (!it.options.length) h += `<div class="ev"><span class="chip ${it.status}"><i></i>${STATUS[it.status]}</span></div>`;
   if (it.evidence) h += `<div class="ev">${/photo/i.test(it.evidence) ? '<span class="photo">📷</span>' : ""}${esc(it.evidence)}</div>`;
   if (it.kind === "labour" && it.hours != null) h += `<div class="ev">${it.hours} hrs × ${money(it.rate)}</div>`;
+  if (it.why) h += `<button class="why-btn ${it.whyOpen ? "open" : ""}" data-act="why-toggle" data-group="${group}" data-i="${i}">${whyLabel(it)}</button>${it.whyOpen ? `<div class="why">${esc(it.why)}<span>From your mechanic's inspection notes</span></div>` : ""}`;
   if (it.options.length) {
     h += `<div class="opts">${it.options.map((o, k) => `<button class="opt ${k === it.opt ? "sel" : ""}" data-act="opt" data-group="${group}" data-i="${i}" data-k="${k}"><span class="t">${o.tier}${k === it.opt ? " ✓" : ""}</span><b>${money(o.price)}</b><span class="w">${esc((o.warranty || "warranty TBC").replace(/\s*\/\s*/g, " / "))}</span></button>`).join("")}</div>`;
     const o = it.options[it.opt];
@@ -524,7 +528,7 @@ function recordJob() {
 
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-act], [data-tab]");
-  if (!b || b.tagName === "SELECT" || b.tagName === "INPUT") return;
+  if (!b || b.tagName === "SELECT" || b.tagName === "INPUT" || b.tagName === "TEXTAREA") return;
   if (b.dataset.tab) { state.tab = b.dataset.tab; render(); return; }
   const act = b.dataset.act, i = Number(b.dataset.i);
   if (act === "build") { state.notes = $("notes").value; build("quote"); return; }
@@ -551,6 +555,7 @@ document.addEventListener("click", (e) => {
   if (act === "open-thread") state.dr = "thread";
   if (act === "open-quote") { state.dr = "quote"; if (!state.viewedAt) state.viewedAt = new Date(); }
   if (act === "opt") grp(b.dataset.group)[i].opt = Number(b.dataset.k);
+  if (act === "why-toggle") { const it = grp(b.dataset.group)[i]; it.whyOpen = !it.whyOpen; }
   if (act === "yes") grp(b.dataset.group)[i].approved = true;
   if (act === "no") grp(b.dataset.group)[i].approved = false;
   if (act === "approve") {
@@ -601,6 +606,10 @@ document.addEventListener("change", (e) => {
 });
 document.addEventListener("input", (e) => {
   const t = e.target;
+  if (t.dataset.act === "why") {
+    const it = grp(t.dataset.group)[Number(t.dataset.i)];
+    it.why = t.value.trim() || null; it.edited = true; t.closest(".card").classList.add("edited"); return;
+  }
   if (t.dataset.act === "book") { state.book[Number(t.dataset.i)].price = t.value === "" ? null : Math.max(0, Number(t.value)); t.parentElement.classList.toggle("empty", t.value === ""); return; }
   if (t.classList.contains("num")) {
     // Update in place (no re-render) so typing and tabbing between price boxes keeps focus
@@ -666,7 +675,7 @@ async function runScene(scene) {
     checkAll,
     async () => { click('[data-act="send"]'); await sleep(1200); },
     async () => { click('[data-act="open-thread"]'); await sleep(400); },
-    async () => { click('[data-act="open-quote"]'); await sleep(400); },
+    async () => { click('[data-act="open-quote"]'); await sleep(400); click('[data-act="why-toggle"]'); await sleep(200); },
     async () => { click('[data-act="approve"]'); await sleep(900); },
     async () => { click('[data-act="build-extra"]'); await waitFor(() => state.ws === "extra_draft"); },
     async () => { await checkAll(); click('[data-act="send-extra"]'); await sleep(1200); },
