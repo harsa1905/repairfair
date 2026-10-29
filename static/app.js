@@ -52,7 +52,15 @@ const fresh = () => ({
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
   history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null,
   book: SEED_BOOK.map((e) => ({ ...e })),
+  // Items a driver said "not now" to become follow-ups; the seeded ones come from past jobs in the history
+  followups: [
+    { id: "F-1036", customer: "Priya", car: "2021 Tesla Model 3", item: "Wheel alignment", price: 120, advised: "front tyres · Fri 9 Oct", due: new Date(Date.now() - 2 * 86400000), status: "due" },
+    { id: "F-1039", customer: "Tom", car: "2015 Hyundai i30", item: "Fuel injector cleaning", price: 89, advised: "logbook service · Wed 14 Oct", due: new Date(Date.now() + 3 * 86400000), status: "due" },
+  ],
 });
+// Default reminder delay (months) by urgency, for items the driver didn't approve
+const FU_MONTHS = { needed_now: 0.5, to_confirm: 1, can_wait: 3, optional: 6 };
+const FU_CHOICES = [[0.5, "2 weeks"], [1, "1 month"], [3, "3 months"], [6, "6 months"]];
 let state = fresh();
 let lastDr = null, lastWs = null, timers = [];
 
@@ -62,6 +70,8 @@ const money = (n) => (n == null ? "price to confirm" : "$" + (Number.isInteger(n
 const timeOf = (d) => d.toLocaleTimeString("en-AU", { hour: "numeric", minute: "2-digit" }).replace(/\s/g, " ").toLowerCase();
 const dayOf = (d) => d.toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short" }).replace(",", "");
 const stampOf = (d) => `${timeOf(d)} · ${dayOf(d)}`;
+const addMonths = (d, m) => { const x = new Date(d); if (m < 1) x.setDate(x.getDate() + Math.round(m * 30)); else x.setMonth(x.getMonth() + m); return x; };
+const whenOf = (d) => (d - Date.now() < 45 * 86400000 ? dayOf(d) : d.toLocaleDateString("en-AU", { month: "short", year: "numeric" }));
 const demoOn = () => $("demoMode").checked;
 const later = (ms, fn) => timers.push(setTimeout(fn, ms));
 const STAGES = ["Checked in", "Quote approved", "In repair", "Quality check", "Ready for pickup"];
@@ -285,7 +295,8 @@ function wsQuoteTab() {
         <div class="ok"><b>${esc(customer())} approved ${money(sumApproved(q.items))}</b>Start the work on the approved items only.</div>
         <div class="stamp"><span class="ic">✓</span>Approved by text link · ${esc(stampOf(state.approvedAt))}</div>
         ${wsJob()}
-        <div class="lbl">Customer's decisions</div><div class="card u-to_confirm" style="padding-top:6px;padding-bottom:6px">${decisions(decItems(q.items))}</div>`;
+        <div class="lbl">Customer's decisions</div><div class="card u-to_confirm" style="padding-top:6px;padding-bottom:6px">${decisions(decItems(q.items))}</div>
+        ${wsFollowupsBooked()}`;
       if (state.ws === "approved") {
         h += `<div class="lbl" style="margin-top:14px">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
           <button class="btn ai" data-act="build-extra">✦ Build extra item with AI</button>${err}`;
@@ -335,12 +346,38 @@ function wsJob() {
     <div class="small" style="text-align:left;margin-top:6px">${esc(customer())} sees each update and the ready time live.</div></div>`;
 }
 
+// "Not now" items become follow-ups: booked on the job, then due in Job history
+function wsFollowupsBooked() {
+  const fs = ourFollowups();
+  if (!fs.length) return "";
+  return `<div class="lbl">Follow-ups booked <span class="pro">PRO</span></div><div class="card fu">${fs.map((f) => `<div class="fu-row ${f.status}">
+      <div class="fu-t"><b>${esc(f.item)}</b><span>${money(f.price)} · ${esc(customer())} said not now</span></div>
+      ${f.status === "off" ? `<span class="fu-off">${esc(f.customer)} opted out</span>`
+        : `<select class="fu-sel" data-act="fu-due" data-id="${f.id}">${FU_CHOICES.map(([m, l]) => `<option value="${m}" ${m === f.months ? "selected" : ""}>Remind in ${l}</option>`).join("")}</select>`}</div>`).join("")}
+    <div class="small" style="text-align:left">RepairFair texts ${esc(customer())} when each one is due.</div></div>`;
+}
+function wsFollowupsDue() {
+  const fs = [...state.followups].sort((a, b) => a.due - b.due);
+  const due = fs.filter((f) => f.status === "due").reduce((s, f) => s + (f.price || 0), 0);
+  return `<div class="fu-head"><b>Follow-ups</b><span class="pro">PRO</span><span class="fu-sum">${due ? `${money(due)} of advised work due` : "All caught up"}</span></div>
+    <div class="card fu">${fs.map((f) => {
+      const late = f.due < Date.now();
+      const right = f.status === "due" ? `<button class="ck-btn" data-act="fu-send" data-id="${f.id}">Send reminder</button>`
+        : f.status === "sent" ? `<span class="ck-done">Reminder sent</span>`
+        : f.status === "off" ? `<span class="fu-off">Opted out</span>` : `<span class="fu-when">${esc(whenOf(f.due))}</span>`;
+      return `<div class="fu-row ${f.ours ? "new" : ""}"><div class="fu-t"><b>${esc(f.item)} · ${money(f.price)}</b>
+        <span>${esc(f.customer)} · ${esc(f.car)} · advised ${esc(f.advised.split(" · ")[1] || "")}</span>
+        ${f.status === "due" ? `<span class="fu-due ${late ? "late" : ""}">${late ? "Due since" : "Due"} ${esc(dayOf(f.due))}</span>` : ""}</div>${right}</div>
+        ${f.status === "sent" ? `<div class="bubble me fu-bub">${esc(reminderText(f))}</div>` : ""}`;
+    }).join("")}</div>`;
+}
+
 function jobTotal(j) { return j.items.filter((i) => i.approved).reduce((s, i) => s + (i.price || 0), 0) + (j.extra && j.extra.decision === "approved" ? j.extra.items.reduce((s, i) => s + (i.price || 0), 0) : 0); }
 
 function wsHistoryTab() {
   const q = state.search.trim().toLowerCase();
   const jobs = state.history.filter((j) => !q || [j.id, j.customer, j.car, j.job, ...j.items.map((i) => i.name)].join(" ").toLowerCase().includes(q));
-  let h = `<input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
+  let h = `${wsFollowupsDue()}<div class="lbl">Jobs</div><input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
   if (!jobs.length) return h + `<div class="small">No jobs match “${esc(state.search)}”.</div>`;
   h += jobs.map((j) => {
     const open = state.open === j.id;
@@ -392,6 +429,15 @@ function drCard(it, i, group, toggle = true) {
   }
   if (toggle) h += `<div class="seg"><button class="yes ${it.approved ? "on" : ""}" data-act="yes" data-group="${group}" data-i="${i}">Approve</button><button class="no ${it.approved ? "" : "on"}" data-act="no" data-group="${group}" data-i="${i}">Not now</button></div>`;
   return h + `</div>`;
+}
+
+function drFollowups() {
+  const fs = ourFollowups();
+  if (!fs.length) return "";
+  return `<div class="lbl">Not now, but not forgotten</div><div class="card u-can_wait fu">${fs.map((f) => `<div class="fu-row ${f.status}">
+      <div class="fu-t"><b>${esc(f.item)}</b><span>${f.status === "off" ? "No reminder" : `We'll text you around ${esc(whenOf(f.due))}`}</span></div>
+      <button class="ck-link" data-act="fu-toggle" data-id="${f.id}">${f.status === "off" ? "Remind me" : "Don't remind me"}</button></div>`).join("")}
+    <div class="small" style="text-align:left">Nothing is booked. City Auto just checks in when it's due.</div></div>`;
 }
 
 function tbcBox(q) {
@@ -446,7 +492,7 @@ function renderDriver() {
         ${drStatus()}
         <div class="stamp"><span class="ic">✓</span>Saved to your service record · ${esc(stampOf(state.approvedAt))}</div>
         <div class="lbl">Your decisions</div><div class="card u-to_confirm" style="padding-top:6px;padding-bottom:6px">${decisions(decItems(q.items))}</div>
-        <div class="small">Items marked “not now” are saved, so you can come back to them later.</div>`;
+        ${drFollowups()}`;
     case "extra":
       return `<div class="qhero" style="background:linear-gradient(135deg,#2B3A40,#46585E)"><div class="k">New item · ${esc(q.job_title)}</div><div class="t">${esc(x.items[0].name)}</div><div class="m">Found mid-job · needs your OK</div></div>
         <div class="bigphoto"><span>📷 Photo from City Auto</span><span>tap to enlarge</span></div>
@@ -519,6 +565,19 @@ function fly(id) { const el = $(id); el.classList.remove("go"); void el.offsetWi
 const doc = (name) => (name === "extra" ? state.extra : state.quote);
 const grp = (name) => doc(name).items;
 
+function bookFollowups() {
+  const q = state.quote;
+  state.followups = state.followups.filter((f) => !f.ours);
+  q.items.forEach((it, k) => {
+    if (it.approved || it.kind === "labour") return;
+    const months = FU_MONTHS[it.status] ?? 3;
+    state.followups.push({ id: `F-1044-${k}`, ours: true, customer: customer(), car: q.car || "", item: itemLabel(it), price: priceOf(it),
+      advised: `${q.job_title.toLowerCase()} · ${dayOf(state.approvedAt)}`, months, due: addMonths(state.approvedAt, months), status: "scheduled", why: it.why });
+  });
+}
+const ourFollowups = () => state.followups.filter((f) => f.ours);
+const reminderText = (f) => `Hi ${f.customer}, it's City Auto. When we did your ${f.advised.split(" · ")[0]} we advised: ${f.item}${f.price != null ? ` (${money(f.price)})` : ""}. Want to book it in? Reply YES and we'll call. Reply STOP to opt out.`;
+
 function recordJob() {
   const q = state.quote;
   const job = { id: "J-1044", isNew: true, customer: customer(), car: q.car || "—", job: q.job_title,
@@ -555,11 +614,14 @@ document.addEventListener("click", (e) => {
   if (act === "open-thread") state.dr = "thread";
   if (act === "open-quote") { state.dr = "quote"; if (!state.viewedAt) state.viewedAt = new Date(); }
   if (act === "opt") grp(b.dataset.group)[i].opt = Number(b.dataset.k);
+  const fu = b.dataset.id && state.followups.find((f) => f.id === b.dataset.id);
+  if (act === "fu-toggle") fu.status = fu.status === "off" ? "scheduled" : "off";
+  if (act === "fu-send") { fu.status = "sent"; later(400, () => toast(`Reminder sent to ${fu.customer}`)); }
   if (act === "why-toggle") { const it = grp(b.dataset.group)[i]; it.whyOpen = !it.whyOpen; }
   if (act === "yes") grp(b.dataset.group)[i].approved = true;
   if (act === "no") grp(b.dataset.group)[i].approved = false;
   if (act === "approve") {
-    state.approvedAt = new Date(); state.ws = "approved"; state.dr = "approved"; recordJob(); fly("packetBack");
+    state.approvedAt = new Date(); state.ws = "approved"; state.dr = "approved"; recordJob(); bookFollowups(); fly("packetBack");
     state.stage = 1; state.stageAt = { 0: state.sentAt, 1: state.approvedAt }; state.readyBy = etaFrom(state.approvedAt, labourHrs(state.quote.items, true));
     later(700, () => toast(`${customer()} approved ${money(sumApproved(state.quote.items))}`));
   }
@@ -601,6 +663,10 @@ document.addEventListener("change", (e) => {
   if (s.dataset && s.dataset.act === "status") {
     const it = grp(s.dataset.group)[Number(s.dataset.i)];
     it.status = s.value; it.approved = s.value === "needed_now"; it.edited = true; render();
+  }
+  if (s.dataset && s.dataset.act === "fu-due") {
+    const f = state.followups.find((x) => x.id === s.dataset.id);
+    f.months = Number(s.value); f.due = addMonths(state.approvedAt, f.months); render();
   }
   if (s.dataset && s.dataset.act === "checked") { doc(s.dataset.group).checked = s.checked; renderWsDock(); }
 });

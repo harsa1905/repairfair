@@ -19,5 +19,6 @@ Open http://localhost:5000 in Chrome or Edge. Stop it with Ctrl+C.
 2. Driver: tap **Why is this needed now?** on the pads, pick a part option, set rotors and brake fluid to **Not now**, then **Approve selected items**.
 3. Workshop: **Build extra item with AI**, resolve its check the same way, tick **I've checked this extra item**, then **Send to Mia for approval**.
 4. Driver: **Approve**. Both phones show the final bill, which matches what was approved.
+5. Optional: Mia's **Not now** items are booked as follow-ups (she can tap **Don't remind me**). In **Job history**, tap **Send reminder** on a follow-up that's due.
 
 Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (it uses saved examples).
