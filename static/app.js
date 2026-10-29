@@ -82,9 +82,23 @@ function prepare(data) {
     const oem = it.options.findIndex((o) => o.tier === "OEM");
     it.opt = it.options.length ? (oem >= 0 ? oem : 0) : null;
     it.approved = it.status === "needed_now";
+    it.priceGap = needsPrice(it); it.priceTbc = false; it.edited = false;
   });
+  // Mechanic check: every gap the AI flagged must be resolved or marked "to confirm" before sending
+  data.checks = data.missing_info.map((text) => ({ text, how: null }));
+  data.checked = false; data.checkedAt = null;
   return data;
 }
+const needsPrice = (it) => (it.options.length ? it.options.some((o) => o.price == null) : it.price == null);
+function checkRows(q) {
+  const rows = [];
+  q.items.forEach((it, i) => { if (it.priceGap) rows.push({ kind: "price", i, text: `Price for ${it.name}`, how: !needsPrice(it) ? "resolved" : it.priceTbc ? "tbc" : null }); });
+  q.checks.forEach((c, i) => rows.push({ kind: "info", i, text: c.text, how: c.how }));
+  return rows;
+}
+const openChecks = (q) => checkRows(q).filter((r) => !r.how).length;
+const canSend = (q) => !openChecks(q) && q.checked;
+const tbcList = (q) => checkRows(q).filter((r) => r.how === "tbc").map((r) => r.text);
 const priceOf = (it) => (it.options.length ? it.options[it.opt].price : it.price);
 const warrantyOf = (it) => (it.options.length ? it.options[it.opt].warranty : it.warranty);
 const sumApproved = (items) => items.filter((i) => i.approved).reduce((s, i) => s + (priceOf(i) || 0), 0);
@@ -133,7 +147,25 @@ async function build(kind) {
 // ---------- shared bits ----------
 const srcTag = (src) => (src === "ai" ? `<span class="src">✦ Built by AI from your notes · check and edit</span>`
                                       : `<span class="src demo">Saved example</span>`);
-const missingBox = (list) => (list && list.length ? `<div class="missing"><b>To confirm before sending</b>${list.map(esc).join(" · ")}</div>` : "");
+function checkPanel(q, group) {
+  const rows = checkRows(q), done = rows.filter((r) => r.how).length;
+  if (!rows.length) return `<div class="check clear"><div class="ck-head"><b>Mechanic check</b><span>Nothing flagged</span></div>
+    <div class="ck-sub">The AI found no gaps. Still check each item and price below.</div></div>`;
+  return `<div class="check ${done === rows.length ? "clear" : ""}"><div class="ck-head"><b>Mechanic check</b><span>${done} of ${rows.length} resolved</span></div>
+    <div class="ck-sub">The AI flagged these gaps. Fix each one, or send it to ${esc(customer())} as “to confirm”.</div>
+    ${rows.map((r) => {
+      const d = `data-group="${group}" data-i="${r.i}" data-kind="${r.kind}"`;
+      const acts = r.how === "resolved" ? `<span class="ck-done">${r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
+        : r.how === "tbc" ? `<span class="ck-tbc">To confirm</span><button class="ck-link" data-act="ck-undo" ${d}>Undo</button>`
+        : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Mark TBC</button>`;
+      return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic">${r.how === "resolved" ? "✓" : r.how === "tbc" ? "?" : "!"}</span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
+    }).join("")}</div>`;
+}
+function refreshCheck(group) {
+  const el = $("checks-" + group);
+  if (el) el.innerHTML = checkPanel(doc(group), group);
+  renderWsDock();
+}
 function decisions(items) {
   return items.map((i) => `<div class="dec ${i.approved ? "" : "no"}"><span class="n"><span class="${i.approved ? "y" : "x"}">${i.approved ? "✓" : "–"}</span>${esc(i.name)}</span><span class="s">${money(i.price ?? null)}</span></div>`).join("");
 }
@@ -155,16 +187,24 @@ function toast(text) {
 }
 
 // ---------- workshop ----------
+// Editable draft card: the mechanic can fix status, prices, labour and which part tier is pre-selected
+const numIn = (v, act, d, pre = "$") => `<span class="num-wrap ${v == null ? "empty" : ""}">${pre}<input class="num" type="number" min="0" step="any" inputmode="decimal" data-act="${act}" ${d} value="${v ?? ""}" placeholder="?"></span>`;
 function wsCard(it, i, group) {
-  const sel = `<select class="chip ${it.status}" data-act="status" data-group="${group}" data-i="${i}">
+  const d = `data-group="${group}" data-i="${i}"`;
+  const sel = `<select class="chip ${it.status}" data-act="status" ${d}>
     ${Object.keys(STATUS).map((k) => `<option value="${k}" ${k === it.status ? "selected" : ""}>${STATUS[k]}</option>`).join("")}</select>`;
   let b = "";
-  if (it.options.length) b += `<div class="ev">Options: ${it.options.map((o) => `${o.tier} ${money(o.price)}`).join(" · ")}</div>`;
-  else if (it.kind === "labour" && it.hours != null) b += `<div class="ev">${it.hours} hrs × ${money(it.rate)} = <b>&nbsp;${money(it.price)}</b></div>`;
-  else b += `<div class="ev">Price <b>&nbsp;${money(it.price)}</b></div>`;
   if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? '<span class="photo">📷</span>' : ""}${esc(it.evidence)}</div>`;
-  if (it.warranty) b += `<div class="war">Warranty: ${esc(it.warranty)}</div>`;
-  return `<div class="card u-${it.status}"><div class="ch"><span class="it">${esc(it.name)}</span>${sel}</div>${b}</div>`;
+  if (it.options.length) {
+    b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}">
+      <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}"></button>
+      <span class="tn">${o.tier}<span class="tw">${esc(o.warranty || "warranty TBC")}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
+      <div class="hint">● pre-selected for ${esc(customer())}. Tap another to change.</div>`;
+  } else if (it.kind === "labour") {
+    b += `<div class="edrow">${numIn(it.hours, "hours", d, "")}<span>hrs ×</span>${numIn(it.rate, "rate", d)}<span>/hr =</span><b class="lp">${money(it.price)}</b></div>`;
+  } else b += `<div class="edrow"><span>Price</span>${numIn(it.price, "price", d)}</div>`;
+  if (warrantyOf(it) && !it.options.length) b += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
+  return `<div class="card u-${it.status} ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${esc(it.name)}<span class="edtag">Edited</span></span>${sel}</div>${b}</div>`;
 }
 
 function wsQuoteTab() {
@@ -180,14 +220,14 @@ function wsQuoteTab() {
         <div class="loading"><span class="spin"></span>AI is building the standard quote…</div><div class="skel"></div><div class="skel"></div>`;
     case "draft":
       return `${srcTag(state.source)}${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}
-        <div class="lbl">${esc(q.job_title)}${q.car ? " · " + esc(q.car) : ""}</div>${missingBox(q.missing_info)}
+        <div class="lbl">${esc(q.job_title)}${q.car ? " · " + esc(q.car) : ""}</div><div id="checks-quote">${checkPanel(q, "quote")}</div>
         ${q.items.map((it, i) => wsCard(it, i, "quote")).join("")}
         <div class="etaline">🕒 Ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))} if approved now (from labour hours)</div>
         <div class="preview"><div class="to"><span>Text message to ${esc(customer())}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(smsText())}</div></div>
-        <button class="btn primary" data-act="send">Send text to ${esc(customer())} →</button>
-        <button class="btn soft" data-act="edit">Edit notes</button>`;
+        <button class="btn soft" data-act="edit">Edit notes and rebuild</button>`;
     case "sent":
       return `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]])}
+        <div class="stamp"><span class="ic">✓</span>Checked by you before sending · ${esc(stampOf(q.checkedAt))}</div>
         <div class="wait"><b>Waiting for ${esc(customer())}</b>${state.viewedAt ? `${esc(customer())} is looking at the quote now…` : "You'll get a notification when they respond."}</div>
         <div class="lbl">Quote sent</div>${q.items.map((i) => `<div class="dec"><span class="n"><span class="chip ${i.status}"><i></i>${STATUS[i.status]}</span>${esc(i.name)}</span></div>`).join("")}`;
     default: {
@@ -203,9 +243,7 @@ function wsQuoteTab() {
         h += `<div class="loading"><span class="spin"></span>AI is building the extra item…</div><div class="skel"></div>`;
       } else if (state.ws === "extra_draft") {
         h += `<div class="lbl" style="margin-top:14px">Extra item</div>${srcTag(state.extraSource)}${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
-          ${missingBox(x.missing_info)}${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}
-          <button class="btn primary" data-act="send-extra">Ask ${esc(customer())} to approve →</button>
-          <div class="small">Nothing extra starts until ${esc(customer())} says yes in writing.</div>`;
+          <div id="checks-extra">${checkPanel(x, "extra")}</div>${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}`;
       } else if (state.ws === "extra_sent") {
         h += `<div style="margin-top:12px">${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]])}</div>
           <div class="wait"><b>Don't start the extra work yet</b>Waiting for ${esc(customer())} to decide.</div>`;
@@ -220,6 +258,21 @@ function wsQuoteTab() {
       return h;
     }
   }
+}
+
+// Fixed bar under a draft: "I've checked this quote" unlocks Send once every flagged gap is handled
+function renderWsDock() {
+  const d = $("wsDock");
+  const g = state.tab !== "quote" ? null : state.ws === "draft" ? "quote" : state.ws === "extra_draft" ? "extra" : null;
+  if (!g) { d.className = "dock"; d.innerHTML = ""; return; }
+  const q = doc(g), left = openChecks(q);
+  const hint = left ? `Resolve ${left} flagged gap${left > 1 ? "s" : ""} above first`
+    : !q.checked ? "Tick once you've checked every item and price"
+    : g === "quote" ? `${esc(customer())} gets a text link to approve each item` : `Nothing extra starts until ${esc(customer())} says yes in writing`;
+  d.className = "dock show";
+  d.innerHTML = `<label class="confirm ${left ? "dis" : ""} ${q.checked && !left ? "on" : ""}"><input type="checkbox" data-act="checked" data-group="${g}" ${q.checked ? "checked" : ""} ${left ? "disabled" : ""}><span>I've checked this ${g === "quote" ? "quote" : "extra item"}</span></label>
+    <button class="btn primary" data-act="${g === "quote" ? "send" : "send-extra"}" ${canSend(q) ? "" : "disabled"}>${g === "quote" ? `Send to ${esc(customer())} by text` : `Send to ${esc(customer())} for approval`}</button>
+    <div class="small">${hint}</div>`;
 }
 
 function wsJob() {
@@ -270,6 +323,11 @@ function drCard(it, i, group, toggle = true) {
   return h + `</div>`;
 }
 
+function tbcBox(q) {
+  const list = tbcList(q);
+  return list.length ? `<div class="missing"><b>City Auto will confirm before starting</b>${list.map(esc).join(" · ")}</div>` : "";
+}
+
 function lockScreen(withNotif) {
   const now = new Date();
   const notif = withNotif ? `<div class="notif" data-act="open-thread"><div class="app">💬</div><div style="flex:1">
@@ -308,6 +366,8 @@ function renderDriver() {
     case "quote":
       return `<div class="qhero"><div class="k">RepairFair standard quote</div><div class="t">${esc(q.job_title)}</div><div class="m">City Auto · ${esc(carName())}</div></div>
         <div class="etaline" style="text-align:center">🕒 ${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
+        <div class="stamp"><span class="ic">✓</span>Checked by a City Auto mechanic before sending</div>
+        ${tbcBox(q)}
         <div class="legend" style="margin:0 0 9px;justify-content:center"><span class="chip needed_now"><i></i>Needed now</span><span class="chip can_wait"><i></i>Can wait</span><span class="chip optional"><i></i>Optional</span></div>
         ${q.items.map((it, i) => drCard(it, i, "quote")).join("")}<div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>`;
     case "approved":
@@ -319,7 +379,7 @@ function renderDriver() {
     case "extra":
       return `<div class="qhero" style="background:linear-gradient(135deg,#2B3A40,#46585E)"><div class="k">New item · ${esc(q.job_title)}</div><div class="t">${esc(x.items[0].name)}</div><div class="m">Found mid-job · needs your OK</div></div>
         <div class="bigphoto"><span>📷 Photo from City Auto</span><span>tap to enlarge</span></div>
-        ${x.items.map((it, i) => drCard(it, i, "extra", false)).join("")}<div class="small">The workshop won't start this until you decide.</div>`;
+        ${tbcBox(x)}${x.items.map((it, i) => drCard(it, i, "extra", false)).join("")}<div class="small">The workshop won't start this until you decide.</div>`;
     case "extra_done": {
       const r = state.extraResult;
       const m = r === "approved" ? "Extra work approved" : r === "call" ? "City Auto will call you" : "Extra work declined";
@@ -380,11 +440,13 @@ function render() {
   if (drChanged) $("dr").scrollTop = 0;
   lastDr = state.dr;
   renderDriverChrome();
+  renderWsDock();
   $("wsTitle").textContent = state.quote ? `City Auto · ${state.quote.job_title}` : "City Auto";
 }
 
 function fly(id) { const el = $(id); el.classList.remove("go"); void el.offsetWidth; el.classList.add("go"); }
-const grp = (name) => (name === "extra" ? state.extra.items : state.quote.items);
+const doc = (name) => (name === "extra" ? state.extra : state.quote);
+const grp = (name) => doc(name).items;
 
 function recordJob() {
   const q = state.quote;
@@ -402,7 +464,16 @@ document.addEventListener("click", (e) => {
   if (act === "build-extra") { state.extraNotes = $("extraNotes").value; build("extra"); return; }
   if (act === "use-demo") { $("demoMode").checked = true; saveDemo(); state.err = null; badge(); render(); return; }
   if (act === "edit") state.ws = "compose";
+  if (act === "ck-ok" || act === "ck-tbc" || act === "ck-undo") {
+    const g = b.dataset.group, how = act === "ck-ok" ? "resolved" : act === "ck-tbc" ? "tbc" : null;
+    if (b.dataset.kind === "price") grp(g)[i].priceTbc = how === "tbc";
+    else doc(g).checks[i].how = how;
+    refreshCheck(g); return;
+  }
+  if (act === "pre") { const it = grp(b.dataset.group)[i]; it.opt = Number(b.dataset.k); it.edited = true; }
+  if ((act === "send" || act === "send-extra") && !canSend(doc(act === "send" ? "quote" : "extra"))) return;
   if (act === "send") {
+    state.quote.checkedAt = new Date();
     state.ws = "sent"; state.sentAt = new Date(); fly("packetOut");
     later(950, () => { state.deliveredAt = new Date(); state.dr = "notified"; render(); });
   }
@@ -453,10 +524,24 @@ document.addEventListener("change", (e) => {
   const s = e.target;
   if (s.dataset && s.dataset.act === "status") {
     const it = grp(s.dataset.group)[Number(s.dataset.i)];
-    it.status = s.value; it.approved = s.value === "needed_now"; render();
+    it.status = s.value; it.approved = s.value === "needed_now"; it.edited = true; render();
   }
+  if (s.dataset && s.dataset.act === "checked") { doc(s.dataset.group).checked = s.checked; renderWsDock(); }
 });
 document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.classList.contains("num")) {
+    // Update in place (no re-render) so typing and tabbing between price boxes keeps focus
+    const it = grp(t.dataset.group)[Number(t.dataset.i)], v = t.value === "" ? null : Math.max(0, Number(t.value));
+    if (t.dataset.act === "price") { if (t.dataset.k != null) it.options[Number(t.dataset.k)].price = v; else it.price = v; }
+    else {
+      it[t.dataset.act] = v;
+      it.price = it.hours != null && it.rate != null ? Math.round(it.hours * it.rate * 100) / 100 : null;
+      t.closest(".card").querySelector(".lp").textContent = money(it.price);
+    }
+    it.edited = true; t.closest(".card").classList.add("edited"); t.parentElement.classList.toggle("empty", v == null);
+    refreshCheck(t.dataset.group); return;
+  }
   if (e.target.id === "search") { state.search = e.target.value; render(); }
   if (e.target.id === "notes") state.notes = e.target.value;
   if (e.target.id === "extraNotes") state.extraNotes = e.target.value;
@@ -496,17 +581,22 @@ async function runScene(scene) {
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const waitFor = async (fn) => { for (let k = 0; k < 100 && !fn(); k++) await sleep(100); };
   const click = (sel) => document.querySelector(sel).click();
+  const checkAll = async () => {  // mechanic check: resolve each flagged gap, then tick "I've checked"
+    for (let row; (row = document.querySelector(".ck-row.open .ck-btn"));) { row.click(); await sleep(150); }
+    click('[data-act="checked"]'); await sleep(200);
+  };
   $("demoMode").checked = true; badge();
-  const order = ["draft", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history"];
+  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history"];
   const stop = order.indexOf(scene);
   const steps = [
     async () => { click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
+    checkAll,
     async () => { click('[data-act="send"]'); await sleep(1200); },
     async () => { click('[data-act="open-thread"]'); await sleep(400); },
     async () => { click('[data-act="open-quote"]'); await sleep(400); },
     async () => { click('[data-act="approve"]'); await sleep(900); },
     async () => { click('[data-act="build-extra"]'); await waitFor(() => state.ws === "extra_draft"); },
-    async () => { click('[data-act="send-extra"]'); await sleep(1200); },
+    async () => { await checkAll(); click('[data-act="send-extra"]'); await sleep(1200); },
     async () => { click('[data-act="open-extra"]'); await sleep(400); },
     async () => { click('[data-act="x-approve"]'); await sleep(900); },
     async () => { click('[data-act="start"]'); await sleep(200); click('[data-act="qc"]'); await sleep(200); click('[data-act="ready"]'); await sleep(1200); click('[data-act="open-ready"]'); await sleep(500); },
