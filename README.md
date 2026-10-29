@@ -15,7 +15,7 @@ python app.py
 Open http://localhost:5000 in Chrome or Edge. Stop it with Ctrl+C.
 
 ## Demo flow (about 60 seconds)
-1. Workshop: **Build standard quote with AI**. In the **Mechanic check**, mark each flagged gap **Resolved** or **Mark TBC** (prices, status and the pre-selected part tier can be edited on each item), tick **I've checked this quote**, then **Send to Mia by text**.
+1. Workshop: **Build standard quote with AI**. In the **Mechanic check**, tap **Fill from your price book** (it fills the flush price, brands and part numbers), mark anything left **Resolved** or **Mark TBC** (prices, status and the pre-selected part tier can be edited on each item), tick **I've checked this quote**, then **Send to Mia by text**.
 2. Driver: pick a part option, set rotors and brake fluid to **Not now**, then **Approve selected items**.
 3. Workshop: **Build extra item with AI**, resolve its check the same way, tick **I've checked this extra item**, then **Send to Mia for approval**.
 4. Driver: **Approve**. Both phones show the final bill, which matches what was approved.

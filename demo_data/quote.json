@@ -13,9 +13,9 @@
     {"name": "Front rotors (pair)", "kind": "part", "status": "can_wait", "evidence": "22.4 mm (minimum 22 mm)",
      "price": 240, "hours": null, "rate": null, "warranty": null, "options": []},
     {"name": "Brake fluid flush", "kind": "service", "status": "optional", "evidence": "Last change unknown",
-     "price": 90, "hours": null, "rate": null, "warranty": null, "options": []},
+     "price": null, "hours": null, "rate": null, "warranty": null, "options": []},
     {"name": "Labour", "kind": "labour", "status": "needed_now", "evidence": null,
      "price": 135, "hours": 1.5, "rate": 90, "warranty": "12 months workmanship", "options": []}
   ],
-  "missing_info": ["Brand and part number for each pad option", "Rotor brand and warranty"]
+  "missing_info": ["Price for the brake fluid flush", "Brand and part number for each pad option", "Rotor brand and warranty"]
 }

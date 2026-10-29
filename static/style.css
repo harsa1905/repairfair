@@ -325,3 +325,19 @@ button.opt:hover { border-color: #BFCBCC; }
 .confirm.on { background: var(--brand-50); border-color: var(--brand-500); color: var(--brand-700); }
 .confirm.dis { color: var(--faint); cursor: not-allowed; } .confirm.dis input { cursor: not-allowed; }
 .btn:disabled { background: #C9D2D3; color: #fff; cursor: not-allowed; filter: none; transform: none; }
+
+/* price book */
+.ck-fill { display: block; width: 100%; margin: 2px 0 6px; border: 1px solid var(--brand-500); background: #fff; color: var(--brand-700); border-radius: 9px; padding: 7px 10px; font-size: 12px; font-weight: 700; text-align: left; }
+.ck-fill:hover { background: var(--brand-50); }
+.bktag { margin-left: 6px; font-size: 9.5px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; color: #1E6E44; background: var(--green-bg); border-radius: 5px; padding: 2px 5px; vertical-align: 2px; }
+.pn { font-size: 11px; color: var(--muted); margin-top: 5px; }
+.bk-head { display: flex; justify-content: space-between; align-items: center; font-size: 13.5px; margin: 6px 2px 2px; }
+.bk-head > span { font-size: 11px; color: var(--faint); font-weight: 600; }
+.pro { font-size: 9.5px; font-weight: 800; letter-spacing: .5px; color: #fff; background: var(--brand); border-radius: 5px; padding: 2px 6px; margin-left: 7px; vertical-align: 2px; }
+.card.bk { padding: 4px 12px 6px 15px; }
+.card.bk::before { background: var(--brand); }
+.bk-item { font-size: 12.5px; font-weight: 700; margin: 8px 0 2px; }
+.bk-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px solid #F0F3F3; font-size: 11.5px; color: var(--muted); }
+.bk-t b { color: var(--ink); margin-right: 6px; }
+.bk-p { display: flex; align-items: center; gap: 3px; } .bk-p small { font-size: 10.5px; color: var(--faint); }
+.dock.show ~ .toast { bottom: 150px; }

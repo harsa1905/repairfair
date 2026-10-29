@@ -41,8 +41,10 @@ Return JSON only, in exactly this shape:
       "hours": number or null,          // labour only
       "rate": number or null,           // labour only, dollars per hour
       "warranty": "warranty text if given, else null",
+      "brand": "brand if given, else null",
+      "part_no": "part number if given, else null",
       "options": [                      // only if the notes give part options
-        {"tier": "Used" | "Economy" | "OEM" | "Premium", "price": number or null, "warranty": "text or null", "brand": "brand or null"}
+        {"tier": "Used" | "Economy" | "OEM" | "Premium", "price": number or null, "warranty": "text or null", "brand": "brand or null", "part_no": "part number or null"}
       ]
     }
   ],
@@ -91,14 +93,16 @@ def normalise(raw):
         for o in it.get("options") or []:
             if isinstance(o, dict) and o.get("tier") in TIERS:
                 opts.append({"tier": o["tier"], "price": _num(o.get("price")),
-                             "warranty": _str(o.get("warranty")), "brand": _str(o.get("brand"))})
+                             "warranty": _str(o.get("warranty")), "brand": _str(o.get("brand")),
+                             "part_no": _str(o.get("part_no"))})
         opts.sort(key=lambda o: TIERS.index(o["tier"]))
         hours, rate, price = _num(it.get("hours")), _num(it.get("rate")), _num(it.get("price"))
         if kind == "labour" and price is None and hours is not None and rate is not None:
             price = round(hours * rate, 2)
         items.append({"name": _str(it["name"]), "kind": kind, "status": status,
                       "evidence": _str(it.get("evidence")), "price": price, "hours": hours, "rate": rate,
-                      "warranty": _str(it.get("warranty")), "options": opts})
+                      "warranty": _str(it.get("warranty")), "brand": _str(it.get("brand")),
+                      "part_no": _str(it.get("part_no")), "options": opts})
     # Labour belongs to the job: if any part is needed now and the AI left labour unclear, mark labour needed now too
     if any(i["kind"] != "labour" and i["status"] == "needed_now" for i in items):
         for i in items:

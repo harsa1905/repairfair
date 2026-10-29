@@ -2,11 +2,12 @@ REPAIRFAIR DEMO: EXAMPLE NOTES
 Copy a "Quote" block into the Mechanic's notes box, and the matching "Extra" block into the Found extra work box.
 
 ==================== EXAMPLE 1: Brakes (the default) ====================
+(The flush has no price on purpose: the workshop's price book fills it in.)
 --- Quote ---
 2017 Mazda 3, customer Mia.
 Front pads at 2mm, need doing now (photo taken). Pad options: economy $90 12 months, OEM $160 12 months/20,000 km, premium ceramic $210 24 months.
 Front rotors 22.4mm, min 22mm, can wait till next service, $240 a pair.
-Brake fluid last change unknown, optional flush $90.
+Brake fluid last change unknown, optional flush.
 Labour 1.5 hrs at $90/hr, 12 month workmanship warranty.
 
 --- Extra ---

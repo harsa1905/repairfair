@@ -4,7 +4,7 @@
 const DEFAULT_NOTES = `2017 Mazda 3, customer Mia.
 Front pads at 2mm, need doing now (photo taken). Pad options: economy $90 12 months, OEM $160 12 months/20,000 km, premium ceramic $210 24 months.
 Front rotors 22.4mm, min 22mm, can wait till next service, $240 a pair.
-Brake fluid last change unknown, optional flush $90.
+Brake fluid last change unknown, optional flush.
 Labour 1.5 hrs at $90/hr, 12 month workmanship warranty.`;
 
 const DEFAULT_EXTRA = `Found a cracked rear brake hose (photo taken), needs doing now, shouldn't drive like this.
@@ -30,6 +30,19 @@ const SEED_HISTORY = [
     extra: { decision: "approved", at: "11:38 am · Fri 2 Oct", items: [{ name: "Wheel cylinder", price: 85, approved: true }] } },
 ];
 
+// The workshop's own prices and parts. RepairFair fills gaps from here; the AI never guesses a price.
+// "key" is matched against item names; "tier" against part options (null = single-price item).
+const SEED_BOOK = [
+  { item: "Front brake pads", key: "pad", tier: "Economy", price: 90, warranty: "12 months", brand: "Value line", part_no: "FP-1120E" },
+  { item: "Front brake pads", key: "pad", tier: "OEM", price: 160, warranty: "12 months / 20,000 km", brand: "Genuine", part_no: "FP-1120G" },
+  { item: "Front brake pads", key: "pad", tier: "Premium", price: 210, warranty: "24 months", brand: "Ceramic Pro", part_no: "FP-1120C" },
+  { item: "Front rotors (pair)", key: "rotor", tier: null, price: 240, warranty: "12 months", brand: "Genuine", part_no: "FR-2240" },
+  { item: "Brake fluid flush", key: "fluid", tier: null, price: 90, warranty: "3 months", brand: "DOT 4 fluid", part_no: null },
+  { item: "Rear brake hose", key: "hose", tier: "Economy", price: 45, warranty: "12 months", brand: "Value line", part_no: "BH-310E" },
+  { item: "Rear brake hose", key: "hose", tier: "OEM", price: 70, warranty: "12 months", brand: "Genuine", part_no: "BH-310G" },
+  { item: "Labour rate", key: "labour", tier: null, price: 90, unit: "/hr", warranty: "12 months workmanship", brand: null, part_no: null },
+];
+
 const fresh = () => ({
   tab: "quote", ws: "compose", dr: "home", drBanner: null, stage: null, stageAt: {}, readyBy: null,
   notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA,
@@ -38,6 +51,7 @@ const fresh = () => ({
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null,
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
   history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null,
+  book: SEED_BOOK.map((e) => ({ ...e })),
 });
 let state = fresh();
 let lastDr = null, lastWs = null, timers = [];
@@ -84,8 +98,12 @@ function prepare(data) {
     it.approved = it.status === "needed_now";
     it.priceGap = needsPrice(it); it.priceTbc = false; it.edited = false;
   });
-  // Mechanic check: every gap the AI flagged must be resolved or marked "to confirm" before sending
-  data.checks = data.missing_info.map((text) => ({ text, how: null }));
+  // Mechanic check: every gap the AI flagged must be resolved or marked "to confirm" before sending.
+  // Missing prices get their own rows, so drop the AI's matching "price for X" lines.
+  const common = ["front", "rear", "brake", "brakes", "pair", "left", "right", "with", "for", "the", "and"];
+  const gapWords = data.items.filter((i) => i.priceGap).flatMap((i) => i.name.toLowerCase().match(/[a-z]{3,}/g) || []).filter((w) => !common.includes(w));
+  data.checks = data.missing_info.filter((t) => !(/price|cost/i.test(t) && gapWords.some((w) => t.toLowerCase().includes(w))))
+    .map((text) => ({ text, how: null, by: null }));
   data.checked = false; data.checkedAt = null;
   return data;
 }
@@ -93,8 +111,37 @@ const needsPrice = (it) => (it.options.length ? it.options.some((o) => o.price =
 function checkRows(q) {
   const rows = [];
   q.items.forEach((it, i) => { if (it.priceGap) rows.push({ kind: "price", i, text: `Price for ${it.name}`, how: !needsPrice(it) ? "resolved" : it.priceTbc ? "tbc" : null }); });
-  q.checks.forEach((c, i) => rows.push({ kind: "info", i, text: c.text, how: c.how }));
+  q.checks.forEach((c, i) => rows.push({ kind: "info", i, text: c.text, how: c.how, by: c.by }));
   return rows;
+}
+
+// ---------- price book ----------
+function bookFor(it, tier) {
+  const name = it.name.toLowerCase();
+  const hits = state.book.filter((e) => (it.kind === "labour" ? e.key === "labour" : e.key !== "labour" && name.includes(e.key)));
+  return tier ? hits.find((e) => e.tier === tier) : hits.find((e) => !e.tier) || hits.find((e) => e.tier === "OEM") || hits[0];
+}
+// Fill only empty fields from the price book (never overwrite the mechanic's or the notes' numbers).
+// Returns how many details were (or, with dry, would be) filled.
+function bookFill(q, dry) {
+  let n = 0;
+  const put = (target, field, value) => { if (target[field] == null && value != null) { n++; if (!dry) target[field] = value; } };
+  q.items.forEach((it) => {
+    const before = n;
+    if (it.options.length) it.options.forEach((o) => { const e = bookFor(it, o.tier); if (e) ["price", "warranty", "brand", "part_no"].forEach((f) => put(o, f, e[f])); });
+    else if (it.kind === "labour") {
+      const e = bookFor(it);
+      if (e) { put(it, "rate", e.price); put(it, "warranty", e.warranty); if (!dry && it.price == null && it.hours != null && it.rate != null) it.price = Math.round(it.hours * it.rate * 100) / 100; }
+    } else { const e = bookFor(it); if (e) ["price", "warranty", "brand", "part_no"].forEach((f) => put(it, f, e[f])); }
+    if (!dry && n > before) it.fromBook = true;
+  });
+  if (!dry) q.checks.forEach((c) => {  // a flagged gap is resolved when the item it mentions is now complete
+    if (c.how) return;
+    const it = q.items.find((i) => i.fromBook && c.text.toLowerCase().includes(bookFor(i).key));
+    const complete = it && (it.options.length ? it.options : [it]).every((o) => o.price != null && o.warranty != null && (it.kind === "labour" || o.brand != null));
+    if (complete) { c.how = "resolved"; c.by = "book"; }
+  });
+  return n;
 }
 const openChecks = (q) => checkRows(q).filter((r) => !r.how).length;
 const canSend = (q) => !openChecks(q) && q.checked;
@@ -148,14 +195,15 @@ async function build(kind) {
 const srcTag = (src) => (src === "ai" ? `<span class="src">✦ Built by AI from your notes · check and edit</span>`
                                       : `<span class="src demo">Saved example</span>`);
 function checkPanel(q, group) {
-  const rows = checkRows(q), done = rows.filter((r) => r.how).length;
+  const rows = checkRows(q), done = rows.filter((r) => r.how).length, fill = bookFill(q, true);
+  const fillBtn = fill ? `<button class="ck-fill" data-act="book-fill" data-group="${group}">📘 Fill ${fill} detail${fill > 1 ? "s" : ""} from your price book</button>` : "";
   if (!rows.length) return `<div class="check clear"><div class="ck-head"><b>Mechanic check</b><span>Nothing flagged</span></div>
-    <div class="ck-sub">The AI found no gaps. Still check each item and price below.</div></div>`;
+    <div class="ck-sub">The AI found no gaps. Still check each item and price below.</div>${fillBtn}</div>`;
   return `<div class="check ${done === rows.length ? "clear" : ""}"><div class="ck-head"><b>Mechanic check</b><span>${done} of ${rows.length} resolved</span></div>
-    <div class="ck-sub">The AI flagged these gaps. Fix each one, or send it to ${esc(customer())} as “to confirm”.</div>
+    <div class="ck-sub">The AI flagged these gaps. Fix each one, or send it to ${esc(customer())} as “to confirm”.</div>${fillBtn}
     ${rows.map((r) => {
       const d = `data-group="${group}" data-i="${r.i}" data-kind="${r.kind}"`;
-      const acts = r.how === "resolved" ? `<span class="ck-done">${r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
+      const acts = r.how === "resolved" ? `<span class="ck-done">${r.by === "book" ? "From price book" : r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
         : r.how === "tbc" ? `<span class="ck-tbc">To confirm</span><button class="ck-link" data-act="ck-undo" ${d}>Undo</button>`
         : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Mark TBC</button>`;
       return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic">${r.how === "resolved" ? "✓" : r.how === "tbc" ? "?" : "!"}</span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
@@ -198,13 +246,14 @@ function wsCard(it, i, group) {
   if (it.options.length) {
     b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}">
       <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}"></button>
-      <span class="tn">${o.tier}<span class="tw">${esc(o.warranty || "warranty TBC")}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
+      <span class="tn">${o.tier}<span class="tw">${esc([o.warranty || "warranty TBC", [o.brand, o.part_no].filter(Boolean).join(" ")].filter(Boolean).join(" · "))}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
       <div class="hint">● pre-selected for ${esc(customer())}. Tap another to change.</div>`;
   } else if (it.kind === "labour") {
     b += `<div class="edrow">${numIn(it.hours, "hours", d, "")}<span>hrs ×</span>${numIn(it.rate, "rate", d)}<span>/hr =</span><b class="lp">${money(it.price)}</b></div>`;
   } else b += `<div class="edrow"><span>Price</span>${numIn(it.price, "price", d)}</div>`;
+  if (!it.options.length && (it.brand || it.part_no)) b += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(" · "))}</div>`;
   if (warrantyOf(it) && !it.options.length) b += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
-  return `<div class="card u-${it.status} ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${esc(it.name)}<span class="edtag">Edited</span></span>${sel}</div>${b}</div>`;
+  return `<div class="card u-${it.status} ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${esc(it.name)}<span class="edtag">Edited</span>${it.fromBook ? '<span class="bktag">Price book</span>' : ""}</span>${sel}</div>${b}</div>`;
 }
 
 function wsQuoteTab() {
@@ -308,6 +357,20 @@ function wsHistoryTab() {
   return h + `<div class="small">Every approval is timestamped and searchable. No more digging through old books.</div>`;
 }
 
+function wsBookTab() {
+  let last = null;
+  const rows = state.book.map((e, i) => {
+    const head = e.item !== last ? `<div class="bk-item">${esc(e.item)}</div>` : "";
+    last = e.item;
+    return `${head}<div class="bk-row"><span class="bk-t">${e.tier ? `<b>${e.tier}</b>` : ""}${esc([e.brand, e.part_no].filter(Boolean).join(" · ") || (e.key === "labour" ? "Workshop hourly rate" : ""))}<span class="tw">${esc(e.warranty || "no warranty set")}</span></span>
+      <span class="bk-p">${numIn(e.price, "book", `data-i="${i}"`)}${e.unit ? `<small>${e.unit}</small>` : ""}</span></div>`;
+  }).join("");
+  return `<div class="bk-head"><div><b>Your price book</b><span class="pro">PRO</span></div><span>${state.book.length} prices</span></div>
+    <div class="small" style="text-align:left;margin:0 2px 9px">Your own prices, brands and part numbers. RepairFair fills quote gaps from here. The AI never guesses a price.</div>
+    <div class="card bk">${rows}</div>
+    <div class="small">Change a price here and the next quote uses it.</div>`;
+}
+
 // ---------- driver ----------
 function drCard(it, i, group, toggle = true) {
   let h = `<div class="card u-${it.status} ${toggle && !it.approved ? "off" : ""}"><div class="ch"><span class="it">${esc(it.name)}</span>
@@ -317,8 +380,12 @@ function drCard(it, i, group, toggle = true) {
   if (it.kind === "labour" && it.hours != null) h += `<div class="ev">${it.hours} hrs × ${money(it.rate)}</div>`;
   if (it.options.length) {
     h += `<div class="opts">${it.options.map((o, k) => `<button class="opt ${k === it.opt ? "sel" : ""}" data-act="opt" data-group="${group}" data-i="${i}" data-k="${k}"><span class="t">${o.tier}${k === it.opt ? " ✓" : ""}</span><b>${money(o.price)}</b><span class="w">${esc((o.warranty || "warranty TBC").replace(/\s*\/\s*/g, " / "))}</span></button>`).join("")}</div>`;
-    h += `<div class="war">${esc(it.options[it.opt].brand || "[Brand]")} · part no. to confirm · warranty shown</div>`;
-  } else if (warrantyOf(it)) h += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
+    const o = it.options[it.opt];
+    h += `<div class="pn">${esc(o.brand || "Brand to confirm")} · ${o.part_no ? "part no. " + esc(o.part_no) : "part no. to confirm"}</div>`;
+  } else {
+    if (it.brand || it.part_no) h += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(" · "))}</div>`;
+    if (warrantyOf(it)) h += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
+  }
   if (toggle) h += `<div class="seg"><button class="yes ${it.approved ? "on" : ""}" data-act="yes" data-group="${group}" data-i="${i}">Approve</button><button class="no ${it.approved ? "" : "on"}" data-act="no" data-group="${group}" data-i="${i}">Not now</button></div>`;
   return h + `</div>`;
 }
@@ -431,7 +498,7 @@ function render() {
   document.querySelectorAll("#wsTabs .tab").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
   const keepSearchFocus = document.activeElement && document.activeElement.id === "search";
   const wsKey = state.tab + ":" + state.ws;
-  $("ws").innerHTML = `<div class="${wsKey !== lastWs ? "enter" : ""}">${state.tab === "history" ? wsHistoryTab() : wsQuoteTab()}</div>`;
+  $("ws").innerHTML = `<div class="${wsKey !== lastWs ? "enter" : ""}">${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
   if (wsKey !== lastWs) $("ws").scrollTop = 0;
   lastWs = wsKey;
   if (keepSearchFocus) { const s = $("search"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
@@ -469,6 +536,10 @@ document.addEventListener("click", (e) => {
     if (b.dataset.kind === "price") grp(g)[i].priceTbc = how === "tbc";
     else doc(g).checks[i].how = how;
     refreshCheck(g); return;
+  }
+  if (act === "book-fill") {
+    const n = bookFill(doc(b.dataset.group), false);
+    render(); toast(`Filled ${n} detail${n > 1 ? "s" : ""} from your price book`); return;
   }
   if (act === "pre") { const it = grp(b.dataset.group)[i]; it.opt = Number(b.dataset.k); it.edited = true; }
   if ((act === "send" || act === "send-extra") && !canSend(doc(act === "send" ? "quote" : "extra"))) return;
@@ -530,6 +601,7 @@ document.addEventListener("change", (e) => {
 });
 document.addEventListener("input", (e) => {
   const t = e.target;
+  if (t.dataset.act === "book") { state.book[Number(t.dataset.i)].price = t.value === "" ? null : Math.max(0, Number(t.value)); t.parentElement.classList.toggle("empty", t.value === ""); return; }
   if (t.classList.contains("num")) {
     // Update in place (no re-render) so typing and tabbing between price boxes keeps focus
     const it = grp(t.dataset.group)[Number(t.dataset.i)], v = t.value === "" ? null : Math.max(0, Number(t.value));
@@ -581,7 +653,8 @@ async function runScene(scene) {
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const waitFor = async (fn) => { for (let k = 0; k < 100 && !fn(); k++) await sleep(100); };
   const click = (sel) => document.querySelector(sel).click();
-  const checkAll = async () => {  // mechanic check: resolve each flagged gap, then tick "I've checked"
+  const checkAll = async () => {  // mechanic check: fill from the price book, resolve what's left, then tick "I've checked"
+    if (document.querySelector('[data-act="book-fill"]')) { click('[data-act="book-fill"]'); await sleep(300); }
     for (let row; (row = document.querySelector(".ck-row.open .ck-btn"));) { row.click(); await sleep(150); }
     click('[data-act="checked"]'); await sleep(200);
   };
