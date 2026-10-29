@@ -42,13 +42,21 @@ New research for the demo-day pitch (Wed 4 Nov). Until this study is done, none 
 
    Raw files stay outside the repo in `C:\uni\sem 3\enterprenuership\review-study\` and are never committed.
 6. **Keyword filter:** flag reviews containing price or quote words (quote, quoted, estimate, bill, invoice, charged, price, cost, extra, "without asking", "didn't ask", overcharg*, rip off, explained, transparent, upfront, honest).
-7. **Hand-coding:** two teammates code every flagged review on their own, using a shared spreadsheet:
-   - **A:** final bill higher than the quote, or work done without approval;
-   - **B:** pricing unclear or unexplained, no A;
-   - **C:** praises a clear quote or explanation;
-   - **0:** none of these.
-
-   One review can be A and C (e.g. "charged more, but explained why"). Disagreements are settled by a third teammate. We report agreement between the coders. A random 50 unflagged reviews are also coded, to estimate what the keywords miss.
+7. **Coding: AI first, then a human check** (chosen by Sameep, 30 Oct):
+   1. **Codebook first.** `codebook.md` fixes the codes, decision rules and examples before any review is read:
+      - **A:** final bill higher than the quote, or work done without approval;
+      - **B:** pricing unclear or unexplained, no A;
+      - **C:** praises a clear quote or explanation;
+      - **0:** none of these.
+   2. **Claude codes every flagged review** in batches of about 80. Each line records ID, code(s) and a short evidence phrase quoted from the review, so a checker can see why at a glance.
+   3. **Claude also codes 50 random unflagged reviews** to estimate what the keywords miss.
+   4. **Human check:**
+      - two teammates each code the same **60 reviews** on their own, without seeing Claude's codes (30 that Claude coded A, B or C; 30 it coded 0);
+      - this takes about 15 minutes each;
+      - we report agreement and Cohen's kappa (Claude vs each teammate, and teammate vs teammate);
+      - Sameep settles disagreements.
+   5. **Pass mark:** at least 80% agreement and kappa ≥ 0.6. Below that, the codebook is tightened, the reviews are recoded and the check is repeated.
+   6. **Disclosed on the method slide:** "AI-assisted coding (Claude), checked by two team members on 60 reviews: X% agreement."
 8. **Results for each region:**
    - % of all sampled reviews coded A;
    - % of 1–2★ reviews coded A;
@@ -60,14 +68,22 @@ New research for the demo-day pitch (Wed 4 Nov). Until this study is done, none 
 - Keywords miss some complaints, which the unflagged sample estimates.
 - "Newest 100" covers different time spans for busy and quiet workshops.
 - Google's terms of service prohibit scraping. This is a small, one-off, non-commercial student study that reports totals only. The compliant official API returns only 5 reviews per place, which is too few for this question.
-- Ethics: aggregated public reviews with no reviewer names. **Check with the tutor** that no ethics approval is needed.
+- Ethics: aggregated public reviews with no reviewer names. **The team has the go-ahead (confirmed by Sameep, 30 Oct).**
+- The coding is AI-assisted. The human check measures how reliable it is, and the result is disclosed.
+
+## Runs
+Both runs use the official Windows release (`google_maps_scraper-1.18.1-windows-amd64.exe`) with `DISABLE_TELEMETRY=1`. The tool sends anonymous usage statistics unless that is set.
+
+1. **List the workshops:** `-input queries.txt -results places.json -json -depth 2 -c 4 -lang en -exit-on-inactivity 3m`. Expect about 600–900 places in about 10 minutes.
+2. **Reviews for the sample:** `-input sample-links.txt -results reviews.json -json -extra-reviews -c 2 -lang en -exit-on-inactivity 5m`. 90 workshops, up to about 300 reviews each; we keep the newest 100.
 
 ## Timeline
 | When | What | Who |
 |---|---|---|
-| Fri 30 Oct | Plan, search list, run the scraper, clean, sample | Claude + Sameep |
-| Sat 31 Oct – Sun 1 Nov | Coding by two teammates | names TBC |
-| Mon 2 Nov | Settle disagreements, compute results, decide whether a number goes on slide 2 | Sameep |
+| Fri 30 Oct | Both runs, clean, sample, strip names, keyword flags | Claude |
+| Fri 30 – Sat 31 Oct | AI coding; build the 60-review check sheet | Claude |
+| Sat 31 Oct – Sun 1 Nov | Blind check, about 15 min each | 2 teammates (names TBC) |
+| Mon 2 Nov | Agreement, settle disagreements, results; decide whether a number goes on slide 2 | Sameep + Claude |
 | Tue 3 Nov | Deck locked | |
 
 ## Files
