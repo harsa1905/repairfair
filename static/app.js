@@ -17,17 +17,17 @@ const PHONE_MASK = "04•• ••• 812";
 
 const SEED_HISTORY = [
   { id: "J-1039", customer: "Tom", car: "2015 Hyundai i30", job: "90,000 km logbook service", date: "Wed 14 Oct",
-    approvedAt: "10:12 am · Wed 14 Oct",
+    approvedAt: "10:12 am, Wed 14 Oct",
     items: [{ name: "Logbook service", price: 385, approved: true }, { name: "Wiper blades", price: 40, approved: true },
             { name: "Fuel injector cleaning", price: 89, approved: false }], extra: null },
   { id: "J-1036", customer: "Priya", car: "2021 Tesla Model 3", job: "Front tyres", date: "Fri 9 Oct",
-    approvedAt: "2:47 pm · Fri 9 Oct",
-    items: [{ name: "Front tyres (pair) · OEM-spec", price: 640, approved: true }, { name: "Fitting and balancing", price: 110, approved: true },
+    approvedAt: "2:47 pm, Fri 9 Oct",
+    items: [{ name: "Front tyres (pair, OEM-spec)", price: 640, approved: true }, { name: "Fitting and balancing", price: 110, approved: true },
             { name: "Wheel alignment", price: 120, approved: false }], extra: null },
   { id: "J-1031", customer: "Dave", car: "2016 Toyota Hilux", job: "Rear brakes", date: "Fri 2 Oct",
-    approvedAt: "9:05 am · Fri 2 Oct",
-    items: [{ name: "Rear brake shoes · OEM", price: 180, approved: true }, { name: "Labour", price: 190, approved: true }],
-    extra: { decision: "approved", at: "11:38 am · Fri 2 Oct", items: [{ name: "Wheel cylinder", price: 85, approved: true }] } },
+    approvedAt: "9:05 am, Fri 2 Oct",
+    items: [{ name: "Rear brake shoes (OEM)", price: 180, approved: true }, { name: "Labour", price: 190, approved: true }],
+    extra: { decision: "approved", at: "11:38 am, Fri 2 Oct", items: [{ name: "Wheel cylinder", price: 85, approved: true }] } },
 ];
 
 // The workshop's own prices and parts. RepairFair fills gaps from here; the AI never guesses a price.
@@ -69,7 +69,17 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const money = (n) => (n == null ? "price to confirm" : "$" + (Number.isInteger(n) ? n.toLocaleString() : n.toFixed(2)));
 const timeOf = (d) => d.toLocaleTimeString("en-AU", { hour: "numeric", minute: "2-digit" }).replace(/\s/g, " ").toLowerCase();
 const dayOf = (d) => d.toLocaleDateString("en-AU", { weekday: "short", day: "numeric", month: "short" }).replace(",", "");
-const stampOf = (d) => `${timeOf(d)} · ${dayOf(d)}`;
+const stampOf = (d) => `${timeOf(d)}, ${dayOf(d)}`;
+// Icons come from the sprite in index.html; items get a warning-light style mark matched from their name
+const ic = (name, size = 20, cls = "") => `<svg class="i ${cls}" width="${size}" height="${size}" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+function itemIcon(it) {
+  if (it.kind === "labour") return "time";
+  const n = it.name.toLowerCase();
+  return /fluid|oil|coolant|flush/.test(n) ? "fluid" : /rotor|disc/.test(n) ? "rotor" : /hose|pipe/.test(n) ? "hose"
+    : /tyre|tire|wheel|alignment/.test(n) ? "tyre" : /pad|shoe|brake/.test(n) ? "brake" : "part";
+}
+const lightOf = (it) => (it.kind === "labour" ? "labour" : it.status);
+const stLabel = (it) => `<span class="st ${it.status}">${STATUS[it.status]}</span>`;
 const addMonths = (d, m) => { const x = new Date(d); if (m < 1) x.setDate(x.getDate() + Math.round(m * 30)); else x.setMonth(x.getMonth() + m); return x; };
 const whenOf = (d) => (d - Date.now() < 45 * 86400000 ? dayOf(d) : d.toLocaleDateString("en-AU", { month: "short", year: "numeric" }));
 const demoOn = () => $("demoMode").checked;
@@ -162,7 +172,7 @@ const sumApproved = (items) => items.filter((i) => i.approved).reduce((s, i) => 
 const sumAll = (items) => items.reduce((s, i) => s + (priceOf(i) || 0), 0);
 const customer = () => (state.quote && state.quote.customer) || "Mia";
 const carName = () => (state.quote && state.quote.car) || "your car";
-const itemLabel = (i) => i.name + (i.options.length ? ` · ${i.options[i.opt].tier}` : "");
+const itemLabel = (i) => i.name + (i.options.length ? ` (${i.options[i.opt].tier})` : "");
 const smsText = () => `Hi ${customer()}, your quote for the ${carName()} is ready. Please review and approve: repairfair.au/q/8F2K`;
 
 // ---------- AI call with auto-fallback ----------
@@ -202,21 +212,23 @@ async function build(kind) {
 }
 
 // ---------- shared bits ----------
-const srcTag = (src) => (src === "ai" ? `<span class="src">✦ Built by AI from your notes · check and edit</span>`
-                                      : `<span class="src demo">Saved example</span>`);
+const srcTag = (src) => `<span class="src">${src === "ai" ? "Built by AI from your notes" : "Saved example"}</span>`;
+// The mechanic check is the workshop's instrument panel: one amber light per gap the AI flagged
 function checkPanel(q, group) {
-  const rows = checkRows(q), done = rows.filter((r) => r.how).length, fill = bookFill(q, true);
-  const fillBtn = fill ? `<button class="ck-fill" data-act="book-fill" data-group="${group}">📘 Fill ${fill} detail${fill > 1 ? "s" : ""} from your price book</button>` : "";
-  if (!rows.length) return `<div class="check clear"><div class="ck-head"><b>Mechanic check</b><span>Nothing flagged</span></div>
+  const rows = checkRows(q), open = rows.filter((r) => !r.how).length, fill = bookFill(q, true);
+  const top = `<div class="cl-top"><b>Mechanic check</b>${srcTag(group === "extra" ? state.extraSource : state.source)}</div>`;
+  const fillBtn = fill ? `<button class="ck-fill" data-act="book-fill" data-group="${group}">Fill ${fill} detail${fill > 1 ? "s" : ""} from your price book</button>` : "";
+  if (!rows.length) return `<div class="cluster check">${top}<div class="readout md green">Nothing flagged</div>
     <div class="ck-sub">The AI found no gaps. Still check each item and price below.</div>${fillBtn}</div>`;
-  return `<div class="check ${done === rows.length ? "clear" : ""}"><div class="ck-head"><b>Mechanic check</b><span>${done} of ${rows.length} resolved</span></div>
-    <div class="ck-sub">The AI flagged these gaps. Fix each one, or send it to ${esc(customer())} as “to confirm”.</div>${fillBtn}
+  return `<div class="cluster check">${top}
+    <div class="readout md ${open ? "amber" : "green"}">${open ? `${open} gap${open > 1 ? "s" : ""}` : "All clear"}</div>
+    <div class="ck-sub">${open ? `Fix each gap, or mark it to confirm with ${esc(customer())}.` : `Every gap is sorted. Check the items, then sign it off.`}</div>${fillBtn}
     ${rows.map((r) => {
       const d = `data-group="${group}" data-i="${r.i}" data-kind="${r.kind}"`;
       const acts = r.how === "resolved" ? `<span class="ck-done">${r.by === "book" ? "From price book" : r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
         : r.how === "tbc" ? `<span class="ck-tbc">To confirm</span><button class="ck-link" data-act="ck-undo" ${d}>Undo</button>`
         : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Mark TBC</button>`;
-      return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic">${r.how === "resolved" ? "✓" : r.how === "tbc" ? "?" : "!"}</span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
+      return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic"></span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
     }).join("")}</div>`;
 }
 function refreshCheck(group) {
@@ -225,21 +237,21 @@ function refreshCheck(group) {
   renderWsDock();
 }
 function decisions(items) {
-  return items.map((i) => `<div class="dec ${i.approved ? "" : "no"}"><span class="n"><span class="${i.approved ? "y" : "x"}">${i.approved ? "✓" : "–"}</span>${esc(i.name)}</span><span class="s">${money(i.price ?? null)}</span></div>`).join("");
+  return items.map((i) => `<div class="dec ${i.approved ? "" : "no"}"><span class="n">${ic(i.approved ? "check" : "dash", 16, i.approved ? "y" : "x")}${esc(i.name)}</span><span class="s">${money(i.price ?? null)}</span></div>`).join("");
 }
 const decItems = (items) => items.map((i) => ({ name: itemLabel(i), price: priceOf(i), approved: i.approved }));
 
 function tracker(title, steps) {
   // steps: [label, Date|null]; the first step without a time is "now"
   const firstOpen = steps.findIndex((s) => !s[1]);
-  return `<div class="tracker"><div class="tt"><span>${title}</span><span style="color:var(--faint);font-weight:600">to ${esc(customer())} · ${PHONE_MASK}</span></div>
-    <div class="steps">${steps.map(([lbl, t], k) => `<div class="step ${t ? "done" : k === firstOpen ? "now" : ""}"><div class="dot">${t ? "✓" : ""}</div>${lbl}<span class="tm">${t ? timeOf(t) : "&nbsp;"}</span></div>`).join("")}</div></div>`;
+  return `<div class="tracker"><div class="tt"><span>${title}</span><span>to ${esc(customer())}, ${PHONE_MASK}</span></div>
+    <div class="steps">${steps.map(([lbl, t], k) => `<div class="step ${t ? "done" : k === firstOpen ? "now" : ""}"><div class="dot">${t ? ic("check", 12) : ""}</div>${lbl}<span class="tm">${t ? timeOf(t) : "&nbsp;"}</span></div>`).join("")}</div></div>`;
 }
 
 let toastTimer = null;
 function toast(text) {
   const t = $("wsToast");
-  t.innerHTML = `<span class="ic">✓</span>${esc(text)}`;
+  t.innerHTML = `${ic("check", 20)}${esc(text)}`;
   t.classList.add("show");
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
 }
@@ -249,22 +261,22 @@ function toast(text) {
 const numIn = (v, act, d, pre = "$") => `<span class="num-wrap ${v == null ? "empty" : ""}">${pre}<input class="num" type="number" min="0" step="any" inputmode="decimal" data-act="${act}" ${d} value="${v ?? ""}" placeholder="?"></span>`;
 function wsCard(it, i, group) {
   const d = `data-group="${group}" data-i="${i}"`;
-  const sel = `<select class="chip ${it.status}" data-act="status" ${d}>
+  const sel = `<select class="status-sel ${it.status}" data-act="status" ${d} aria-label="Urgency">
     ${Object.keys(STATUS).map((k) => `<option value="${k}" ${k === it.status ? "selected" : ""}>${STATUS[k]}</option>`).join("")}</select>`;
   let b = "";
-  if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? '<span class="photo">📷</span>' : ""}${esc(it.evidence)}</div>`;
+  if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? ic("camera", 16) : ""}${esc(it.evidence)}</div>`;
   if (it.options.length) {
     b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}">
-      <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}"></button>
-      <span class="tn">${o.tier}<span class="tw">${esc([o.warranty || "warranty TBC", [o.brand, o.part_no].filter(Boolean).join(" ")].filter(Boolean).join(" · "))}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
-      <div class="hint">● pre-selected for ${esc(customer())}. Tap another to change.</div>`;
+      <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}" aria-label="Pre-select ${esc(o.tier)}"></button>
+      <span class="tn">${o.tier}<span class="tw">${esc([o.warranty || "warranty TBC", [o.brand, o.part_no].filter(Boolean).join(" ")].filter(Boolean).join(", "))}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
+      <div class="hint">The highlighted option is pre-selected for ${esc(customer())}. Tap another to change.</div>`;
   } else if (it.kind === "labour") {
     b += `<div class="edrow">${numIn(it.hours, "hours", d, "")}<span>hrs ×</span>${numIn(it.rate, "rate", d)}<span>/hr =</span><b class="lp">${money(it.price)}</b></div>`;
   } else b += `<div class="edrow"><span>Price</span>${numIn(it.price, "price", d)}</div>`;
-  if (!it.options.length && (it.brand || it.part_no)) b += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(" · "))}</div>`;
+  if (!it.options.length && (it.brand || it.part_no)) b += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(", "))}</div>`;
   if (warrantyOf(it) && !it.options.length) b += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
   b += `<label class="why-ed"><span>${esc(customer())} reads (“${whyLabel(it)}”)</span><textarea rows="3" data-act="why" ${d} placeholder="Explain it in plain words for ${esc(customer())}">${esc(it.why || "")}</textarea></label>`;
-  return `<div class="card u-${it.status} ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${esc(it.name)}<span class="edtag">Edited</span>${it.fromBook ? '<span class="bktag">Price book</span>' : ""}</span>${sel}</div>${b}</div>`;
+  return `<div class="card ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${ic(itemIcon(it), 22, "ic " + lightOf(it))}${esc(it.name)}<span class="tag ed">Edited</span>${it.fromBook ? '<span class="tag bk">Price book</span>' : ""}</span>${sel}</div>${b}</div>`;
 }
 
 function wsQuoteTab() {
@@ -273,37 +285,37 @@ function wsQuoteTab() {
   switch (state.ws) {
     case "compose":
       return `<div class="lbl">Mechanic's notes</div><textarea id="notes" rows="11">${esc(state.notes)}</textarea>
-        <button class="btn ai" data-act="build">✦ Build standard quote with AI</button>
+        <button class="btn ai" data-act="build">Build standard quote with AI</button>
         <div class="small">Type it the way you'd write it on a job card. The AI does the rest.</div>${err}`;
     case "loading":
       return `<div class="lbl">Mechanic's notes</div><textarea rows="11" disabled>${esc(state.notes)}</textarea>
         <div class="loading"><span class="spin"></span>AI is building the standard quote…</div><div class="skel"></div><div class="skel"></div>`;
     case "draft":
-      return `${srcTag(state.source)}${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}
-        <div class="lbl">${esc(q.job_title)}${q.car ? " · " + esc(q.car) : ""}</div><div id="checks-quote">${checkPanel(q, "quote")}</div>
+      return `${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}<div id="checks-quote">${checkPanel(q, "quote")}</div>
+        <div class="lead">${esc(q.job_title)}${q.car ? `, ${esc(q.car)}` : ""}</div>
         ${q.items.map((it, i) => wsCard(it, i, "quote")).join("")}
-        <div class="etaline">🕒 Ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))} if approved now (from labour hours)</div>
+        <div class="etaline">${ic("time", 18)}Ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))} if approved now (from labour hours)</div>
         <div class="preview"><div class="to"><span>Text message to ${esc(customer())}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(smsText())}</div></div>
         <button class="btn soft" data-act="edit">Edit notes and rebuild</button>`;
     case "sent":
       return `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]])}
-        <div class="stamp"><span class="ic">✓</span>Checked by you before sending · ${esc(stampOf(q.checkedAt))}</div>
+        <div class="stamp">${ic("check", 18)}Checked by you before sending, ${esc(stampOf(q.checkedAt))}</div>
         <div class="wait"><b>Waiting for ${esc(customer())}</b>${state.viewedAt ? `${esc(customer())} is looking at the quote now…` : "You'll get a notification when they respond."}</div>
-        <div class="lbl">Quote sent</div>${q.items.map((i) => `<div class="dec"><span class="n"><span class="chip ${i.status}"><i></i>${STATUS[i.status]}</span>${esc(i.name)}</span></div>`).join("")}`;
+        <div class="lbl">Quote sent</div><div class="sheet">${q.items.map((i) => `<div class="row">${ic(itemIcon(i), 22, "ic " + lightOf(i))}<div><div class="it">${esc(i.name)}</div>${stLabel(i)}</div><span class="price">${money(priceOf(i))}</span></div>`).join("")}</div>`;
     default: {
       let h = `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", state.approvedAt]])}
         <div class="ok"><b>${esc(customer())} approved ${money(sumApproved(q.items))}</b>Start the work on the approved items only.</div>
-        <div class="stamp"><span class="ic">✓</span>Approved by text link · ${esc(stampOf(state.approvedAt))}</div>
+        <div class="stamp">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div>
         ${wsJob()}
-        <div class="lbl">Customer's decisions</div><div class="card u-to_confirm" style="padding-top:6px;padding-bottom:6px">${decisions(decItems(q.items))}</div>
+        <div class="lbl">Customer's decisions</div><div class="sheet">${decisions(decItems(q.items))}</div>
         ${wsFollowupsBooked()}`;
       if (state.ws === "approved") {
         h += `<div class="lbl" style="margin-top:14px">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
-          <button class="btn ai" data-act="build-extra">✦ Build extra item with AI</button>${err}`;
+          <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`;
       } else if (state.ws === "extra_loading") {
         h += `<div class="loading"><span class="spin"></span>AI is building the extra item…</div><div class="skel"></div>`;
       } else if (state.ws === "extra_draft") {
-        h += `<div class="lbl" style="margin-top:14px">Extra item</div>${srcTag(state.extraSource)}${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
+        h += `<div class="lead">Extra item</div>${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
           <div id="checks-extra">${checkPanel(x, "extra")}</div>${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}`;
       } else if (state.ws === "extra_sent") {
         h += `<div style="margin-top:12px">${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]])}</div>
@@ -314,7 +326,7 @@ function wsQuoteTab() {
         h += `<div style="margin-top:12px">${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", state.extraAt]])}</div>
           <div class="${r === "approved" ? "ok" : "wait"}"><b>${head}</b>${r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work."}</div>
           <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
-          <button class="btn soft" data-act="go-history">View in job history →</button>`;
+          <button class="btn soft" data-act="go-history">View in job history</button>`;
       }
       return h;
     }
@@ -340,9 +352,9 @@ function wsJob() {
   if (state.stage == null) return "";
   const st = state.stage;
   const next = { 1: ["start", "Start repair"], 2: ["qc", "Quality check done"], 3: ["ready", "Mark ready for pickup"] }[st];
-  return `<div class="jobcard"><div class="jc-top"><span class="lbl" style="margin:0">Job status</span><span class="chip ${st === 4 ? "optional" : "neutral"}"><i></i>${STAGES[st]}</span></div>
+  return `<div class="jobcard"><div class="jc-top"><span>Job status</span><span class="jc-stage ${st === 4 ? "ready" : ""}"><i></i>${STAGES[st]}</span></div>
     <div class="jc-eta"><span>${st === 4 ? "Ready since" : "Ready by"} <b>${esc(etaText(state.readyBy))}</b></span>${st === 4 ? "" : `<span class="adj"><button data-act="eta-">−15 min</button><button data-act="eta+">+15 min</button></span>`}</div>
-    ${next ? `<button class="btn dark" data-act="${next[0]}">${next[1]} →</button>` : `<div class="small" style="text-align:left">✓ ${esc(customer())} has been told the car is ready to collect.</div>`}
+    ${next ? `<button class="btn dark" data-act="${next[0]}">${next[1]}</button>` : `<div class="stamp" style="margin:10px 0 0">${ic("check", 18)}${esc(customer())} has been told the car is ready to collect.</div>`}
     <div class="small" style="text-align:left;margin-top:6px">${esc(customer())} sees each update and the ready time live.</div></div>`;
 }
 
@@ -350,8 +362,8 @@ function wsJob() {
 function wsFollowupsBooked() {
   const fs = ourFollowups();
   if (!fs.length) return "";
-  return `<div class="lbl">Follow-ups booked <span class="pro">PRO</span></div><div class="card fu">${fs.map((f) => `<div class="fu-row ${f.status}">
-      <div class="fu-t"><b>${esc(f.item)}</b><span>${money(f.price)} · ${esc(customer())} said not now</span></div>
+  return `<div class="lbl">Follow-ups booked <span class="pro">Pro</span></div><div class="sheet fu">${fs.map((f) => `<div class="fu-row ${f.status}">
+      <div class="fu-t"><b>${esc(f.item)}</b><span>${money(f.price)}, ${esc(customer())} said not now</span></div>
       ${f.status === "off" ? `<span class="fu-off">${esc(f.customer)} opted out</span>`
         : `<select class="fu-sel" data-act="fu-due" data-id="${f.id}">${FU_CHOICES.map(([m, l]) => `<option value="${m}" ${m === f.months ? "selected" : ""}>Remind in ${l}</option>`).join("")}</select>`}</div>`).join("")}
     <div class="small" style="text-align:left">RepairFair texts ${esc(customer())} when each one is due.</div></div>`;
@@ -359,14 +371,14 @@ function wsFollowupsBooked() {
 function wsFollowupsDue() {
   const fs = [...state.followups].sort((a, b) => a.due - b.due);
   const due = fs.filter((f) => f.status === "due").reduce((s, f) => s + (f.price || 0), 0);
-  return `<div class="fu-head"><b>Follow-ups</b><span class="pro">PRO</span><span class="fu-sum">${due ? `${money(due)} of advised work due` : "All caught up"}</span></div>
-    <div class="card fu">${fs.map((f) => {
+  return `<div class="fu-head"><b>Follow-ups</b><span class="pro">Pro</span><span class="fu-sum">${due ? `${money(due)} of advised work due` : "All caught up"}</span></div>
+    <div class="sheet fu">${fs.map((f) => {
       const late = f.due < Date.now();
       const right = f.status === "due" ? `<button class="ck-btn" data-act="fu-send" data-id="${f.id}">Send reminder</button>`
         : f.status === "sent" ? `<span class="ck-done">Reminder sent</span>`
         : f.status === "off" ? `<span class="fu-off">Opted out</span>` : `<span class="fu-when">${esc(whenOf(f.due))}</span>`;
-      return `<div class="fu-row ${f.ours ? "new" : ""}"><div class="fu-t"><b>${esc(f.item)} · ${money(f.price)}</b>
-        <span>${esc(f.customer)} · ${esc(f.car)} · advised ${esc(f.advised.split(" · ")[1] || "")}</span>
+      return `<div class="fu-row ${f.ours ? "new" : ""}"><div class="fu-t"><b>${esc(f.item)}, ${money(f.price)}</b>
+        <span>${esc(f.customer)}, ${esc(f.car)}. Advised ${esc(f.advised.split(" · ")[1] || "")}</span>
         ${f.status === "due" ? `<span class="fu-due ${late ? "late" : ""}">${late ? "Due since" : "Due"} ${esc(dayOf(f.due))}</span>` : ""}</div>${right}</div>
         ${f.status === "sent" ? `<div class="bubble me fu-bub">${esc(reminderText(f))}</div>` : ""}`;
     }).join("")}</div>`;
@@ -383,14 +395,14 @@ function wsHistoryTab() {
     const open = state.open === j.id;
     let d = "";
     if (open) {
-      d = `<div class="jd"><div class="lbl" style="margin-top:4px">Approved items</div>${decisions(j.items)}`;
-      if (j.extra) d += `<div class="lbl">Extra work · ${j.extra.decision} · ${esc(j.extra.at)}</div>${decisions(j.extra.items)}`;
+      d = `<div class="jd"><div class="lbl">Approved items</div>${decisions(j.items)}`;
+      if (j.extra) d += `<div class="lbl">Extra work, ${j.extra.decision} <span class="soft">${esc(j.extra.at)}</span></div>${decisions(j.extra.items)}`;
       d += `</div>`;
     }
     return `<div class="job ${j.isNew ? "new" : ""}" data-act="job" data-id="${j.id}">
-      <div class="jt"><span>${esc(j.job)}${j.isNew ? '<span class="tagnew">NEW</span>' : ""}</span><span>${money(jobTotal(j))}</span></div>
-      <div class="jm">${esc(j.customer)} · ${esc(j.car)} · ${esc(j.date)} · ${j.id}</div>
-      <div class="jp">✓ Approved by text link · ${esc(j.approvedAt)}${j.extra ? " · extra " + esc(j.extra.decision) : ""}</div>${d}</div>`;
+      <div class="jt"><span>${esc(j.job)}${j.isNew ? '<span class="tagnew">New</span>' : ""}</span><span>${money(jobTotal(j))}</span></div>
+      <div class="jm">${esc(j.customer)}, ${esc(j.car)}. ${esc(j.date)}, ${j.id}</div>
+      <div class="jp">${ic("check", 16)}Approved by text link, ${esc(j.approvedAt)}${j.extra ? `. Extra ${esc(j.extra.decision)}` : ""}</div>${d}</div>`;
   }).join("");
   return h + `<div class="small">Every approval is timestamped and searchable. No more digging through old books.</div>`;
 }
@@ -400,41 +412,65 @@ function wsBookTab() {
   const rows = state.book.map((e, i) => {
     const head = e.item !== last ? `<div class="bk-item">${esc(e.item)}</div>` : "";
     last = e.item;
-    return `${head}<div class="bk-row"><span class="bk-t">${e.tier ? `<b>${e.tier}</b>` : ""}${esc([e.brand, e.part_no].filter(Boolean).join(" · ") || (e.key === "labour" ? "Workshop hourly rate" : ""))}<span class="tw">${esc(e.warranty || "no warranty set")}</span></span>
+    return `${head}<div class="bk-row"><span class="bk-t">${e.tier ? `<b>${e.tier}</b>` : ""}${esc([e.brand, e.part_no].filter(Boolean).join(" ") || (e.key === "labour" ? "Workshop hourly rate" : ""))}<span class="tw">${esc(e.warranty || "no warranty set")}</span></span>
       <span class="bk-p">${numIn(e.price, "book", `data-i="${i}"`)}${e.unit ? `<small>${e.unit}</small>` : ""}</span></div>`;
   }).join("");
-  return `<div class="bk-head"><div><b>Your price book</b><span class="pro">PRO</span></div><span>${state.book.length} prices</span></div>
+  return `<div class="bk-head"><div><b>Your price book</b><span class="pro">Pro</span></div><span>${state.book.length} prices</span></div>
     <div class="small" style="text-align:left;margin:0 2px 9px">Your own prices, brands and part numbers. RepairFair fills quote gaps from here. The AI never guesses a price.</div>
-    <div class="card bk">${rows}</div>
+    <div class="sheet bk">${rows}</div>
     <div class="small">Change a price here and the next quote uses it.</div>`;
 }
 
 // ---------- driver ----------
 const whyLabel = (it) => (it.kind === "labour" ? "What does this cover?"
   : { needed_now: "Why is this needed now?", can_wait: "Why can this wait?", optional: "Why is this suggested?" }[it.status] || "Why is this on the quote?");
-function drCard(it, i, group, toggle = true) {
-  let h = `<div class="card u-${it.status} ${toggle && !it.approved ? "off" : ""}"><div class="ch"><span class="it">${esc(it.name)}</span>
-    ${it.options.length ? `<span class="chip ${it.status}"><i></i>${STATUS[it.status]}</span>` : `<span class="price">${money(it.price)}</span>`}</div>`;
-  if (!it.options.length) h += `<div class="ev"><span class="chip ${it.status}"><i></i>${STATUS[it.status]}</span></div>`;
-  if (it.evidence) h += `<div class="ev">${/photo/i.test(it.evidence) ? '<span class="photo">📷</span>' : ""}${esc(it.evidence)}</div>`;
-  if (it.kind === "labour" && it.hours != null) h += `<div class="ev">${it.hours} hrs × ${money(it.rate)}</div>`;
-  if (it.why) h += `<button class="why-btn ${it.whyOpen ? "open" : ""}" data-act="why-toggle" data-group="${group}" data-i="${i}">${whyLabel(it)}</button>${it.whyOpen ? `<div class="why">${esc(it.why)}<span>From your mechanic's inspection notes</span></div>` : ""}`;
+// One row per item. With a toggle, the switch turns the item (and its light in the panel) on or off.
+function drRow(it, i, group, toggle = true) {
+  const d = `data-group="${group}" data-i="${i}"`;
+  let m = "";
+  if (it.evidence) m += `<div class="ev">${/photo/i.test(it.evidence) ? ic("camera", 16) : ""}${esc(it.evidence)}</div>`;
+  if (it.kind === "labour" && it.hours != null) m += `<div class="ev">${it.hours} hrs at ${money(it.rate)} an hour</div>`;
   if (it.options.length) {
-    h += `<div class="opts">${it.options.map((o, k) => `<button class="opt ${k === it.opt ? "sel" : ""}" data-act="opt" data-group="${group}" data-i="${i}" data-k="${k}"><span class="t">${o.tier}${k === it.opt ? " ✓" : ""}</span><b>${money(o.price)}</b><span class="w">${esc((o.warranty || "warranty TBC").replace(/\s*\/\s*/g, " / "))}</span></button>`).join("")}</div>`;
+    m += `<div class="opts">${it.options.map((o, k) => `<button class="opt ${k === it.opt ? "sel" : ""}" data-act="opt" ${d} data-k="${k}"><span class="t">${o.tier}</span><b>${money(o.price)}</b><span class="w">${esc((o.warranty || "warranty TBC").replace(/\s*\/\s*/g, " or "))}</span></button>`).join("")}</div>`;
     const o = it.options[it.opt];
-    h += `<div class="pn">${esc(o.brand || "Brand to confirm")} · ${o.part_no ? "part no. " + esc(o.part_no) : "part no. to confirm"}</div>`;
+    m += `<div class="pn">${esc(o.brand || "Brand to confirm")}, ${o.part_no ? "part no. " + esc(o.part_no) : "part no. to confirm"}</div>`;
   } else {
-    if (it.brand || it.part_no) h += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(" · "))}</div>`;
-    if (warrantyOf(it)) h += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
+    if (it.brand || it.part_no) m += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(", "))}</div>`;
+    if (warrantyOf(it)) m += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
   }
-  if (toggle) h += `<div class="seg"><button class="yes ${it.approved ? "on" : ""}" data-act="yes" data-group="${group}" data-i="${i}">Approve</button><button class="no ${it.approved ? "" : "on"}" data-act="no" data-group="${group}" data-i="${i}">Not now</button></div>`;
-  return h + `</div>`;
+  if (it.why) m += `<button class="why-btn ${it.whyOpen ? "open" : ""}" data-act="why-toggle" ${d} aria-expanded="${!!it.whyOpen}">${whyLabel(it)}</button>${it.whyOpen ? `<div class="why">${esc(it.why)}<span>From your mechanic's inspection notes</span></div>` : ""}`;
+  const sw = toggle ? `<button class="sw" role="switch" aria-checked="${!!it.approved}" aria-label="${esc(it.name)}" data-act="sw" ${d}></button>` : "<span></span>";
+  return `<div class="row ${toggle && !it.approved ? "off" : ""}" id="row-${group}-${i}">${ic(itemIcon(it), 22, "ic " + lightOf(it))}
+    <div><div class="ch"><span class="it">${esc(it.name)}</span><span class="price">${money(priceOf(it))}</span></div>${it.kind === "labour" ? "" : stLabel(it)}</div>${sw}
+    <div class="more">${m}</div></div>`;
+}
+// The driver's instrument panel: the total being approved, and one light per item that's on
+const lamps = (items, group) => `<div class="lights">${items.map((it, i) => `<span class="lamp ${lightOf(it)} ${it.approved ? "on" : ""}" id="lamp-${group}-${i}" title="${esc(it.name)}">${ic(itemIcon(it), 26)}</span>`).join("")}</div>`;
+function drQuotePanel(q) {
+  return `<div class="cluster"><div class="cl-top"><b>City Auto</b><span>${esc(carName())}</span></div>
+    <div class="readout" id="drRead">${money(sumApproved(q.items))}</div>
+    <div class="cl-sub" id="drSub">to approve today, out of ${money(sumAll(q.items))} quoted</div>
+    ${lamps(q.items, "quote")}
+    <div class="cl-foot">${ic("check", 18)}Checked by a City Auto mechanic before it was sent</div></div>`;
+}
+// Flip an item without re-rendering, so the switch slides and its light fades rather than snapping
+function toggleItem(group, i) {
+  const it = grp(group)[i];
+  it.approved = !it.approved;
+  const row = $(`row-${group}-${i}`);
+  row.classList.toggle("off", !it.approved);
+  row.querySelector(".sw").setAttribute("aria-checked", it.approved);
+  $(`lamp-${group}-${i}`).classList.toggle("on", it.approved);
+  const read = $("drRead");
+  read.textContent = money(sumApproved(state.quote.items));
+  pulse(read);
+  renderDriverChrome();
 }
 
 function drFollowups() {
   const fs = ourFollowups();
   if (!fs.length) return "";
-  return `<div class="lbl">Not now, but not forgotten</div><div class="card u-can_wait fu">${fs.map((f) => `<div class="fu-row ${f.status}">
+  return `<div class="lbl">Not now, but not forgotten</div><div class="sheet fu">${fs.map((f) => `<div class="fu-row ${f.status}">
       <div class="fu-t"><b>${esc(f.item)}</b><span>${f.status === "off" ? "No reminder" : `We'll text you around ${esc(whenOf(f.due))}`}</span></div>
       <button class="ck-link" data-act="fu-toggle" data-id="${f.id}">${f.status === "off" ? "Remind me" : "Don't remind me"}</button></div>`).join("")}
     <div class="small" style="text-align:left">Nothing is booked. City Auto just checks in when it's due.</div></div>`;
@@ -442,12 +478,12 @@ function drFollowups() {
 
 function tbcBox(q) {
   const list = tbcList(q);
-  return list.length ? `<div class="missing"><b>City Auto will confirm before starting</b>${list.map(esc).join(" · ")}</div>` : "";
+  return list.length ? `<div class="missing"><b>City Auto will confirm before starting</b>${list.map(esc).join("<br>")}</div>` : "";
 }
 
 function lockScreen(withNotif) {
   const now = new Date();
-  const notif = withNotif ? `<div class="notif" data-act="open-thread"><div class="app">💬</div><div style="flex:1">
+  const notif = withNotif ? `<div class="notif" data-act="open-thread"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
       <div class="top"><span>Messages</span><span>now</span></div><div class="ti">City Auto</div>
       <div class="tx">Hi ${esc(customer())}, your quote for the ${esc(carName())} is ready. Please review and approve…</div></div></div>
       <div class="tapme">Tap to open</div>` : "";
@@ -460,10 +496,10 @@ function thread() {
   const need = q.items.filter((i) => i.status === "needed_now").length;
   const wait = q.items.length - need;
   return `<div class="thread"><div class="tstamp">Today ${timeOf(state.sentAt)}</div>
-    <div class="bubble">Hi ${esc(customer())}, it's City Auto. Your quote for the ${esc(carName())} is ready. Please review and approve 👇</div>
+    <div class="bubble">Hi ${esc(customer())}, it's City Auto. Your quote for the ${esc(carName())} is ready. Please review and approve below.</div>
     <div class="linkcard" data-act="open-quote"><div class="lc-top"><img src="/static/logo.svg" alt=""><div><div class="lc-k">RepairFair quote</div><div class="lc-t">${esc(q.job_title)}</div></div></div>
-      <div class="lc-b"><div class="row">${need ? `<span class="chip needed_now"><i></i>${need} needed now</span>` : ""}${wait ? `<span class="chip can_wait"><i></i>${wait} other item${wait > 1 ? "s" : ""}</span>` : ""}</div>
-      <span class="cta">View &amp; approve</span><div class="dom">repairfair.au</div></div></div>
+      <div class="lc-b"><div class="row2">${need ? `<span class="key needed_now"><i></i>${need} needed now</span>` : ""}${wait ? `<span class="key can_wait"><i></i>${wait} other item${wait > 1 ? "s" : ""}</span>` : ""}</div>
+      <span class="cta">View and approve</span><div class="dom">repairfair.au</div></div></div>
     ${state.dr === "thread" && !state.viewedAt ? "" : ""}</div>`;
 }
 
@@ -471,7 +507,7 @@ function drStatus() {
   if (state.stage == null) return "";
   const st = state.stage;
   return `<div class="statuscard"><div class="sc-top"><span>Your ${esc(carName())}</span><span class="eta ${st === 4 ? "ready" : ""}">${st === 4 ? "Ready now" : "Ready " + esc(etaText(state.readyBy))}</span></div>
-    <div class="vsteps">${STAGES.map((lbl, k) => `<div class="vs ${k < st || st === 4 ? "done" : k === st ? "now" : ""}"><span class="vd">${k <= st ? "✓" : ""}</span><span class="vl">${lbl}</span><span class="vt">${state.stageAt[k] ? esc(timeOf(state.stageAt[k])) : ""}</span></div>`).join("")}</div></div>`;
+    <div class="vsteps">${STAGES.map((lbl, k) => `<div class="vs ${k < st || st === 4 ? "done" : k === st ? "now" : ""}"><span class="vd">${k <= st ? ic("check", 12) : ""}</span><span class="vl">${lbl}</span><span class="vt">${state.stageAt[k] ? esc(timeOf(state.stageAt[k])) : ""}</span></div>`).join("")}</div></div>`;
 }
 
 function renderDriver() {
@@ -481,39 +517,47 @@ function renderDriver() {
     case "notified": return lockScreen(true);
     case "thread": return thread();
     case "quote":
-      return `<div class="qhero"><div class="k">RepairFair standard quote</div><div class="t">${esc(q.job_title)}</div><div class="m">City Auto · ${esc(carName())}</div></div>
-        <div class="etaline" style="text-align:center">🕒 ${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
-        <div class="stamp"><span class="ic">✓</span>Checked by a City Auto mechanic before sending</div>
+      return `${drQuotePanel(q)}
+        <div class="etaline">${ic("time", 18)}${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
         ${tbcBox(q)}
-        <div class="legend" style="margin:0 0 9px;justify-content:center"><span class="chip needed_now"><i></i>Needed now</span><span class="chip can_wait"><i></i>Can wait</span><span class="chip optional"><i></i>Optional</span></div>
-        ${q.items.map((it, i) => drCard(it, i, "quote")).join("")}<div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>`;
+        <div class="lead">${esc(customer())}, choose what we do today</div>
+        <div class="sheet">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
+        <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>`;
     case "approved":
-      return `<div class="success"><div class="tick">✓</div><div class="h">You approved ${money(sumApproved(q.items))}</div><div class="s">City Auto has your approval in writing.</div></div>
+      return `<div class="cluster"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>
+          <div class="readout green">${money(sumApproved(q.items))}</div>
+          <div class="cl-sub">City Auto has your approval in writing.</div>
+          ${lamps(q.items, "done")}
+          <div class="cl-foot">${ic("check", 18)}Saved to your service record, ${esc(stampOf(state.approvedAt))}</div></div>
         ${drStatus()}
-        <div class="stamp"><span class="ic">✓</span>Saved to your service record · ${esc(stampOf(state.approvedAt))}</div>
-        <div class="lbl">Your decisions</div><div class="card u-to_confirm" style="padding-top:6px;padding-bottom:6px">${decisions(decItems(q.items))}</div>
+        <div class="lbl">Your decisions</div><div class="sheet">${decisions(decItems(q.items))}</div>
         ${drFollowups()}`;
     case "extra":
-      return `<div class="qhero" style="background:linear-gradient(135deg,#2B3A40,#46585E)"><div class="k">New item · ${esc(q.job_title)}</div><div class="t">${esc(x.items[0].name)}</div><div class="m">Found mid-job · needs your OK</div></div>
-        <div class="bigphoto"><span>📷 Photo from City Auto</span><span>tap to enlarge</span></div>
-        ${tbcBox(x)}${x.items.map((it, i) => drCard(it, i, "extra", false)).join("")}<div class="small">The workshop won't start this until you decide.</div>`;
+      return `<div class="cluster"><div class="cl-top"><b>Found mid-job</b><span>${esc(q.job_title)}</span></div>
+          <div class="readout">${money(sumAll(x.items))}</div>
+          <div class="cl-sub"><b>${esc(x.items[0].name)}</b> needs your OK before City Auto continues.</div>
+          ${lamps(x.items.map((it) => ({ ...it, approved: true })), "extra")}</div>
+        <div class="bigphoto"><span>${ic("camera", 18)}Photo from City Auto</span><span>tap to enlarge</span></div>
+        ${tbcBox(x)}<div class="sheet">${x.items.map((it, i) => drRow(it, i, "extra", false)).join("")}</div>
+        <div class="small">The workshop won't start this until you decide.</div>`;
     case "extra_done": {
       const r = state.extraResult;
       const m = r === "approved" ? "Extra work approved" : r === "call" ? "City Auto will call you" : "Extra work declined";
       const s = r === "approved" ? "Saved with your quote." : r === "call" ? "Nothing extra starts until you agree." : "City Auto won't do it.";
-      return `<div class="success"><div class="tick" style="${r === "approved" ? "" : "background:var(--brand);box-shadow:0 0 0 8px var(--brand-100)"}">${r === "call" ? "☎" : "✓"}</div><div class="h">${m}</div><div class="s">${s}</div></div>
+      return `<div class="cluster"><div class="cl-top"><b>${m}</b>${r === "call" ? ic("phone", 18) : ""}</div>
+          <div class="readout ${r === "approved" ? "green" : ""}">${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</div>
+          <div class="cl-sub">Your final bill. ${s}</div>
+          <div class="cl-foot">${ic("check", 18)}Decision saved, ${esc(stampOf(state.extraAt))}</div></div>
         ${drStatus()}
-        <div class="stamp"><span class="ic">✓</span>Decision saved · ${esc(stampOf(state.extraAt))}</div>
-        <div class="card u-to_confirm"><div class="totalrow"><span>Your final bill</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
-        <div class="small" style="text-align:left">Only what you approved. No surprises.</div></div>`;
+        <div class="small">Only what you approved. No surprises.</div>`;
     }
     case "ready": {
       const total = sumApproved(q.items) + (x && state.extraResult === "approved" ? sumApproved(x.items) : 0);
-      return `<div class="success"><div class="tick">🚗</div><div class="h">Your car is ready</div><div class="s">City Auto · open until 5:30 pm today</div></div>
-        ${drStatus()}
-        <div class="card u-to_confirm"><div class="totalrow"><span>Final bill</span><b>${money(total)}</b></div>
-        <div class="small" style="text-align:left">Exactly what you approved. Pay at pickup.</div></div>
-        <div class="stamp"><span class="ic">✓</span>Itemised invoice saved to your service record</div>`;
+      return `<div class="cluster"><div class="cl-top"><b>Your car is ready</b><span>Open until 5:30 pm</span></div>
+          <div class="readout green">${money(total)}</div>
+          <div class="cl-sub">Final bill. Exactly what you approved, paid at pickup.</div>
+          <div class="cl-foot">${ic("check", 18)}Itemised invoice saved to your service record</div></div>
+        ${drStatus()}`;
     }
   }
   return "";
@@ -524,12 +568,12 @@ function renderDriverChrome() {
   document.querySelector(".dr-phone").classList.toggle("lock", lock);
   $("drTop").innerHTML = lock ? "" : state.dr === "thread"
     ? `<div class="thread-head"><span class="back">‹</span><div class="av">CA</div><div class="nm">City Auto ›</div></div>`
-    : `<div class="urlbar">🔒 repairfair.au/q/8F2K</div>`;
-  $("drBanner").innerHTML = state.drBanner === "ready" ? `<div class="notif" data-act="open-ready"><div class="app">💬</div><div style="flex:1">
-      <div class="top"><span>Messages · City Auto</span><span>now</span></div><div class="ti">Your car is ready 🚗</div>
+    : `<div class="urlbar">${ic("lock", 14)}repairfair.au/q/8F2K</div>`;
+  $("drBanner").innerHTML = state.drBanner === "ready" ? `<div class="notif" data-act="open-ready"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
+      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your car is ready</div>
       <div class="tx">Your ${esc(carName())} is ready to collect. Tap to view your final bill.</div></div></div>`
-    : state.drBanner === "extra" ? `<div class="notif" data-act="open-extra"><div class="app">💬</div><div style="flex:1">
-      <div class="top"><span>Messages · City Auto</span><span>now</span></div><div class="ti">We found something</div>
+    : state.drBanner === "extra" ? `<div class="notif" data-act="open-extra"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
+      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">We found something</div>
       <div class="tx">${esc(state.extra.items[0].name)}: needs your OK before we continue. Tap to view.</div></div></div>` : "";
   const d = $("drDock");
   if (state.dr === "quote") {
@@ -548,20 +592,29 @@ function render() {
   document.querySelectorAll("#wsTabs .tab").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
   const keepSearchFocus = document.activeElement && document.activeElement.id === "search";
   const wsKey = state.tab + ":" + state.ws;
-  $("ws").innerHTML = `<div class="${wsKey !== lastWs ? "enter" : ""}">${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
-  if (wsKey !== lastWs) $("ws").scrollTop = 0;
+  $("ws").innerHTML = `<div>${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
+  if (wsKey !== lastWs) { $("ws").scrollTop = 0; enter($("ws").firstElementChild); }
   lastWs = wsKey;
   if (keepSearchFocus) { const s = $("search"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
   const drChanged = state.dr !== lastDr;
-  $("dr").innerHTML = `<div class="${drChanged ? "enter" : ""}">${renderDriver()}</div>`;
-  if (drChanged) $("dr").scrollTop = 0;
+  $("dr").innerHTML = `<div>${renderDriver()}</div>`;
+  if (drChanged) { $("dr").scrollTop = 0; enter($("dr").firstElementChild); }
   lastDr = state.dr;
   renderDriverChrome();
   renderWsDock();
-  $("wsTitle").textContent = state.quote ? `City Auto · ${state.quote.job_title}` : "City Auto";
+  $("wsTitle").textContent = state.quote ? `City Auto, ${state.quote.job_title.toLowerCase()}` : "City Auto";
 }
 
 function fly(id) { const el = $(id); el.classList.remove("go"); void el.offsetWidth; el.classList.add("go"); }
+// Motion (static/vendor/motion.js), using transform and opacity so the browser runs it off the main thread: a short staggered rise when a screen changes, and a small settle when a total updates.
+// Skipped if the library didn't load or the viewer asked for reduced motion.
+const M = window.Motion, still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const EASE_OUT = [0.23, 1, 0.32, 1];
+function enter(el) {
+  if (!M || still || !el) return;
+  M.animate([...el.children], { opacity: [0, 1], transform: ["translateY(8px)", "none"] }, { duration: 0.28, delay: M.stagger(0.035), ease: EASE_OUT });
+}
+function pulse(el) { if (M && !still && el) M.animate(el, { opacity: [0.4, 1], transform: ["translateY(-4px)", "none"] }, { duration: 0.2, ease: EASE_OUT }); }
 const doc = (name) => (name === "extra" ? state.extra : state.quote);
 const grp = (name) => doc(name).items;
 
@@ -618,8 +671,7 @@ document.addEventListener("click", (e) => {
   if (act === "fu-toggle") fu.status = fu.status === "off" ? "scheduled" : "off";
   if (act === "fu-send") { fu.status = "sent"; later(400, () => toast(`Reminder sent to ${fu.customer}`)); }
   if (act === "why-toggle") { const it = grp(b.dataset.group)[i]; it.whyOpen = !it.whyOpen; }
-  if (act === "yes") grp(b.dataset.group)[i].approved = true;
-  if (act === "no") grp(b.dataset.group)[i].approved = false;
+  if (act === "sw") { toggleItem(b.dataset.group, i); return; }
   if (act === "approve") {
     state.approvedAt = new Date(); state.ws = "approved"; state.dr = "approved"; recordJob(); bookFollowups(); fly("packetBack");
     state.stage = 1; state.stageAt = { 0: state.sentAt, 1: state.approvedAt }; state.readyBy = etaFrom(state.approvedAt, labourHrs(state.quote.items, true));
@@ -698,9 +750,9 @@ document.addEventListener("input", (e) => {
 function saveDemo() { try { localStorage.setItem("rf-demo", demoOn() ? "1" : "0"); } catch (_) {} }
 function badge() {
   const b = $("aiBadge");
-  if (demoOn()) { b.className = "pill demo"; b.textContent = "Demo mode · saved examples"; return; }
+  if (demoOn()) { b.className = "pill demo"; b.textContent = "Demo mode: saved examples"; return; }
   b.className = window.__aiReady ? "pill live" : "pill demo";
-  b.textContent = window.__aiReady ? `Live AI · ${window.__aiModel}` : "No API key · saved examples";
+  b.textContent = window.__aiReady ? `Live AI, ${window.__aiModel}` : "No API key: saved examples";
 }
 function fit() {
   const vp = $("viewport"), st = $("stage");
