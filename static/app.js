@@ -13,6 +13,7 @@ Labour 0.5 hr at $90/hr.`;
 
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
+const WORKSHOP = "City Auto";
 const PHONE_MASK = "04•• ••• 812";
 
 const SEED_HISTORY = [
@@ -41,6 +42,18 @@ const SEED_BOOK = [
   { item: "Rear brake hose", key: "hose", tier: "Economy", price: 45, warranty: "12 months", brand: "Value line", part_no: "BH-310E" },
   { item: "Rear brake hose", key: "hose", tier: "OEM", price: 70, warranty: "12 months", brand: "Genuine", part_no: "BH-310G" },
   { item: "Labour rate", key: "labour", tier: null, price: 90, unit: "/hr", warranty: "12 months workmanship", brand: null, part_no: null },
+];
+
+// Sample "typical price" ranges for the fair price check. Illustrative only: real ranges would come from quotes across workshops.
+const FAIR_RANGES = [
+  { key: "pad", tier: "Economy", low: 70, high: 120 },
+  { key: "pad", tier: "OEM", low: 130, high: 190 },
+  { key: "pad", tier: "Premium", low: 180, high: 260 },
+  { key: "rotor", low: 200, high: 320 },
+  { key: "fluid", low: 70, high: 120 },
+  { key: "hose", tier: "Economy", low: 35, high: 70 },
+  { key: "hose", tier: "OEM", low: 60, high: 100 },
+  { key: "labour", low: 80, high: 130 },
 ];
 
 const fresh = () => ({
@@ -170,6 +183,27 @@ const priceOf = (it) => (it.options.length ? it.options[it.opt].price : it.price
 const warrantyOf = (it) => (it.options.length ? it.options[it.opt].warranty : it.warranty);
 const sumApproved = (items) => items.filter((i) => i.approved).reduce((s, i) => s + (priceOf(i) || 0), 0);
 const sumAll = (items) => items.reduce((s, i) => s + (priceOf(i) || 0), 0);
+// Fair price check: compares an item's price (labour: its hourly rate) with the typical range for that part
+function fairFor(it) {
+  const name = it.name.toLowerCase(), tier = it.options.length ? it.options[it.opt].tier : null;
+  return FAIR_RANGES.find((r) => (it.kind === "labour" ? r.key === "labour" : r.key !== "labour" && name.includes(r.key)) && (r.tier || null) === tier);
+}
+function fairCheck(it) {
+  const r = fairFor(it), p = it.kind === "labour" ? it.rate : priceOf(it);
+  return r && p != null ? { ...r, over: p > r.high } : null;
+}
+function fairLine(it, forDriver) {
+  const c = fairCheck(it);
+  if (!c) return "";
+  const range = `$${c.low}\u2013$${c.high}${it.kind === "labour" ? " an hour" : ""}`;
+  return c.over
+    ? `<div class="fair over">Above the typical ${range}.${forDriver ? ` Ask ${WORKSHOP} why.` : ""}</div>`
+    : `<div class="fair">${ic("check", 15)}Within the typical ${range}</div>`;
+}
+function fairSummary(items) {
+  const checks = items.map(fairCheck).filter(Boolean), ok = checks.filter((c) => !c.over).length;
+  return checks.length ? `${ok} of ${checks.length} prices within the typical range` : "";
+}
 const customer = () => (state.quote && state.quote.customer) || "Mia";
 const carName = () => (state.quote && state.quote.car) || "your car";
 const itemLabel = (i) => i.name + (i.options.length ? ` (${i.options[i.opt].tier})` : "");
@@ -275,6 +309,7 @@ function wsCard(it, i, group) {
   } else if (it.kind === "labour") {
     b += `<div class="edrow">${numIn(it.hours, "hours", d, "")}<span>hrs ×</span>${numIn(it.rate, "rate", d)}<span>/hr =</span><b class="lp">${money(it.price)}</b></div>`;
   } else b += `<div class="edrow"><span>Price</span>${numIn(it.price, "price", d)}</div>`;
+  b += `<div class="fair-slot">${fairLine(it, false)}</div>`;
   if (!it.options.length && (it.brand || it.part_no)) b += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(", "))}</div>`;
   if (warrantyOf(it) && !it.options.length) b += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
   b += `<label class="why-ed"><span>${esc(customer())} reads (“${whyLabel(it)}”)</span><textarea rows="3" data-act="why" ${d} placeholder="Explain it in plain words for ${esc(customer())}">${esc(it.why || "")}</textarea></label>`;
@@ -458,8 +493,9 @@ function drRow(it, i, group, toggle = true) {
   if (it.options.length) {
     m += `<div class="opts">${it.options.map((o, k) => `<button class="opt ${k === it.opt ? "sel" : ""}" data-act="opt" ${d} data-k="${k}"><span class="t">${o.tier}</span><b>${money(o.price)}</b><span class="w">${esc((o.warranty || "warranty TBC").replace(/\s*\/\s*/g, " or "))}</span></button>`).join("")}</div>`;
     const o = it.options[it.opt];
-    m += `<div class="pn">${esc(o.brand || "Brand to confirm")}, ${o.part_no ? "part no. " + esc(o.part_no) : "part no. to confirm"}</div>`;
+    m += fairLine(it, true) + `<div class="pn">${esc(o.brand || "Brand to confirm")}, ${o.part_no ? "part no. " + esc(o.part_no) : "part no. to confirm"}</div>`;
   } else {
+    m += fairLine(it, true);
     if (it.brand || it.part_no) m += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(", "))}</div>`;
     if (warrantyOf(it)) m += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
   }
@@ -476,7 +512,8 @@ function drQuotePanel(q) {
     <div class="readout" id="drRead">${money(sumApproved(q.items))}</div>
     <div class="cl-sub" id="drSub">to approve today, out of ${money(sumAll(q.items))} quoted</div>
     ${lamps(q.items, "quote")}
-    <div class="cl-foot">${ic("check", 18)}Checked by a City Auto mechanic before it was sent</div></div>`;
+    <div class="cl-foot">${ic("check", 18)}Checked by a City Auto mechanic before it was sent</div>
+    ${fairSummary(q.items) ? `<div class="cl-foot">${ic("check", 18)}${fairSummary(q.items)}</div>` : ""}</div>`;
 }
 // Flip an item without re-rendering, so the switch slides and its light fades rather than snapping
 function toggleItem(group, i) {
@@ -547,7 +584,8 @@ function renderDriver() {
         ${tbcBox(q)}
         <div class="lead">${esc(customer())}, choose what we do today</div>
         <div class="sheet">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
-        <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>`;
+        <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
+        <div class="small">Typical price ranges are sample data for this demo.</div>`;
     case "approved":
       return `<div class="cluster"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>
           <div class="readout green">${money(sumApproved(q.items))}</div>
@@ -766,6 +804,7 @@ document.addEventListener("input", (e) => {
       t.closest(".card").querySelector(".lp").textContent = money(it.price);
     }
     it.edited = true; t.closest(".card").classList.add("edited"); t.parentElement.classList.toggle("empty", v == null);
+    t.closest(".card").querySelector(".fair-slot").innerHTML = fairLine(it, false);
     refreshCheck(t.dataset.group); return;
   }
   if (e.target.id === "search") { state.search = e.target.value; render(); }
