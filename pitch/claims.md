@@ -6,7 +6,7 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 - **USP:** every repair is quoted item by item and every extra is approved in writing, so nothing reaches the bill that the driver didn't agree to.
 - **Tool first, network later:** workshops pay for quicker replies and proof of what was agreed. As more join, the shared quote format and driver-owned record grow into a network of garages drivers can trust. The network is the long-term vision and what stops copycats, not a reason to pay on day one.
 - **Say "network", not "platform":** we don't replace workshop software.
-- **Founding Workshop offer:** the first 20–30 Inner West workshops get 12 months free, then $49 a month locked in. They sign a letter of intent to pay and use it on all their quotes. The free plan (about 20 quotes a month) stays for everyone else.
+- **Founding Workshop offer (a plan, not a result):** once the app is deployed, the first 20–30 Inner West workshops get 12 months free, then $49 a month locked in. They sign a letter of intent to pay and use it on all their quotes. The free plan (about 20 quotes a month) stays for everyone else. Nobody has signed yet.
 
 ## Already supported
 
@@ -34,15 +34,19 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 
 The share of **all** reviews stays off the main slides. It will look small, so it's a Q&A answer: most drivers never post a review, which is why the survey and interviews matter more. Region differences stay in the backups unless their ranges clearly separate.
 
-## Need the pilot or sign-ups
+## Not available by demo day
 
-| Claim | Slide | Data |
-|---|---|---|
-| "Approvals take minutes, not hours" | 4 | Time from sending a quote to getting a reply |
-| "Every charge was approved" | 4 | Approved total vs final bill |
-| "Customers approve more when they can choose" | 4, 6 | Items approved, and "Not now" follow-ups that return |
-| "Workshops will pay" | 4 | Signed Founding Workshop letters |
-| "Workshops rely on it" | 4 | Quotes sent per workshop |
+There's no pilot and no signed workshops: the app isn't deployed and there isn't time (decided 31 Oct). These claims are **out of the pitch**. Don't show placeholders or imply a pilot has run. They become what the pilot would measure, which is the basis of the ask on slide 8.
+
+| What the pilot would measure | Data |
+|---|---|
+| Approvals take minutes, not hours | Time from sending a quote to getting a reply |
+| Every charge was approved | Approved total vs final bill |
+| Customers approve more when they can choose | Items approved, and "Not now" follow-ups that return |
+| Workshops will pay | Signed Founding Workshop letters |
+| Workshops rely on it | Quotes sent per workshop |
+
+**Slide 4 instead shows validation so far:** 10 workshop interviews, 6 would trial it free, 4 would pay $29–79 a month, a working prototype, and what changed after feedback. Written approval of extras became the core, and AI drafting became optional because some shops already quote in minutes. Add the review study number only if it clears its bar and isn't already on slide 2. Call it a **working prototype**, never a live product, and say that nobody has paid yet.
 
 ## Competitor prices (checked 30 Oct 2026)
 

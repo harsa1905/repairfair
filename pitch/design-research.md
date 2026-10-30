@@ -73,8 +73,8 @@ Both repos were read in full from shallow clones (MIT-licensed). Nothing is inst
 ## Still open (needs Sameep)
 
 1. Who presents which slides; names and roles for all seven team members.
-2. Pilot status: repairs so far, which measures are tracked, and whether a workshop will commit to keep paying $49.
-3. The ask on slide 8.
+2. ~~Pilot status.~~ Closed 31 Oct: no pilot by demo day; see `claims.md`.
+3. The ask on slide 8: help deploying the app and running the first Inner West pilot, plus any specific funding or introductions.
 4. OK to check competitors' current prices for the reference list?
 5. The Glebe "10–15 minutes" quote isn't on the verified list. The suggestion is to leave it out.
 6. Clip vs live demo. The suggestion is the clip.
