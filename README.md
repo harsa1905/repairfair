@@ -24,4 +24,4 @@ Open http://localhost:5000 in Chrome or Edge. Stop it with Ctrl+C.
 Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (it uses saved examples).
 
 ## Design
-Each screen leads with a dark "instrument panel" (the number that matters and the warning lights); below it are plain lists with normal phone controls. Colour only means urgency or state. Fonts (Barlow, SIL Open Font License) and the Motion animation library (MIT) are saved in `static/vendor/`, so the demo looks the same without internet.
+Each screen leads with a blue-teal "instrument panel" (the number that matters and the warning lights); below it are plain lists with normal phone controls. Colour only means urgency or state. Fonts (Barlow, SIL Open Font License) and the Motion animation library (MIT) are saved in `static/vendor/`, so the demo looks the same without internet.

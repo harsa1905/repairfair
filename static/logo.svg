@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="RepairFair"><title>RepairFair</title>
-<rect width="256" height="256" rx="56" fill="#0B4A50"/>
+<rect width="256" height="256" rx="56" fill="#0F5F78"/>
 <path fill="#fff" d="M74 36 H182 A10 10 0 0 1 192 46 V214 L176 204.8 L160 214 L144 204.8 L128 214 L112 204.8 L96 214 L80 204.8 L64 214 V46 A10 10 0 0 1 74 36 Z"/>
-<g fill="#0B4A50" transform="translate(127 120) scale(0.58) translate(-127 -131)"><g transform="translate(0 -6)">
+<g fill="#0F5F78" transform="translate(127 120) scale(0.58) translate(-127 -131)"><g transform="translate(0 -6)">
 <rect x="-17" y="-17" width="110.4" height="34" rx="17" transform="translate(44 140) rotate(45)"/>
 <rect x="-17" y="-17" width="138" height="34" rx="17" transform="translate(98 194) rotate(-45)"/>
 <path transform="translate(192 100) rotate(135) scale(0.82)" d="M-41 -16 L8 -16 L8 16 L-41 16 A44 44 0 1 0 -41 -16 Z"/></g></g></svg>
