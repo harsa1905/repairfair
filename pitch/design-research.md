@@ -16,7 +16,7 @@ The deck is an **HTML deck** streamed from Sameep's laptop, with a **PDF export 
 | Source | What worked | What we take |
 |---|---|---|
 | **Trunk Tools**: AI for construction admin, $40M Series B (2025) [1] | Made a boring problem physical (paperwork stacked as tall as a building). Headlines state outcomes ("25 hours saved per PM per week"). Logos of the tools it works with (Procore, Autodesk) show it is "a layer, not a replacement". Product shown as a video. | Slide 2 makes the problem physical: a $300 quote growing into a $1,120 bill. Slide 5's answer to "what stops copycats?": we sit on top of MechanicDesk and Xero; we don't replace them. |
-| **Handly**: booking and admin for small trade businesses, pre-seed (2022) [2] | Soft blue-and-white palette: friendly for a B2B product used by tradespeople. App shown on a phone. Built on WhatsApp, which customers already use. Traction shown honestly, including churn, which built trust. Criticised for having **no ask** and for blurring live and planned features. | Friendly palette. "A text link, no app" as our familiar-tools point. Honest pilot placeholders. A concrete ask on slide 8. Label what's live today. |
+| **Handly**: booking and admin for small trade businesses, pre-seed (2022) [2] | Soft blue-and-white palette: friendly for a B2B product used by tradespeople. App shown on a phone. Built on WhatsApp, which customers already use. Traction shown honestly, including churn, which built trust. Criticised for having **no ask** and for blurring live and planned features. | Friendly palette. "A text link, no app" as our familiar-tools point. Honesty about what isn't proven yet. A concrete ask on slide 8. Label what's live today. |
 | **Keeper**: pre-seed (2024) [3] | The look carried the message (serif type and classical art signalled seriousness). Measured outcomes, not vanity numbers. Dense material went to the appendix. | Our look should say **"in writing, itemised, trustworthy"**: a quote card whose line items tick to approved. Measures are approved vs final charges, not clicks. Detail goes to backup slides. |
 | **YC: How to design a better pitch deck** (Kevin Hale) [4] | Legible, simple, obvious. Large bold simple type with good contrast. **Text at the top** (easier to read from the back). **No screenshots** ("almost always illegible"). Chart titles state the conclusion. | Big headlines at the top. Closely cropped phone views instead of screenshots. Every number labelled in plain words. |
 | **YC demo-day format, 2026** (Flowjam) [5] | **A 10–15-second clip of the product working, very early.** One number for traction. **End on the ask and contact details; never a bare "Thank you."** "If your mouth and the slide say the same thing, cut one." Pre-recorded beats live ("live demos fail at the worst moment"). | The 30-second video becomes about 12 seconds on slide 3. Slide 8 is ask + email + QR code. Slides carry numbers; the script carries the explanation. |
@@ -32,7 +32,7 @@ The deck is an **HTML deck** streamed from Sameep's laptop, with a **PDF export 
 | Colours | The app's own tokens: sand `#F3F1EC` background, teal `#0F5257` brand, ink `#13232B` text, muted `#5B6B70`, lines `#E2E7E7`. Slides 1 and 8 are full teal. |
 | Priority colours | Red `#D9423A`, amber `#D98E04`, green `#2E9B62`, used **only inside the quote card**, as in the app. |
 | Type | **Inter**, the app's font, so the deck and app match. Saved locally in `pitch/` so it works offline at the venue. Headlines 60pt+ at the top; hero numbers 160pt+; about 15 words per slide at most. |
-| Recurring visual | The quote card. Slide 1 shows $300 → $1,120. Slide 3 shows items ticking from "needs approval" to "approved in writing". Slide 4 shows approved vs final charges (pilot data). |
+| Recurring visual | The quote card. Slide 1 shows $300 → $1,120. Slide 3 shows items ticking from "needs approval" to "approved in writing". Slide 4 shows what changed after feedback. |
 | Product | One phone frame with one crop of the real app per slide, and the short clip on slide 3. Shown after app-dev's restyle lands. |
 | Motion | Restrained: one fade or rise per slide; nothing flashy. Respects reduced-motion settings. |
 | Close | The ask, an email address and a QR code. No "Thank you" slide. |
@@ -67,7 +67,7 @@ Both repos were read in full from shallow clones (MIT-licensed). Nothing is inst
   - every slide at 1280×720 and on a phone viewport;
   - nothing overflowing;
   - no fonts under 24px;
-  - no unfilled `PILOT RESULT` box left by mistake;
+  - no pilot results or placeholders on any slide;
   - the presenter window works when only the audience window is shared.
 
 ## Still open (needs Sameep)

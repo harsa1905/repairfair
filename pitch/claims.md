@@ -48,6 +48,33 @@ There's no pilot and no signed workshops: the app isn't deployed and there isn't
 
 **Slide 4 instead shows validation so far:** 10 workshop interviews, 6 would trial it free, 4 would pay $29–79 a month, a working prototype, and what changed after feedback. Written approval of extras became the core, and AI drafting became optional because some shops already quote in minutes. Add the review study number only if it clears its bar and isn't already on slide 2. Call it a **working prototype**, never a live product, and say that nobody has paid yet.
 
+## Estimates and goals (always labelled)
+
+These are never shown as results.
+
+| Slide | What to show | Label |
+|---|---|---|
+| 6 | "One follow-up job a month covers the $49" | Break-even, not a forecast. Holds only if that job earns the workshop at least $49, so confirm a real average margin first |
+| 6 | 5% of about 28,000 workshops × $49 × 12 ≈ $820k a year | Illustrative |
+| 8 | Pilot goals (draft below) | Goals, not predictions |
+
+**Draft pilot goals, to be confirmed by the team:**
+- 6 Inner West workshops for 3 months, starting from those who said they'd trial it.
+- Half of quotes get a reply within 1 hour.
+- Every charge on the final bill was approved in writing.
+- At least 3 of the 6 workshops agree to pay $49 afterwards.
+
+## Prototype timing test (run last, before the pitch)
+
+Run on the laptop, with no deployment needed, using the latest app version. This is a prototype test, not a pilot.
+
+1. **Quote speed:** a team member goes from rough notes to a sent quote, including the mechanic check, 3 times. Record the median time.
+2. **Approval speed:** 5 people who haven't seen the app each approve one quote. Time from opening the quote to approving it, then ask what they approved and the total. Record the median time and how many answered correctly.
+
+**Report it as:** "In a prototype test with 5 people, the typical quote was approved in X seconds, and Y of 5 could say what they'd approved." The testers aren't real customers or mechanics, and we say so. Use it on slide 4 only if all 5 tests are completed.
+
+**Results:** not run yet. Add them here before the deck is locked.
+
 ## Competitor prices (checked 30 Oct 2026)
 
 All in AUD a month excluding GST, unless noted.
