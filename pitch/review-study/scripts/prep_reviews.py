@@ -15,12 +15,16 @@ to be shared.
 import argparse
 import csv
 import json
+import random
 import re
 from collections import Counter
 from pathlib import Path
 
+SEED = 2026
 BATCH_SIZE = 80
 CODE_MAX_STARS = 2
+PRAISE_MIN_STARS = 4
+PRAISE_SAMPLE = 400
 DUP_MIN_WORDS = 6
 BURST_SAME_DAY = 4
 
@@ -122,10 +126,21 @@ def main():
         lines = [f"{r['review_id']} | {r['rating']}★ | {r['text']}" for r in to_code[n:n + BATCH_SIZE]]
         (coding / f"batch_{n // BATCH_SIZE + 1:02d}.txt").write_text("\n".join(lines), encoding="utf-8")
 
+    # Praise set: a random 400 of the 4-5 star reviews that came with each download,
+    # coded only for praise of clear quotes (not a random sample of all good reviews).
+    positives = [r for r in reviews if r["text"] and int(r["rating"] or 0) >= PRAISE_MIN_STARS]
+    praise = random.Random(SEED).sample(positives, min(PRAISE_SAMPLE, len(positives)))
+    praise.sort(key=lambda r: r["review_id"])
+    for n in range(0, len(praise), BATCH_SIZE):
+        lines = [f"{r['review_id']} | {r['rating']}★ | {r['text']}" for r in praise[n:n + BATCH_SIZE]]
+        (coding / f"praise_{n // BATCH_SIZE + 1:02d}.txt").write_text("\n".join(lines), encoding="utf-8")
+
     summary = {
         "reviews": len(reviews),
         "negative_with_text_to_code": len(to_code),
         "coding_batches": -(-len(to_code) // BATCH_SIZE),
+        "positive_with_text": len(positives),
+        "praise_reviews_to_code": len(praise),
         "workshops_without_reviews": missing,
         "workshops_with_more_negatives_than_fetched": capped,
         "ratings": dict(sorted(Counter(str(r["rating"]) for r in reviews).items())),

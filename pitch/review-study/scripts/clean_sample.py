@@ -2,7 +2,10 @@
 
 Reads the scraper's JSONL output, keeps mechanic/repair workshops, places each one
 in a council (LGA) by point-in-polygon against the ABS boundaries, maps councils to
-the six study regions, then draws 15 workshops per region with a fixed seed.
+the six study regions, then draws 15 workshops per region with a fixed seed from
+those with at least 5 one- or two-star reviews (3 if a region runs short), because
+most workshops have too few negative reviews to be worth a request. It also measures
+how closely workshops sit together, using every open workshop found.
 
 Outputs go to the private work folder (outside the repo). Only the aggregate
 counts file is meant to be shared.
@@ -12,13 +15,18 @@ counts file is meant to be shared.
 import argparse
 import csv
 import json
+import math
 import random
+import statistics
 from collections import Counter
 from pathlib import Path
 
 SEED = 2026
 PER_REGION = 15
 MIN_REVIEWS = 10
+MIN_NEGATIVES = 5
+FALLBACK_NEGATIVES = 3
+NEIGHBOUR_KM = 2
 
 REGIONS = {
     "Inner West": ["Inner West", "Canada Bay", "Burwood", "Strathfield"],
@@ -86,6 +94,16 @@ def find_lga(lon, lat, lgas):
     return None
 
 
+def distance_km(a, b):
+    lat1, lon1, lat2, lon2 = map(math.radians, (a["lat"], a["lon"], b["lat"], b["lon"]))
+    h = math.sin((lat2 - lat1) / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2
+    return 6371 * 2 * math.asin(math.sqrt(h))
+
+
+def negatives(p):
+    return p["stars_1"] + p["stars_2"]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--places", nargs="+", required=True, help="scraper JSONL file(s)")
@@ -95,7 +113,7 @@ def main():
     out = Path(args.out)
 
     lgas = load_lgas(args.lgas)
-    seen, kept, dropped = set(), [], Counter()
+    seen, found, kept, dropped = set(), [], [], Counter()
     for path in args.places:
         for p in read_places(path):
             pid = p.get("place_id") or p.get("data_id")
@@ -110,9 +128,6 @@ def main():
             if "closed" in (p.get("status") or "").lower():
                 dropped["closed"] += 1
                 continue
-            if (p.get("review_count") or 0) < MIN_REVIEWS:
-                dropped[f"fewer than {MIN_REVIEWS} reviews"] += 1
-                continue
             lat, lon = p.get("latitude"), p.get("longitude") or p.get("longtitude")
             lga = find_lga(lon, lat, lgas) if lat and lon else None
             if lga is None:
@@ -120,7 +135,7 @@ def main():
                 continue
             title = p.get("title") or ""
             stars = p.get("reviews_per_rating") or {}
-            kept.append({
+            place = {
                 "place_id": pid,
                 "data_id": p.get("data_id", ""),
                 "title": title,
@@ -135,7 +150,23 @@ def main():
                 "rating": p.get("review_rating", ""),
                 # Star breakdown of all the workshop's reviews, used to estimate prevalence.
                 **{f"stars_{s}": stars.get(str(s), 0) for s in range(1, 6)},
-            })
+            }
+            found.append(place)
+            if (p.get("review_count") or 0) < MIN_REVIEWS:
+                dropped[f"fewer than {MIN_REVIEWS} reviews"] += 1
+                continue
+            kept.append(place)
+
+    # Density uses every open workshop found, not only those with enough reviews.
+    density = {}
+    for region in REGIONS:
+        group = [p for p in found if p["region"] == region]
+        counts = [sum(1 for q in found if q is not p and distance_km(p, q) <= NEIGHBOUR_KM) for p in group]
+        density[region] = {
+            "workshops_found": len(group),
+            "independents": sum(1 for p in group if not p["chain"]),
+            "median_others_within_2km": statistics.median(counts) if counts else None,
+        }
 
     fields = list(kept[0].keys()) if kept else []
     with open(out / "places_clean.csv", "w", newline="", encoding="utf-8") as f:
@@ -144,10 +175,24 @@ def main():
         w.writerows(kept)
 
     rng = random.Random(SEED)
-    sample = []
+    sample, pools = [], {}
     for region in REGIONS:
-        pool = sorted((p for p in kept if p["region"] == region), key=lambda p: p["place_id"])
+        region_kept = [p for p in kept if p["region"] == region]
+        minimum = MIN_NEGATIVES
+        pool = [p for p in region_kept if negatives(p) >= minimum]
+        if len(pool) < PER_REGION:
+            minimum = FALLBACK_NEGATIVES
+            pool = [p for p in region_kept if negatives(p) >= minimum]
+        pool.sort(key=lambda p: p["place_id"])
         picked = rng.sample(pool, min(PER_REGION, len(pool)))
+        all_negatives = sum(negatives(p) for p in region_kept)
+        pools[region] = {
+            "minimum_negatives": minimum,
+            "pool": len(pool),
+            "pool_share_of_negatives": round(sum(negatives(p) for p in pool) / all_negatives, 3) if all_negatives else None,
+            "negatives": all_negatives,
+            "all_reviews": sum(p["review_count"] for p in region_kept),
+        }
         for i, p in enumerate(picked, 1):
             sample.append({"workshop_id": f"{REGION_CODES[region]}{i:02d}", **p})
 
@@ -163,6 +208,8 @@ def main():
         "workshops_per_region": dict(Counter(p["region"] for p in kept)),
         "workshops_per_lga": dict(Counter(p["lga"] for p in kept)),
         "sampled_per_region": dict(Counter(s["region"] for s in sample)),
+        "sampling_pools": pools,
+        "density": density,
         "chains_in_sample": sum(s["chain"] for s in sample),
         "seed": SEED,
     }

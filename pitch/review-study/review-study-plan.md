@@ -16,8 +16,10 @@ So we take each workshop's **60 lowest-rated** reviews. That captures essentiall
 - The trial also showed clear quotes are praised often (17 of 87 text reviews). That is reported as an observation from the trial only, not as a study result.
 
 ## What it can give the pitch
+The claims and the bar each must clear are in [../claims.md](../claims.md). In short:
 - **Slide 2 (problem):** at most one number, with the method in the backup slides.
-- **Slide 7 (go-to-market):** a dot map of where workshops are, plus each region's share of complaints that are about the bill or approvals.
+- **Slide 6 (business model):** how often good reviews praise clear quotes, labelled indicative.
+- **Slide 7 (go-to-market):** a dot map of where workshops are, and how close together they sit. Complaint rates by region stay in the backups unless their ranges clearly separate.
 
 ## Regions (defined by council area so the boundaries are objective)
 
@@ -43,7 +45,9 @@ So we take each workshop's **60 lowest-rated** reviews. That captures essentiall
    - drop dealerships, tyre-only, panel/smash, glass, detailing and parts shops;
    - drop workshops that are closed or have fewer than 10 reviews;
    - keep chains but flag them.
-3. **Sample:** 15 workshops per region, chosen at random with a fixed seed (2026), 90 in total. If a region has fewer than 15, take all of them and say so.
+3. **Sample:** 15 workshops per region, chosen at random with a fixed seed (2026), 90 in total, **from workshops with at least 5 one- or two-star reviews**. If a region has fewer than 15 of those, use 3 or more for that region; if it's still short, take all of them and say so.
+
+   Why: in the Marrickville test the median workshop had only 2 such reviews, and 3 of 19 workshops held 62% of them, so a purely random pick would spend credits on workshops with almost nothing to code. Workshops with 5 or more covered 90% of negative reviews. The cost is that results describe workshops with several bad reviews, which we state.
 4. **Reviews (Firecrawl Maps):** the **60 lowest-rated** reviews per workshop (`sort=lowest`, `count=60`). That is 10 credits per workshop, **900 credits** in total, on a fresh free account (1,000 a month).
 5. **Privacy at import** (`scripts/prep_reviews.py`):
    - delete reviewer names, profile links, photos and review URLs immediately;
@@ -53,7 +57,9 @@ So we take each workshop's **60 lowest-rated** reviews. That captures essentiall
    Raw files stay outside the repo in `C:\uni\sem 3\enterprenuership\review-study\` and are never committed.
 
    **Review text itself can contain names**, e.g. staff names or a reviewer signing off. That's fine for internal coding, but **any quote used on a slide must be paraphrased and anonymised**, with no workshop or person named.
-6. **What gets coded:** **every 1–2★ review with text.** No keyword filter is needed, so there are no keyword misses. Keyword flags are kept only as a column for reference.
+6. **What gets coded:** **every 1–2★ review with text**, with its main code, topics and any quoted and billed amounts. No keyword filter is needed, so there are no keyword misses. Keyword flags are kept only as a column for reference.
+
+   A random **400 of the 4–5★ reviews** that come with the downloads are coded for praise of clear quotes only. They aren't a random sample of all good reviews, so this result is indicative.
 7. **Suspicious reviews** (see "Fake reviews" below) are flagged, not deleted. Results are reported **with and without** them.
 8. **Coding: AI first, then a human check** (chosen by Sameep):
    1. **Codebook first.** `codebook.md` fixes the codes, decision rules and examples before coding:
@@ -64,17 +70,21 @@ So we take each workshop's **60 lowest-rated** reviews. That captures essentiall
       - **0:** none of these.
    2. **Claude codes** every review in the coding set, in batches of about 80. Each line records ID, code(s), a short evidence phrase and notes.
    3. **Human check:**
-      - two teammates each code the same **60 reviews** on their own, without seeing Claude's codes (30 that Claude coded A, B, C or D; 30 it coded 0);
-      - this takes about 15 minutes each;
-      - we report agreement and Cohen's kappa (Claude vs each teammate, and teammate vs teammate);
+      - two teammates each code the same **60 reviews** on their own, without seeing Claude's codes (30 that Claude coded A, B, C or D; 30 it coded 0), and tick any topics;
+      - this takes about 20 minutes each;
+      - we report agreement and Cohen's kappa (Claude vs each teammate, and teammate vs teammate), on whether a review is A or D, plus exact-code agreement;
       - Sameep settles disagreements.
    4. **Pass mark:** at least 80% agreement and kappa ≥ 0.6. Below that, the codebook is tightened, the reviews are recoded and the check is repeated.
    5. **Disclosed on the method slide:** "AI-assisted coding (Claude), checked by two team members on 60 reviews: X% agreement."
-9. **Results** (overall and for each region):
-   - % of 1–2★ reviews coded A, D, and A or D;
-   - the estimated share of **all** reviews (using each workshop's star breakdown);
+9. **Results** (`scripts/analyse.py`, written before the run and tested only on made-up codes):
+   - % of 1–2★ reviews coded A, D, and A or D, overall and by region, with a 95% range that resamples whole workshops because a few workshops hold most reviews;
+   - every review counts equally for the headline; the average across workshops, the last 5 years, and removing the 3 biggest workshops are reported as checks;
+   - how that ranks against the other complaint topics;
+   - the typical rise where a review states both amounts;
+   - the share of 4–5★ reviews praising clear quotes;
+   - the estimated share of **all** reviews (using the star breakdowns of every listed workshop);
    - all with n (workshops, reviews), the collection date and limitations;
-   - all shown with and without suspicious reviews.
+   - the headline shown with and without suspicious reviews.
 
 ## Fake reviews
 We can't prove a review is fake. So we **flag likely ones and report results both with and without them**. If the headline barely moves, the result doesn't depend on fakes. The flags, computed in `prep_reviews.py`:
@@ -91,6 +101,8 @@ Google already removes many fake reviews before we ever see them. **What we can'
 ## Limitations (these go in the backup slide)
 - Reviewers choose to write, so the sample is skewed towards strong experiences. Google also removes some reviews.
 - "Lowest-rated 60" covers essentially all negative reviews for most workshops, but not for the few with more than 60 negative reviews. Those are flagged in the results.
+- Sampling only workshops with several bad reviews means results don't describe workshops with almost none.
+- The listing finds only what 30 searches return, so workshop counts and distances are lower limits, not a full census.
 - Prevalence across all reviews is an **estimate**, combining star breakdowns with the coded negative reviews.
 - Google's terms of service prohibit scraping. This is a small, one-off, non-commercial student study that reports totals only. The compliant official API returns only 5 reviews per place, which is too few for this question.
 - Ethics: aggregated public reviews with no reviewer names. **The team has the go-ahead (confirmed by Sameep, 30 Oct).**
@@ -116,12 +128,12 @@ The scraper's own extended-reviews option is blocked by Google (HTTP 403) and re
 | When | What | Who |
 |---|---|---|
 | Fri 30 – Sat 31 Oct | Listing, sample, reviews, prep, AI coding, check sheet | Claude (after Sameep connects the new account) |
-| Sat 31 Oct – Sun 1 Nov | Blind check, about 15 min each | 2 teammates (names TBC) |
+| Sat 31 Oct – Sun 1 Nov | Blind check, about 20 min each | 2 teammates (names TBC) |
 | Mon 2 Nov | Agreement, settle disagreements, results; decide whether a number goes on slide 2 | Sameep + Claude |
 | Tue 3 Nov | Deck locked | |
 
 ## Files
 - `queries.txt`: the 30 searches.
 - `codebook.md`: codes and decision rules.
-- `scripts/clean_sample.py`, `scripts/prep_reviews.py`.
-- Later: the check-sheet and analysis scripts, and **aggregated** results only.
+- `scripts/clean_sample.py`, `scripts/prep_reviews.py`, `scripts/make_check.py`, `scripts/analyse.py`.
+- Later: **aggregated** results only.
