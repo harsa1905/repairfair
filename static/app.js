@@ -227,7 +227,7 @@ function checkPanel(q, group) {
       const d = `data-group="${group}" data-i="${r.i}" data-kind="${r.kind}"`;
       const acts = r.how === "resolved" ? `<span class="ck-done">${r.by === "book" ? "From price book" : r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
         : r.how === "tbc" ? `<span class="ck-tbc">To confirm</span><button class="ck-link" data-act="ck-undo" ${d}>Undo</button>`
-        : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Mark TBC</button>`;
+        : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Confirm later</button>`;
       return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic"></span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
     }).join("")}</div>`;
 }
@@ -260,7 +260,7 @@ function toast(text) {
 
 // ---------- workshop ----------
 // Editable draft card: the mechanic can fix status, prices, labour and which part tier is pre-selected
-const numIn = (v, act, d, pre = "$") => `<span class="num-wrap ${v == null ? "empty" : ""}">${pre}<input class="num" type="number" min="0" step="any" inputmode="decimal" data-act="${act}" ${d} value="${v ?? ""}" placeholder="?"></span>`;
+const numIn = (v, act, d, pre = "$") => `<label class="num-wrap ${v == null ? "empty" : ""}">${pre}<input class="num" type="number" min="0" step="any" inputmode="decimal" data-act="${act}" ${d} value="${v ?? ""}" placeholder="?"></label>`;
 function wsCard(it, i, group) {
   const d = `data-group="${group}" data-i="${i}"`;
   const sel = `<select class="status-sel ${it.status}" data-act="status" ${d} aria-label="Urgency">
@@ -268,7 +268,7 @@ function wsCard(it, i, group) {
   let b = "";
   if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? ic("camera", 16) : ""}${esc(it.evidence)}</div>`;
   if (it.options.length) {
-    b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}">
+    b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}" data-act="pre" ${d} data-k="${k}">
       <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}" aria-label="Pre-select ${esc(o.tier)}"></button>
       <span class="tn">${o.tier}<span class="tw">${esc([o.warranty || "warranty TBC", [o.brand, o.part_no].filter(Boolean).join(" ")].filter(Boolean).join(", "))}</span></span>${numIn(o.price, "price", `${d} data-k="${k}"`)}</div>`).join("")}</div>
       <div class="hint">The highlighted option is pre-selected for ${esc(customer())}. Tap another to change.</div>`;
@@ -654,6 +654,7 @@ function recordJob() {
 }
 
 document.addEventListener("click", (e) => {
+  if (e.target.closest(".num-wrap")) return;  // a price box keeps focus; don't let its row re-render
   const b = e.target.closest("[data-act], [data-tab]");
   if (!b || b.tagName === "SELECT" || b.tagName === "INPUT" || b.tagName === "TEXTAREA") return;
   if (b.dataset.tab) { state.tab = b.dataset.tab; render(); return; }
