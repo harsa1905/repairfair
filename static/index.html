@@ -17,6 +17,9 @@
     <symbol id="i-hose" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 17c4.5 0 3.5-10 7-10s2.5 10 7 10"/><path d="M3 15v4M21 15v4"/></g></symbol>
     <symbol id="i-tyre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.2"/></g></symbol>
     <symbol id="i-part" viewBox="0 0 24 24"><path d="M14.6 5.2a4.2 4.2 0 0 0-4.9 5.6L4.5 16a1.8 1.8 0 0 0 2.5 2.5l5.2-5.2a4.2 4.2 0 0 0 5.6-4.9l-2.6 2.6-2.3-.6-.6-2.3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9.5 8.5h5M9.5 12.5h5"/></g></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 1.5H5z"/><path d="M10 20.5h4"/></g></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 4.5h8l8 8-7.5 7.5-8.5-8z"/><circle cx="8.5" cy="9" r="1.2" fill="currentColor" stroke="none"/></g></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
     <symbol id="i-msg" viewBox="0 0 24 24"><path d="M12 4.2c-5 0-9 3.2-9 7.1 0 2.2 1.2 4.2 3.2 5.5l-.7 3.2 3.8-2.1c.9.2 1.8.3 2.7.3 5 0 9-3.2 9-7.1S17 4.2 12 4.2z" fill="currentColor"/></symbol>
@@ -57,13 +60,15 @@
             <img src="/static/logo.svg" alt="" class="mini-logo">
             <div><div class="ah1">RepairFair for workshops</div><div class="ah2" id="wsTitle">City Auto</div></div>
           </div>
-          <div class="tabs" id="wsTabs">
-            <button class="tab on" data-tab="quote">Quote</button>
-            <button class="tab" data-tab="book">Price book</button>
-            <button class="tab" data-tab="history">Job history</button>
-          </div>
           <div class="screen" id="ws"></div>
           <div class="dock" id="wsDock"></div>
+          <nav class="tabbar" id="wsTabs" aria-label="Workshop sections">
+            <button class="tab on" data-tab="quote"><svg class="i" width="24" height="24" aria-hidden="true"><use href="#i-doc"/></svg>Quote</button>
+            <button class="tab" data-tab="job"><svg class="i" width="24" height="24" aria-hidden="true"><use href="#i-part"/></svg>Job</button>
+            <button class="tab" data-tab="followups"><svg class="i" width="24" height="24" aria-hidden="true"><use href="#i-bell"/></svg>Follow-ups</button>
+            <button class="tab" data-tab="history"><svg class="i" width="24" height="24" aria-hidden="true"><use href="#i-time"/></svg>History</button>
+            <button class="tab" data-tab="book"><svg class="i" width="24" height="24" aria-hidden="true"><use href="#i-tag"/></svg>Prices</button>
+          </nav>
           <div class="toast" id="wsToast"></div>
         </div>
       </section>

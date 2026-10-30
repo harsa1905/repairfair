@@ -282,7 +282,7 @@ function wsCard(it, i, group) {
 }
 
 function wsQuoteTab() {
-  const q = state.quote, x = state.extra;
+  const q = state.quote;
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   switch (state.ws) {
     case "compose":
@@ -306,38 +306,48 @@ function wsQuoteTab() {
             sub: state.viewedAt ? `${esc(customer())} is looking at the quote now.` : `You'll get a notification when ${esc(customer())} responds.`,
             foot: `Checked by you before sending, ${esc(stampOf(q.checkedAt))}` })}
         <div class="lbl">Quote sent</div><div class="sheet">${q.items.map((i) => `<div class="row">${ic(itemIcon(i), 22, "ic " + lightOf(i))}<div><div class="it">${esc(i.name)}</div>${stLabel(i)}</div><span class="price">${money(priceOf(i))}</span></div>`).join("")}</div>`;
-    default: {
-      // One panel for the approval (the same lights Mia sees), then the job, then her decisions with their reminders
-      let h = `<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
-          <div class="readout green">${money(sumApproved(q.items))}</div>
-          <div class="cl-sub">Start the work on the approved items only.</div>
-          ${lamps(q.items, "ws")}
-          <div class="cl-foot">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div></div>
-        ${wsJob()}${wsDecisions()}`;
-      if (state.ws === "approved") {
-        h += state.extraOpen
-          ? `<div class="lbl">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
-            <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`
-          : `<button class="btn soft" data-act="extra-open">${ic("part", 18)}Found something extra mid-job?</button>`;
-      } else if (state.ws === "extra_loading") {
-        h += `<div class="loading"><span class="spin"></span>AI is building the extra item…</div><div class="skel"></div>`;
-      } else if (state.ws === "extra_draft") {
-        h += `<div class="lead">Extra item</div>${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
-          <div id="checks-extra">${checkPanel(x, "extra")}</div>${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}`;
-      } else if (state.ws === "extra_sent") {
-        h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]],
-          { read: "Waiting", cls: "amber", sub: `Don't start the extra work until ${esc(customer())} decides.` })}`;
-      } else if (state.ws === "extra_done") {
-        const r = state.extraResult;
-        h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", state.extraAt]],
-          { read: r === "approved" ? "Approved" : r === "call" ? `Call ${esc(customer())}` : "Declined", cls: r === "approved" ? "green" : "amber",
-            sub: r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work." })}
-          <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
-          <button class="btn soft" data-act="go-history">View in job history</button>`;
-      }
-      return h;
-    }
+    default:
+      return `<div class="cluster"><div class="cl-top"><b>Quote approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+          <div class="readout md green">${money(sumApproved(q.items))}</div>
+          <div class="cl-sub">${esc(customer())} approved this quote. The work is now in the Job tab.</div></div>
+        <button class="btn primary" data-tab="job">Open the job</button>`;
   }
+}
+
+// The job in progress: everything that happens after the driver approves
+function wsJobTab() {
+  const q = state.quote, x = state.extra;
+  const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
+  if (state.stage == null) return `<div class="blank">${ic("part", 36)}<b>No job in progress</b>A job starts here as soon as a customer approves a quote.</div>`;
+  // One panel for the approval (the same lights Mia sees), then the job, then her decisions with their reminders
+  let h = `<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+      <div class="readout green">${money(sumApproved(q.items))}</div>
+      <div class="cl-sub">Start the work on the approved items only.</div>
+      ${lamps(q.items, "ws")}
+      <div class="cl-foot">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div></div>
+    ${wsJob()}${wsDecisions()}`;
+  if (state.ws === "approved") {
+    h += state.extraOpen
+      ? `<div class="lbl">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
+        <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`
+      : `<button class="btn soft" data-act="extra-open">${ic("part", 18)}Found something extra mid-job?</button>`;
+  } else if (state.ws === "extra_loading") {
+    h += `<div class="loading"><span class="spin"></span>AI is building the extra item…</div><div class="skel"></div>`;
+  } else if (state.ws === "extra_draft") {
+    h += `<div class="lead">Extra item</div>${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
+      <div id="checks-extra">${checkPanel(x, "extra")}</div>${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}`;
+  } else if (state.ws === "extra_sent") {
+    h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]],
+      { read: "Waiting", cls: "amber", sub: `Don't start the extra work until ${esc(customer())} decides.` })}`;
+  } else if (state.ws === "extra_done") {
+    const r = state.extraResult;
+    h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", state.extraAt]],
+      { read: r === "approved" ? "Approved" : r === "call" ? `Call ${esc(customer())}` : "Declined", cls: r === "approved" ? "green" : "amber",
+        sub: r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work." })}
+      <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
+      <button class="btn soft" data-act="go-history">View in History</button>`;
+  }
+  return h;
 }
 
 // Fixed bar under a draft: "I've checked this quote" unlocks Send once every flagged gap is handled
@@ -349,7 +359,7 @@ function renderWsDock() {
       <div class="small">Type it the way you'd write it on a job card. The AI does the rest.</div>`;
     return;
   }
-  const g = state.tab !== "quote" ? null : state.ws === "draft" ? "quote" : state.ws === "extra_draft" ? "extra" : null;
+  const g = state.tab === "quote" && state.ws === "draft" ? "quote" : state.tab === "job" && state.ws === "extra_draft" ? "extra" : null;
   if (!g) { d.className = "dock"; d.innerHTML = ""; return; }
   const q = doc(g), left = openChecks(q);
   const hint = left ? `Resolve ${left} flagged gap${left > 1 ? "s" : ""} above first`
@@ -404,7 +414,7 @@ function jobTotal(j) { return j.items.filter((i) => i.approved).reduce((s, i) =>
 function wsHistoryTab() {
   const q = state.search.trim().toLowerCase();
   const jobs = state.history.filter((j) => !q || [j.id, j.customer, j.car, j.job, ...j.items.map((i) => i.name)].join(" ").toLowerCase().includes(q));
-  let h = `${wsFollowupsDue()}<div class="lbl">Jobs</div><input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
+  let h = `<input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
   if (!jobs.length) return h + `<div class="small">No jobs match “${esc(state.search)}”.</div>`;
   h += jobs.map((j) => {
     const open = state.open === j.id;
@@ -607,7 +617,7 @@ function render() {
   document.querySelectorAll("#wsTabs .tab").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
   const keepSearchFocus = document.activeElement && document.activeElement.id === "search";
   const wsKey = state.tab + ":" + state.ws;
-  $("ws").innerHTML = `<div class="${state.tab === "quote" && state.ws === "compose" ? "fill" : ""}">${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
+  $("ws").innerHTML = `<div class="${state.tab === "quote" && state.ws === "compose" ? "fill" : ""}">${({ job: wsJobTab, followups: wsFollowupsDue, history: wsHistoryTab, book: wsBookTab }[state.tab] || wsQuoteTab)()}</div>`;
   if (wsKey !== lastWs) { $("ws").scrollTop = 0; enter($("ws").firstElementChild); }
   lastWs = wsKey;
   if (keepSearchFocus) { const s = $("search"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
@@ -690,7 +700,7 @@ document.addEventListener("click", (e) => {
   if (act === "why-toggle") { const it = grp(b.dataset.group)[i]; it.whyOpen = !it.whyOpen; }
   if (act === "sw") { toggleItem(b.dataset.group, i); return; }
   if (act === "approve") {
-    state.approvedAt = new Date(); state.ws = "approved"; state.dr = "approved"; recordJob(); bookFollowups(); fly("packetBack");
+    state.approvedAt = new Date(); state.ws = "approved"; state.dr = "approved"; state.tab = "job"; recordJob(); bookFollowups(); fly("packetBack");
     state.stage = 1; state.stageAt = { 0: state.sentAt, 1: state.approvedAt }; state.readyBy = etaFrom(state.approvedAt, labourHrs(state.quote.items, true));
     later(700, () => toast(`${customer()} approved ${money(sumApproved(state.quote.items))}`));
   }
