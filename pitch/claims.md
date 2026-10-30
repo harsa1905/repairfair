@@ -30,6 +30,8 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 | "Clear quotes earn 5-star reviews" | 6 | Praise in a sample of 4–5★ reviews | At least 10% of them, labelled indicative |
 | "Inner West garages are close enough to build a network" | 7 | Free listing: garages within 2 km, independents vs chains | The typical garage has at least 3 others within 2 km |
 
+**Listing result (30 Oct):** the density claim passes. The search found 96 open Inner West workshops, 93 of them independents, and the typical one has 26 others within 2 km. That's a lower limit, because 30 searches don't find every workshop. The West also has 26, so we can say "close enough", not "the densest".
+
 The share of **all** reviews stays off the main slides. It will look small, so it's a Q&A answer: most drivers never post a review, which is why the survey and interviews matter more. Region differences stay in the backups unless their ranges clearly separate.
 
 ## Need the pilot or sign-ups
