@@ -21,6 +21,8 @@ Open http://localhost:5000 in Chrome or Edge. Stop it with Ctrl+C.
 4. Driver: **Approve**. Both phones show the final bill, which matches what was approved.
 5. Optional: Mia's **Not now** items are booked as follow-ups, with the reminder time on each declined row in the workshop's decisions list (she can tap **Don't remind me**). In the **Follow-ups** tab, tap **Send reminder** on one that's due. Past jobs are in **History**, and the workshop's own prices are in **Prices**.
 
+6. Optional: tap **Results** at the top of the workshop phone to see what the workshop gained. The figures are samples, and today's job adds to them.
+
 Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (it uses saved examples).
 
 ## Design

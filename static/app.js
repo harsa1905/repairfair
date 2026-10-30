@@ -56,6 +56,10 @@ const FAIR_RANGES = [
   { key: "labour", low: 80, high: 130 },
 ];
 
+// Sample month for the owner's Results screen. Illustrative only; the live demo job is added on top.
+const SAMPLE_MONTH = { quotes: 46, approved: 38, minutes: 14, extraAsked: 11, extraApproved: 9, extraValue: 1460, reminders: 12, booked: 5, bookedValue: 1105 };
+const PRO_PRICE = 49;
+
 const fresh = () => ({
   tab: "quote", ws: "compose", dr: "home", drBanner: null, stage: null, stageAt: {}, readyBy: null,
   notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA,
@@ -444,6 +448,30 @@ function wsFollowupsDue() {
     }).join("")}</div>`;
 }
 
+// What the workshop gained: the sample month plus anything that happened in this demo
+function wsResultsTab() {
+  const s = { ...SAMPLE_MONTH };
+  if (state.sentAt) s.quotes++;
+  if (state.approvedAt) s.approved++;
+  if (state.xSentAt) s.extraAsked++;
+  if (state.extraResult === "approved") { s.extraApproved++; s.extraValue += sumApproved(state.extra.items); }
+  s.reminders += state.followups.filter((f) => f.status === "sent").length;
+  const won = s.extraValue + s.bookedValue;
+  const row = (label, value, sub) => `<div class="res"><span>${label}${sub ? `<small>${sub}</small>` : ""}</span><b>${value}</b></div>`;
+  return `<div class="cluster"><div class="cl-top"><b>Extra revenue won</b><span>Sample month</span></div>
+      <div class="readout green">${money(won)}</div>
+      <div class="cl-sub">From approved extra work and follow-ups. About ${Math.floor(won / PRO_PRICE)} times the ${money(PRO_PRICE)} Pro plan.</div></div>
+    <div class="lbl">This month <span class="pro">Pro</span></div>
+    <div class="sheet">
+      ${row("Quotes sent", s.quotes)}
+      ${row("Quotes approved", `${Math.round((s.approved / s.quotes) * 100)}%`, `${s.approved} of ${s.quotes}`)}
+      ${row("Typical time to approval", `${s.minutes} min`)}
+      ${row("Extra work approved", money(s.extraValue), `${s.extraApproved} of ${s.extraAsked} requests`)}
+      ${row("Follow-ups booked", money(s.bookedValue), `${s.booked} from ${s.reminders} reminders`)}
+    </div>
+    <div class="small">Sample figures for this demo. Today's job adds to them as you go.</div>`;
+}
+
 function jobTotal(j) { return j.items.filter((i) => i.approved).reduce((s, i) => s + (i.price || 0), 0) + (j.extra && j.extra.decision === "approved" ? j.extra.items.reduce((s, i) => s + (i.price || 0), 0) : 0); }
 
 function wsHistoryTab() {
@@ -652,10 +680,10 @@ function renderDriverChrome() {
 
 // ---------- render ----------
 function render() {
-  document.querySelectorAll("#wsTabs .tab").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
+  document.querySelectorAll("#wsTabs .tab, #resultsBtn").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
   const keepSearchFocus = document.activeElement && document.activeElement.id === "search";
   const wsKey = state.tab + ":" + state.ws;
-  $("ws").innerHTML = `<div class="${state.tab === "quote" && state.ws === "compose" ? "fill" : ""}">${({ job: wsJobTab, followups: wsFollowupsDue, history: wsHistoryTab, book: wsBookTab }[state.tab] || wsQuoteTab)()}</div>`;
+  $("ws").innerHTML = `<div class="${state.tab === "quote" && state.ws === "compose" ? "fill" : ""}">${({ job: wsJobTab, followups: wsFollowupsDue, history: wsHistoryTab, book: wsBookTab, results: wsResultsTab }[state.tab] || wsQuoteTab)()}</div>`;
   if (wsKey !== lastWs) { $("ws").scrollTop = 0; enter($("ws").firstElementChild); }
   lastWs = wsKey;
   if (keepSearchFocus) { const s = $("search"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); }

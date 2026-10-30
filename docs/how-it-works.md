@@ -1,6 +1,6 @@
 # How the RepairFair prototype works
 
-*Written 30 Oct 2026. Describes the `app-dev` branch at commit `3f01026`.*
+*Written 30 Oct 2026, updated 31 Oct. Describes the `app-dev` branch.*
 
 RepairFair is a small web app. A Python server passes the mechanic's notes to the OpenAI API, and the browser does everything else, including both simulated phones.
 
@@ -93,6 +93,10 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Human in the loop.** The AI drafts and a person decides. `canSend()` keeps **Send** locked until every gap is handled and the mechanic has ticked the box. The rule is enforced in code, not just suggested.
 
+**Fair price check.** `fairCheck()` compares each price (for labour, the hourly rate) with a typical range in `FAIR_RANGES`. The ranges are invented samples for the demo. Real ones would come from quotes across many workshops, which is the long-term moat.
+
+**Results screen.** `wsResultsTab()` adds today's demo job to `SAMPLE_MONTH`, a set of invented figures for one workshop's month. It shows how the product would prove its value, not real results.
+
 **Price book.** `bookFill()` fills only empty fields from the workshop's saved prices. It never overwrites what the mechanic typed, so prices come from the workshop rather than the AI.
 
 ## Reliability
@@ -107,7 +111,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 - **Both phones run on one page.** There is no real second device.
 - **No real text messages.** Nothing leaves your computer except the notes sent to OpenAI.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
-- **Sample data only.** The history, price book and follow-ups are invented examples.
+- **Sample data only.** The history, price book, follow-ups, typical price ranges and Results figures are invented examples.
 - **Local only.** It runs on your computer and isn't hosted online.
 
 Taking it to real users would need a database, sign-in, a text-message service such as Twilio, online hosting, and privacy handling for customer details.
