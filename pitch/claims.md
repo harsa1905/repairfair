@@ -54,7 +54,7 @@ These are never shown as results.
 
 | Slide | What to show | Label |
 |---|---|---|
-| 6 | "One follow-up job a month covers the $49" | Break-even, not a forecast. Holds only if that job earns the workshop at least $49, so confirm a real average margin first |
+| 6 | "One follow-up job of about $100 a month covers the $49" | Break-even, not a forecast. Assumes a 50% gross margin, a mostly US benchmark [5], so $49 ÷ 50% ≈ $100. That's about an hour's work at the A$90–140 independents typically charge [6]. Ask one workshop to confirm it |
 | 6 | 5% of about 28,000 workshops × $49 × 12 ≈ $820k a year | Illustrative |
 | 8 | Pilot goals (draft below) | Goals, not predictions |
 
@@ -95,3 +95,5 @@ All in AUD a month excluding GST, unless noted.
 2. MechanicDesk, https://www.mechanicdesk.com.au/ (accessed 30 Oct 2026)
 3. Workshop Software, "Workshop Software vs MechanicDesk: 2026 Comparison", https://workshopsoftware.com/workshop-software-vs-mechanicdesk/ (accessed 30 Oct 2026; a competitor's own page)
 4. Auxo Workshop, "Pricing", https://auxoworkshop.com/pricing (accessed 30 Oct 2026)
+5. Sunbit, "What Is a Good Profit Margin for an Auto Repair Shop?", https://sunbit.com/knowledge-center/auto/good-profit-margin-auto-repair-shop/ (accessed 31 Oct 2026; cites a Ratchet+Wrench survey; a vendor's blog)
+6. Garage Auto, "Mechanic Hourly Rate Australia (2026)", https://garageauto.app/mechanic-hourly-rate-australia/ (accessed 31 Oct 2026; a vendor's blog)
