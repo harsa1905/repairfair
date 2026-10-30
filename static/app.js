@@ -50,7 +50,7 @@ const fresh = () => ({
   err: null, extraResult: null,
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null,
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
-  history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null,
+  history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null, extraOpen: false,
   book: SEED_BOOK.map((e) => ({ ...e })),
   // Items a driver said "not now" to become follow-ups; the seeded ones come from past jobs in the history
   followups: [
@@ -241,11 +241,13 @@ function decisions(items) {
 }
 const decItems = (items) => items.map((i) => ({ name: itemLabel(i), price: priceOf(i), approved: i.approved }));
 
-function tracker(title, steps) {
-  // steps: [label, Date|null]; the first step without a time is "now"
+function tracker(title, steps, o = {}) {
+  // steps: [label, Date|null]; the first step without a time is "now". o: optional readout, line and footer.
   const firstOpen = steps.findIndex((s) => !s[1]);
   return `<div class="tracker"><div class="tt"><span>${title}</span><span>to ${esc(customer())}, ${PHONE_MASK}</span></div>
-    <div class="steps">${steps.map(([lbl, t], k) => `<div class="step ${t ? "done" : k === firstOpen ? "now" : ""}"><div class="dot">${t ? ic("check", 12) : ""}</div>${lbl}<span class="tm">${t ? timeOf(t) : "&nbsp;"}</span></div>`).join("")}</div></div>`;
+    ${o.read ? `<div class="readout md ${o.cls || ""}">${o.read}</div>` : ""}${o.sub ? `<div class="cl-sub tr-sub">${o.sub}</div>` : ""}
+    <div class="steps">${steps.map(([lbl, t], k) => `<div class="step ${t ? "done" : k === firstOpen ? "now" : ""}"><div class="dot">${t ? ic("check", 12) : ""}</div>${lbl}<span class="tm">${t ? timeOf(t) : "&nbsp;"}</span></div>`).join("")}</div>
+    ${o.foot ? `<div class="cl-foot">${ic("check", 18)}${o.foot}</div>` : ""}</div>`;
 }
 
 let toastTimer = null;
@@ -284,9 +286,10 @@ function wsQuoteTab() {
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   switch (state.ws) {
     case "compose":
-      return `<div class="lbl">Mechanic's notes</div><textarea id="notes" rows="11">${esc(state.notes)}</textarea>
-        <button class="btn ai" data-act="build">Build standard quote with AI</button>
-        <div class="small">Type it the way you'd write it on a job card. The AI does the rest.</div>${err}`;
+      // The notes fill the screen like a job card; the build button sits in the dock below
+      return `<label class="notes-card"><span class="nc-top"><b>Mechanic's notes</b><span>Job 1044, checked in 8:05 am</span></span>
+          <textarea id="notes">${esc(state.notes)}</textarea>
+          <span class="photos"><span class="ph">${ic("camera", 18)}</span><span class="ph">${ic("camera", 18)}</span><span class="ph-t">2 photos attached</span></span></label>${err}`;
     case "loading":
       return `<div class="lbl">Mechanic's notes</div><textarea rows="11" disabled>${esc(state.notes)}</textarea>
         <div class="loading"><span class="spin"></span>AI is building the standard quote…</div><div class="skel"></div><div class="skel"></div>`;
@@ -298,33 +301,37 @@ function wsQuoteTab() {
         <div class="preview"><div class="to"><span>Text message to ${esc(customer())}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(smsText())}</div></div>
         <button class="btn soft" data-act="edit">Edit notes and rebuild</button>`;
     case "sent":
-      return `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]])}
-        <div class="stamp">${ic("check", 18)}Checked by you before sending, ${esc(stampOf(q.checkedAt))}</div>
-        <div class="wait"><b>Waiting for ${esc(customer())}</b>${state.viewedAt ? `${esc(customer())} is looking at the quote now…` : "You'll get a notification when they respond."}</div>
+      return `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]],
+          { read: state.viewedAt ? "Viewing now" : "Waiting", cls: "amber",
+            sub: state.viewedAt ? `${esc(customer())} is looking at the quote now.` : `You'll get a notification when ${esc(customer())} responds.`,
+            foot: `Checked by you before sending, ${esc(stampOf(q.checkedAt))}` })}
         <div class="lbl">Quote sent</div><div class="sheet">${q.items.map((i) => `<div class="row">${ic(itemIcon(i), 22, "ic " + lightOf(i))}<div><div class="it">${esc(i.name)}</div>${stLabel(i)}</div><span class="price">${money(priceOf(i))}</span></div>`).join("")}</div>`;
     default: {
-      let h = `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", state.approvedAt]])}
-        <div class="ok"><b>${esc(customer())} approved ${money(sumApproved(q.items))}</b>Start the work on the approved items only.</div>
-        <div class="stamp">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div>
-        ${wsJob()}
-        <div class="lbl">Customer's decisions</div><div class="sheet">${decisions(decItems(q.items))}</div>
-        ${wsFollowupsBooked()}`;
+      // One panel for the approval (the same lights Mia sees), then the job, then her decisions with their reminders
+      let h = `<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+          <div class="readout green">${money(sumApproved(q.items))}</div>
+          <div class="cl-sub">Start the work on the approved items only.</div>
+          ${lamps(q.items, "ws")}
+          <div class="cl-foot">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div></div>
+        ${wsJob()}${wsDecisions()}`;
       if (state.ws === "approved") {
-        h += `<div class="lbl" style="margin-top:14px">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
-          <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`;
+        h += state.extraOpen
+          ? `<div class="lbl">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
+            <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`
+          : `<button class="btn soft" data-act="extra-open">${ic("part", 18)}Found something extra mid-job?</button>`;
       } else if (state.ws === "extra_loading") {
         h += `<div class="loading"><span class="spin"></span>AI is building the extra item…</div><div class="skel"></div>`;
       } else if (state.ws === "extra_draft") {
         h += `<div class="lead">Extra item</div>${state.extraNotice ? `<div class="notice">${esc(state.extraNotice)}</div>` : ""}
           <div id="checks-extra">${checkPanel(x, "extra")}</div>${x.items.map((it, i) => wsCard(it, i, "extra")).join("")}`;
       } else if (state.ws === "extra_sent") {
-        h += `<div style="margin-top:12px">${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]])}</div>
-          <div class="wait"><b>Don't start the extra work yet</b>Waiting for ${esc(customer())} to decide.</div>`;
+        h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", null]],
+          { read: "Waiting", cls: "amber", sub: `Don't start the extra work until ${esc(customer())} decides.` })}`;
       } else if (state.ws === "extra_done") {
         const r = state.extraResult;
-        const head = r === "approved" ? `${esc(customer())} approved the extra work` : r === "call" ? `${esc(customer())} asked you to call` : `${esc(customer())} declined the extra work`;
-        h += `<div style="margin-top:12px">${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", state.extraAt]])}</div>
-          <div class="${r === "approved" ? "ok" : "wait"}"><b>${head}</b>${r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work."}</div>
+        h += `<div class="lead">Extra item</div>${tracker("Extra item", [["Sent", state.xSentAt], ["Delivered", state.xDeliveredAt], ["Viewed", state.xViewedAt], ["Decision", state.extraAt]],
+          { read: r === "approved" ? "Approved" : r === "call" ? `Call ${esc(customer())}` : "Declined", cls: r === "approved" ? "green" : "amber",
+            sub: r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work." })}
           <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
           <button class="btn soft" data-act="go-history">View in job history</button>`;
       }
@@ -336,6 +343,12 @@ function wsQuoteTab() {
 // Fixed bar under a draft: "I've checked this quote" unlocks Send once every flagged gap is handled
 function renderWsDock() {
   const d = $("wsDock");
+  if (state.tab === "quote" && state.ws === "compose") {
+    d.className = "dock show";
+    d.innerHTML = `<button class="btn ai" data-act="build" style="margin-top:0">Build standard quote with AI</button>
+      <div class="small">Type it the way you'd write it on a job card. The AI does the rest.</div>`;
+    return;
+  }
   const g = state.tab !== "quote" ? null : state.ws === "draft" ? "quote" : state.ws === "extra_draft" ? "extra" : null;
   if (!g) { d.className = "dock"; d.innerHTML = ""; return; }
   const q = doc(g), left = openChecks(q);
@@ -355,18 +368,20 @@ function wsJob() {
   return `<div class="jobcard"><div class="jc-top"><span>Job status</span><span class="jc-stage ${st === 4 ? "ready" : ""}"><i></i>${STAGES[st]}</span></div>
     <div class="jc-eta"><span>${st === 4 ? "Ready since" : "Ready by"} <b>${esc(etaText(state.readyBy))}</b></span>${st === 4 ? "" : `<span class="adj"><button data-act="eta-">−15 min</button><button data-act="eta+">+15 min</button></span>`}</div>
     ${next ? `<button class="btn dark" data-act="${next[0]}">${next[1]}</button>` : `<div class="stamp" style="margin:10px 0 0">${ic("check", 18)}${esc(customer())} has been told the car is ready to collect.</div>`}
-    <div class="small" style="text-align:left;margin-top:6px">${esc(customer())} sees each update and the ready time live.</div></div>`;
+    </div>`;
 }
 
-// "Not now" items become follow-ups: booked on the job, then due in Job history
-function wsFollowupsBooked() {
-  const fs = ourFollowups();
-  if (!fs.length) return "";
-  return `<div class="lbl">Follow-ups booked <span class="pro">Pro</span></div><div class="sheet fu">${fs.map((f) => `<div class="fu-row ${f.status}">
-      <div class="fu-t"><b>${esc(f.item)}</b><span>${money(f.price)}, ${esc(customer())} said not now</span></div>
-      ${f.status === "off" ? `<span class="fu-off">${esc(f.customer)} opted out</span>`
-        : `<select class="fu-sel" data-act="fu-due" data-id="${f.id}">${FU_CHOICES.map(([m, l]) => `<option value="${m}" ${m === f.months ? "selected" : ""}>Remind in ${l}</option>`).join("")}</select>`}</div>`).join("")}
-    <div class="small" style="text-align:left">RepairFair texts ${esc(customer())} when each one is due.</div></div>`;
+// The driver's decisions. "Not now" items become follow-ups, booked right on their row and due later in Job history.
+function wsDecisions() {
+  const q = state.quote, fs = ourFollowups();
+  const rows = q.items.map((it, k) => {
+    const f = fs.find((x) => x.id === `F-1044-${k}`);
+    const remind = !f ? "" : f.status === "off" ? `<span class="fu-off">${esc(f.customer)} opted out of a reminder</span>`
+      : `<select class="fu-sel" data-act="fu-due" data-id="${f.id}" aria-label="Reminder for ${esc(f.item)}">${FU_CHOICES.map(([m, l]) => `<option value="${m}" ${m === f.months ? "selected" : ""}>Remind in ${l}</option>`).join("")}</select>`;
+    return `<div class="dec ${it.approved ? "" : "no"}"><span class="n">${ic(it.approved ? "check" : "dash", 16, it.approved ? "y" : "x")}${esc(itemLabel(it))}</span><span class="s">${money(priceOf(it))}</span>${remind ? `<div class="dec-fu">${remind}</div>` : ""}</div>`;
+  }).join("");
+  return `<div class="lbl">${esc(customer())}'s decisions${fs.length ? ` <span class="soft">and reminders</span><span class="pro">Pro</span>` : ""}</div><div class="sheet">${rows}</div>
+    ${fs.length ? `<div class="small" style="text-align:left;margin:-4px 2px 10px">RepairFair texts ${esc(customer())} when each one is due.</div>` : ""}`;
 }
 function wsFollowupsDue() {
   const fs = [...state.followups].sort((a, b) => a.due - b.due);
@@ -592,7 +607,7 @@ function render() {
   document.querySelectorAll("#wsTabs .tab").forEach((t) => t.classList.toggle("on", t.dataset.tab === state.tab));
   const keepSearchFocus = document.activeElement && document.activeElement.id === "search";
   const wsKey = state.tab + ":" + state.ws;
-  $("ws").innerHTML = `<div>${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
+  $("ws").innerHTML = `<div class="${state.tab === "quote" && state.ws === "compose" ? "fill" : ""}">${state.tab === "history" ? wsHistoryTab() : state.tab === "book" ? wsBookTab() : wsQuoteTab()}</div>`;
   if (wsKey !== lastWs) { $("ws").scrollTop = 0; enter($("ws").firstElementChild); }
   lastWs = wsKey;
   if (keepSearchFocus) { const s = $("search"); s.focus(); s.setSelectionRange(s.value.length, s.value.length); }
@@ -647,6 +662,7 @@ document.addEventListener("click", (e) => {
   if (act === "build-extra") { state.extraNotes = $("extraNotes").value; build("extra"); return; }
   if (act === "use-demo") { $("demoMode").checked = true; saveDemo(); state.err = null; badge(); render(); return; }
   if (act === "edit") state.ws = "compose";
+  if (act === "extra-open") { state.extraOpen = true; render(); $("extraNotes").focus(); return; }
   if (act === "ck-ok" || act === "ck-tbc" || act === "ck-undo") {
     const g = b.dataset.group, how = act === "ck-ok" ? "resolved" : act === "ck-tbc" ? "tbc" : null;
     if (b.dataset.kind === "price") grp(g)[i].priceTbc = how === "tbc";
@@ -789,13 +805,13 @@ async function runScene(scene) {
   const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history"];
   const stop = order.indexOf(scene);
   const steps = [
-    async () => { click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
+    async () => { await waitFor(() => document.querySelector('[data-act="build"]')); click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
     checkAll,
     async () => { click('[data-act="send"]'); await sleep(1200); },
     async () => { click('[data-act="open-thread"]'); await sleep(400); },
     async () => { click('[data-act="open-quote"]'); await sleep(400); click('[data-act="why-toggle"]'); await sleep(200); },
     async () => { click('[data-act="approve"]'); await sleep(900); },
-    async () => { click('[data-act="build-extra"]'); await waitFor(() => state.ws === "extra_draft"); },
+    async () => { click('[data-act="extra-open"]'); await sleep(100); click('[data-act="build-extra"]'); await waitFor(() => state.ws === "extra_draft"); },
     async () => { await checkAll(); click('[data-act="send-extra"]'); await sleep(1200); },
     async () => { click('[data-act="open-extra"]'); await sleep(400); },
     async () => { click('[data-act="x-approve"]'); await sleep(900); },
