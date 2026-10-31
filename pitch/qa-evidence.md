@@ -4,6 +4,8 @@ Facts for judges' questions and for replacing the app's sample numbers. Everythi
 
 ## Competitors
 
+**How to use this (Sameep, 31 Oct):** don't name or quote Meckly on slides, and don't use its claims as evidence. If a judge raises it, call it a recent startup offering a full workshop system, and don't comment on its honesty.
+
 **Meckly changes our competition story.** It's an Australian workshop system selling almost the same promise. Its page for car owners opens on a surprise-bill story and offers quotes by SMS with photos, approved before work starts.
 
 | Product | Price a month (ex GST) | Approval by the customer | Driver record | Quality |
