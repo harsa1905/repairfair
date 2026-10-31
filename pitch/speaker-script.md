@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:40 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:39 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -12,7 +12,7 @@ The story takes about 4:40 with pauses. Safaa opens and tells Mia's story throug
 | 6 | 1 in 5 | Safaa | 0:15 |
 | 7 | The insight | Safaa | 0:16 |
 | 8 | The solution | Safaa | 0:08 |
-| 9 | Demo | Video | 0:30 |
+| 9 | Demo | Video | 0:29 |
 | 10 | Mia's new bill | Safaa | 0:14 |
 | 11 | Why now | Safaa | 0:18 |
 | 12 | Traction | Safaa | 0:22 |
@@ -92,17 +92,19 @@ We're Safaa and Sameep, presenting for Group 8. This semester we've interviewed 
 
 Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
-## Demo video script (0:30)
+## Demo video script (0:29)
+
+Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`, recorded from the prototype in Demo mode.
 
 | Time | On screen | Voiceover |
 |---|---|---|
-| 0:00–0:07 | Notes become a quote; mechanic check | "A mechanic types rough notes. AI turns them into a clear, itemised quote, and the mechanic checks it." |
-| 0:07–0:13 | Quote sent; driver's phone lights up | "The driver gets a text link, with no app to install." |
-| 0:13–0:21 | Driver approves items | "They see what's urgent, what can wait, and approve item by item." |
-| 0:21–0:27 | Extra hose approved | "Find something extra mid-job? It needs written approval too." |
-| 0:27–0:30 | Final bill of $470 | "The final bill matches what was approved." |
+| 0:00–0:08 | Mechanic finishes notes, AI builds the quote, mechanic checks it | "A mechanic types rough notes. AI turns them into a clear, itemised quote, and the mechanic checks it." |
+| 0:08–0:12 | Text arrives on Mia's phone | "Mia gets a text link, with no app to install." |
+| 0:12–0:18 | Mia reads the quote and approves | "She sees what's urgent, what can wait, and approves it line by line." |
+| 0:18–0:25 | Extra hose found and sent for approval | "Find something extra mid-job? It needs her written approval too." |
+| 0:25–0:29 | Final bill of $470 | "The final bill matches what she approved." |
 
-Filming shortcuts and the full demo order are in the shared `app-dev-features.md` notes. Use an AI voice for the narration. The other features (reminder booking, suggested checks, Send to Xero) are for Q&A, not the 30 seconds.
+The other features (reminder booking, suggested checks, Send to Xero) are for Q&A, not the video.
 
 ## Likely questions
 - **How was the review number checked?** It was AI-coded, and two more AI coders agreed on 90%+ of a 60-review sample. Say a person hasn't checked it, unless the human check gets done.

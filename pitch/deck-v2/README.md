@@ -11,7 +11,6 @@ Open `index.html` in Chrome or Edge. It works offline. Keep this whole folder to
 Slide 9 is the demo video. It plays when the slide opens, and the speaker stays silent. If the browser blocks it, click the slide. If you're streaming, remember to share computer audio.
 
 ## Before demo day
-- Save the finished video as `assets/demo.mp4`. Until then, slide 9 shows a still image.
 - If a person checks the review coding, update the review study backup slide.
 
 ## PDF for Canvas
