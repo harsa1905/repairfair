@@ -1,58 +1,58 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:13 with pauses. Sameep tells Mia's story through to the new bill. Safaa covers why it can work as a business. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:13 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:22). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
-| 1 | RepairFair | Sameep | 0:10 |
-| 2 | The quote | Sameep | 0:12 |
-| 3 | The bill | Sameep | 0:12 |
-| 4 | The trap | Sameep | 0:12 |
-| 5 | No answer | Sameep | 0:18 |
-| 6 | 1 in 5 | Sameep | 0:14 |
-| 7 | The insight | Sameep | 0:12 |
-| 8 | The solution | Sameep | 0:08 |
+| 1 | RepairFair | Safaa | 0:10 |
+| 2 | The quote | Safaa | 0:12 |
+| 3 | The bill | Safaa | 0:12 |
+| 4 | The trap | Safaa | 0:12 |
+| 5 | No answer | Safaa | 0:18 |
+| 6 | 1 in 5 | Safaa | 0:14 |
+| 7 | The insight | Safaa | 0:12 |
+| 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:30 |
-| 10 | Mia's new bill | Sameep | 0:10 |
+| 10 | Mia's new bill | Safaa | 0:10 |
 | 11 | Why now | Safaa | 0:12 |
 | 12 | Traction | Safaa | 0:22 |
-| 13 | Competition | Safaa | 0:18 |
-| 14 | Business model | Safaa | 0:15 |
-| 15 | Market | Safaa | 0:20 |
-| 16 | Team | Safaa | 0:10 |
-| 17 | Ask | Safaa | 0:18 |
+| 13 | Competition | Sameep | 0:18 |
+| 14 | Business model | Sameep | 0:15 |
+| 15 | Market | Sameep | 0:20 |
+| 16 | Team | Sameep | 0:10 |
+| 17 | Ask | Sameep | 0:18 |
 
 ## Script
 
-**1. RepairFair** (Sameep)
+**1. RepairFair** (Safaa)
 
 We're RepairFair. Workshops send quotes by text, and drivers approve them line by line.
 
-**2. The quote** (Sameep)
+**2. The quote** (Safaa)
 
 Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The quote is three hundred dollars. She says yes.
 
-**3. The bill** (Sameep)
+**3. The bill** (Safaa)
 
 When she comes back, the bill is eleven hundred and twenty. [Pause.] Mia's made up. That bill isn't. A Sydney driver really got it.
 
-**4. The trap** (Sameep)
+**4. The trap** (Safaa)
 
 And that's the trap. The work is already done. She can't tell what she's paying for, and she can't send it back.
 
-**5. No answer** (Sameep)
+**5. No answer** (Safaa)
 
 Now stand on the other side of the counter. The mechanic isn't the villain here. They find a problem and ring Mia. She's at work. No answer. The car sits on the hoist, the next job waits, and if they go ahead anyway, she can say she never agreed.
 
-**6. 1 in 5** (Sameep)
+**6. 1 in 5** (Safaa)
 
 We read over a thousand bad reviews of Sydney mechanics. One in five is about this: a surprise bill, work nobody approved, or work nobody needed.
 
-**7. The insight** (Sameep)
+**7. The insight** (Safaa)
 
 But most people trust their local mechanic. So trust isn't the problem. The missing record is. Repairs get agreed in a quick phone call, and nobody can check what was said.
 
-**8. The solution** (Sameep)
+**8. The solution** (Safaa)
 
 So we built RepairFair. Every line, approved in writing. Here's one job, start to finish.
 
@@ -60,7 +60,7 @@ So we built RepairFair. Every line, approved in writing. Here's one job, start t
 
 Plays with its own voice. Stay silent.
 
-**10. Mia's new bill** (Sameep)
+**10. Mia's new bill** (Safaa)
 
 Same brakes. Same Mia. This time, every line on the bill is one she approved, and the mechanic has proof.
 
@@ -70,25 +70,25 @@ This works now because AI can read a mechanic's rough notes and write a clear qu
 
 **12. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. They also changed what we built: written approval came from owners who'd lost money on extras. We've got a working prototype. We haven't got paying customers yet, and that's the next step.
+We took it to ten workshops. Six want to try it. Four said they'd pay. They also changed what we built: written approval came from owners who'd lost money on extras. We've got a working prototype. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
-**13. Competition** (Safaa)
+**13. Competition** (Sameep)
 
 Workshop software does far more than we do, and owners rarely switch. So we don't ask them to. Keep your system, and add the part that gets the yes. We help the driver decide what's urgent, what can wait, and why.
 
-**14. Business model** (Safaa)
+**14. Business model** (Sameep)
 
 Workshops pay forty-nine dollars a month. Drivers pay nothing. When a driver says "not now", we remind them later. About one hour of that work a month covers the fee.
 
-**15. Market** (Safaa)
+**15. Market** (Sameep)
 
 Australians spend about ten billion dollars a year on servicing and repairs, across twenty-eight thousand workshops. We start in Sydney's Inner West, where garages sit close together, and go suburb by suburb. Every garage that joins makes a clear quote something drivers look for.
 
-**16. Team** (Safaa)
+**16. Team** (Sameep)
 
-We're Sameep and Safaa, presenting for Group 8. This semester we've interviewed ten workshops, read over a thousand reviews, mapped six hundred garages and built a working prototype.
+We're Safaa and Sameep, presenting for Group 8. This semester we've interviewed ten workshops, read over a thousand reviews, mapped six hundred garages and built a working prototype.
 
-**17. Ask** (Safaa)
+**17. Ask** (Sameep)
 
 Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
