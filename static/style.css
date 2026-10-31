@@ -499,3 +499,4 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 
 /* Xero demo */
 .demo-flag { background: var(--amber-bg); color: #5E3E00; border-radius: 12px; padding: 8px 12px; font-size: 13.5px; line-height: 1.4; margin: 2px 0 10px; }
+.notes-card textarea { scrollbar-width: thin; }
