@@ -82,7 +82,7 @@ Workshops pay forty-nine dollars a month. Drivers pay nothing. There's a free pl
 
 **15. Market** (Sameep)
 
-Australians spend about ten billion dollars a year on servicing and repairs. We start with the ninety-six garages we've found in the Inner West. They sit close together, so we can sign them in person. Then over six hundred across Sydney, and about twenty-eight thousand nationally. Later, fleets and insurers.
+Australians spend about ten billion dollars a year on servicing and repairs. We start with the ninety-six garages we've found in the Inner West. They sit close together, so we can sign them in person. Then over six hundred across Sydney, and about twenty-eight thousand nationally. Later, invoicing, then fleets and insurers.
 
 **16. Team** (Sameep)
 
@@ -131,6 +131,6 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **When do you make money?** Founding workshops start paying after six months, and the free plan stops at 20 quotes. The offer costs about $4,300 for 30 workshops, which is illustrative.
 - **Why not take a cut of each job?** We'd earn more when drivers say yes. A flat fee keeps us neutral.
 - **Is 607 all of Sydney?** No, it's the workshops we found across 21 councils, so it's a minimum. The real number is much higher.
-- **Do fleets or insurers want this?** We haven't spoken to any. They're ideas for later.
+- **Do fleets or insurers want this?** We haven't spoken to any. Fleets come first, because the business paying isn't the driver, so it has Mia's problem. Insurers are mostly crash repairs, so they're a possible later option.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
-- **Do workshops have to enter jobs twice?** Today, yes, in their main system. We add no new form for the quote, and a Xero export is the planned first step towards fixing that.
+- **Do workshops have to enter jobs twice?** Today, yes, if they run a main system, because we don't connect to it yet. We add no new form for the quote. Next on our roadmap, the approved quote becomes the invoice and goes to Xero, so paper-based workshops only enter it once. Full software needs a direct connection, which we haven't built.
