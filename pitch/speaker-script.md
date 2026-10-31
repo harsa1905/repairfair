@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:34 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:43). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:40 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -14,7 +14,7 @@ The story takes about 4:34 with pauses. Safaa opens and tells Mia's story throug
 | 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:30 |
 | 10 | Mia's new bill | Safaa | 0:14 |
-| 11 | Why now | Safaa | 0:12 |
+| 11 | Why now | Safaa | 0:18 |
 | 12 | Traction | Safaa | 0:22 |
 | 13 | Competition | Sameep | 0:18 |
 | 14 | Business model | Sameep | 0:15 |
@@ -66,7 +66,7 @@ Same brakes. Same Mia. This time it's on her phone, so she can read it properly.
 
 **11. Why now** (Safaa)
 
-This works now because AI can read a mechanic's rough notes and write a clear quote in seconds. The mechanic checks it, and it goes out.
+This works now because AI can read a mechanic's rough notes and write a clear quote in seconds. The mechanic checks it, and it goes out. And it's no new paperwork for the mechanic. The notes they already write become the quote, and the driver's yes is saved as the record.
 
 **12. Traction** (Safaa)
 
@@ -116,3 +116,4 @@ Filming shortcuts and the full demo order are in the shared `app-dev-features.md
 - **How big can this get?** At $49, Australian workshops alone are worth about $16.5M a year. The larger pool is the $10 billion spent on repairs, with fleets and insurers as later options.
 - **Is the price too low?** We don't know yet, which is one thing the pilot would test, along with support costs.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
+- **Do workshops have to enter jobs twice?** Today, yes, in their main system. We add no new form for the quote, and a Xero export is the planned first step towards fixing that.
