@@ -1,5 +1,7 @@
 # Pitch design research (29 Oct 2026)
 
+**Update (1 Nov):** the built deck uses the app's current look instead of the sand and Inter design below: Barlow fonts, brand `#0F5F78`, paper `#F3F8F9`. See `deck/theme.css`.
+
 Why the demo-day deck looks the way it does. This is research and decisions only; the deck isn't built yet.
 
 ## Recommendation

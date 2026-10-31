@@ -1,0 +1,107 @@
+/* RepairFair deck theme: the app's own colours and type, on the html-ppt runtime. */
+@font-face{font-family:Barlow;font-weight:400;font-display:swap;src:url(assets/fonts/barlow-400.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:500;font-display:swap;src:url(assets/fonts/barlow-500.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:600;font-display:swap;src:url(assets/fonts/barlow-600.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:700;font-display:swap;src:url(assets/fonts/barlow-700.woff2) format("woff2")}
+@font-face{font-family:"Barlow Semi Condensed";font-weight:600;font-display:swap;src:url(assets/fonts/barlow-semi-condensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Semi Condensed";font-weight:700;font-display:swap;src:url(assets/fonts/barlow-semi-condensed-700.woff2) format("woff2")}
+
+:root{
+  --brand:#0F5F78;--brand-700:#0B4759;--brand-100:#CDE6EC;--brand-50:#E6F3F6;
+  --ink:#13232B;--muted:#4D5D62;--line:#DCE8EB;--paper:#F3F8F9;--card:#FFFFFF;
+  --red:#D9423A;--red-t:#A42A23;--red-bg:#FCE9E7;--amber-t:#8A5A00;--amber-bg:#FDF1D9;--green-t:#1E6E44;--green-bg:#E3F3EA;
+  --lit-amber:#FFD56E;--cl-soft:#DDF0F4;
+  --display:"Barlow Semi Condensed",Barlow,"Segoe UI",sans-serif;
+  --body:Barlow,"Segoe UI",system-ui,sans-serif;
+  --bg:var(--paper);--text-1:var(--ink);--text-2:var(--muted);--text-3:var(--muted);
+  --surface:var(--card);--border:var(--line);--accent:var(--brand);--font-sans:var(--body);
+}
+html,body{background:#0B4759}
+.slide{padding:84px 104px 64px;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:32px;line-height:1.32;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;text-align:left;box-sizing:border-box;overflow:hidden}
+.slide.brand{background:var(--brand);color:#fff}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:30px;letter-spacing:.01em;text-transform:none;color:var(--brand);margin:0 0 12px}
+.brand .eyebrow{color:var(--cl-soft)}
+h1{font-family:var(--display);font-weight:700;font-size:76px;line-height:1.04;margin:0 0 44px;color:inherit;letter-spacing:-.005em}
+.row{display:flex;flex-direction:row;align-items:stretch;justify-content:flex-start;gap:72px;flex:1;min-height:0;margin:0;width:auto}
+.col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:stretch;text-align:left}
+.col.center{justify-content:center}
+.label{font-family:var(--display);font-weight:700;font-size:42px;margin:0 0 14px;color:var(--brand)}
+.stat{display:flex;align-items:center;gap:32px;padding:24px 0;border-top:2px solid var(--line)}
+.stat:first-of-type{border-top:0}
+.stat b{font-family:var(--display);font-weight:700;font-size:112px;line-height:1;color:var(--brand);white-space:nowrap;flex:0 0 auto}
+.stat span{font-size:36px;line-height:1.2;color:var(--ink)}
+.source{font-size:24px;line-height:1.3;color:var(--muted);margin:auto 0 0;padding-top:20px}
+.brand .source{color:var(--cl-soft)}
+.band{background:var(--brand-50);border-radius:16px;padding:22px 32px;font-size:32px;font-weight:600;color:var(--brand-700);margin-top:30px}
+ul.plain{list-style:none;margin:0;padding:0}
+ul.plain li{padding:22px 0 22px 50px;position:relative;font-size:38px;line-height:1.25;border-top:2px solid var(--line)}
+ul.plain li:first-child{border-top:0}
+ul.plain li::before{content:"";position:absolute;left:4px;top:30px;width:20px;height:11px;border-left:5px solid var(--brand);border-bottom:5px solid var(--brand);transform:rotate(-45deg)}
+.brand ul.plain li{border-color:rgba(255,255,255,.22)}
+.brand ul.plain li::before{border-color:var(--lit-amber)}
+.small{font-size:26px;color:var(--muted)}
+
+/* The itemised quote card: the deck's one signature, and the only place priority colours appear. */
+.qcard{background:var(--card);color:var(--ink);border-radius:24px;padding:36px 44px;width:640px;box-sizing:border-box}
+.qcard h2{font-family:var(--display);font-weight:600;font-size:30px;color:var(--muted);margin:0 0 10px}
+.qline{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:18px 0;border-top:2px solid var(--line);font-size:34px;font-weight:500}
+.qline:first-of-type{border-top:0}
+.qline b{font-family:var(--display);font-weight:700;font-size:64px;line-height:1}
+.qline.over b{color:var(--red-t);font-size:92px}
+.qline.fair b{color:var(--green-t)}
+.hook{font-family:var(--display);font-weight:700;font-size:164px;line-height:1;margin:0}
+.hook .bill{color:var(--lit-amber)}
+.oneliner{font-size:40px;line-height:1.25;font-weight:500;margin:44px 0 0;max-width:1010px}
+
+.phone{height:880px;border-radius:44px;display:block;margin:-20px 0 0 auto}
+.flow{counter-reset:s;list-style:none;margin:0;padding:0}
+.flow li{counter-increment:s;display:flex;gap:26px;align-items:flex-start;padding:18px 0;font-size:36px;line-height:1.22}
+.flow li::before{content:counter(s);font-family:var(--display);font-weight:700;font-size:34px;color:#fff;background:var(--brand);border-radius:50%;width:58px;height:58px;display:flex;align-items:center;justify-content:center;flex:0 0 58px}
+
+.slide.video{padding:0;background:#0B4759}
+.slide.video img,.slide.video video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0B4759}
+.slide.video video{opacity:0}
+.slide.video.playing video{opacity:1}
+.tap{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 28px;border-radius:999px;font-size:26px;display:none}
+.slide.video.blocked .tap{display:block}
+
+.layers{display:flex;flex-direction:column;gap:18px}
+.layer{border-radius:18px;padding:28px 36px;font-size:32px}
+.layer.us{background:var(--brand);color:#fff;font-weight:600}
+.layer.us b{font-family:var(--display);font-size:50px;display:block;line-height:1.1}
+.layer.them{background:var(--brand-100);color:var(--brand-700)}
+.layer.them b{font-family:var(--display);font-size:40px;display:block;line-height:1.1}
+.price{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-top:2px solid var(--line);font-size:34px}
+.price:first-of-type{border-top:0}
+.price b{font-family:var(--display);font-size:54px;color:var(--brand);text-align:right}
+
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:baseline;gap:24px;padding:12px 0;border-top:2px solid var(--line)}
+.step:first-child{border-top:0}
+.step b{font-family:var(--display);font-weight:700;font-size:80px;line-height:1;color:var(--brand);min-width:290px}
+.step.now b{color:var(--brand-700)}
+.step span{font-size:30px;line-height:1.2}
+.map{height:770px;display:block;margin:-14px 0 0}
+.map .lga{fill:#E8F0F2;stroke:#fff;stroke-width:2}
+.map .lga.iw{fill:var(--brand-100)}
+.map .d{fill:#8FA6AD}
+.map .d.iw{fill:var(--brand-700)}
+
+.goals{columns:1}
+.todo{background:var(--lit-amber);color:var(--ink);font-weight:700;border-radius:10px;padding:6px 18px;display:inline-block;font-size:30px}
+table.b{border-collapse:collapse;width:100%;font-size:32px;line-height:1.25}
+table.b th{font-family:var(--display);font-weight:700;font-size:30px;text-align:left;color:var(--brand);padding:10px 16px 10px 0;border-bottom:3px solid var(--brand-100)}
+table.b td{padding:12px 16px 12px 0;border-bottom:2px solid var(--line);vertical-align:top}
+.backup h1{font-size:64px;margin-bottom:26px}
+.slide.backup{padding-top:64px}
+.backup p{margin:0 0 14px;font-size:30px}
+.refs{font-size:30px;line-height:1.3;margin:0;padding-left:44px}
+.refs li{margin:0 0 7px}
+
+@media (prefers-reduced-motion:reduce){.slide{transition:none!important}}
+@media print{
+  html,body{background:#fff}
+  .slide.video img{position:absolute}
+  .slide.video video,.tap{display:none!important}
+}

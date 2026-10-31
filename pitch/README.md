@@ -13,7 +13,7 @@
 8. Team + ask: deploy the app and run the first Inner West pilot, with pilot goals (0:20)
 Backup: references, EV, research detail, review study method.
 
-Claims, evidence bars and competitor prices are in [claims.md](claims.md). Q&A facts, app price data and the Meckly finding are in [qa-evidence.md](qa-evidence.md).
+The deck is in [deck/](deck/README.md), with the script in [speaker-script.md](speaker-script.md). Claims, evidence bars and competitor prices are in [claims.md](claims.md). Q&A facts, app price data and the Meckly finding are in [qa-evidence.md](qa-evidence.md).
 
 ## Design rules (from YC's demo-day guide)
 Legible, simple, obvious: one idea per slide, big text near the top, no unreadable screenshots.
