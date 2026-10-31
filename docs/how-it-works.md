@@ -46,7 +46,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | Secrets | `.env` file with `python-dotenv` | Keeps the API key out of the code and off the page |
 | Animation | Motion 11.18.2 | Staggered screen entrances and the total settling |
 | Fonts | Barlow, Barlow Semi Condensed | Saved locally so the demo works offline |
-| Icons and logo | Hand-written SVG | Warning-light icons and the spanner-tick logo |
+| Icons and logo | Hand-written SVG icons, PNG logo | Warning-light icons, plus the RepairFair logo with its R-and-car symbol |
 | Version control | Git and GitHub | Work happens on `app-dev`; `main` is updated by pull request |
 
 **Run it:** `python app.py`, then open http://localhost:5000.
@@ -59,7 +59,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | `static/index.html` | The page frame: both phones, the tab bar and the icon set | 101 lines |
 | `static/app.js` | All app logic: state, screens, price book, follow-ups | About 1,100 lines |
 | `static/style.css` | All visual design: colours, type, layout | About 500 lines |
-| `static/logo.svg` | The logo | Small |
+| `static/logo-wordmark.png`, `logo-mark.png` | The logo, and the small symbol used for icons | Small |
 | `static/vendor/` | The fonts and Motion, stored locally | Small |
 | `demo_data/quote.json`, `extra.json`, `checks.json` | Saved examples for Demo mode | Small |
 | `example-notes.txt` | Sample mechanic's notes to paste in | Small |

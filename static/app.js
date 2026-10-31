@@ -704,7 +704,7 @@ function thread() {
   const wait = q.items.length - need;
   return `<div class="thread"><div class="tstamp">Today ${timeOf(state.sentAt)}</div>
     <div class="bubble">Hi ${esc(customer())}, it's City Auto. Your quote for the ${esc(carName())} is ready. Please review and approve below.</div>
-    <div class="linkcard" data-act="open-quote"><div class="lc-top"><img src="/static/logo.svg" alt=""><div><div class="lc-k">RepairFair quote</div><div class="lc-t">${esc(q.job_title)}</div></div></div>
+    <div class="linkcard" data-act="open-quote"><div class="lc-top"><img src="/static/logo-mark.png" alt=""><div><div class="lc-k">RepairFair quote</div><div class="lc-t">${esc(q.job_title)}</div></div></div>
       <div class="lc-b"><div class="row2">${need ? `<span class="key needed_now"><i></i>${need} needed now</span>` : ""}${wait ? `<span class="key can_wait"><i></i>${wait} other item${wait > 1 ? "s" : ""}</span>` : ""}</div>
       <span class="cta">View and approve</span><div class="dom">repairfair.au</div></div></div>
     ${state.dr === "thread" && !state.viewedAt ? "" : ""}</div>`;
