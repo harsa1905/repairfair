@@ -32,6 +32,21 @@ Facts for judges' questions and for replacing the app's sample numbers. Everythi
 
 **Useful side of this:** a company is already charging for this, which helps show the problem is real.
 
+## What workshops use today
+
+From `RepairFair-workshop-responses.xlsx`. It was recorded for 5 of the 10 workshops: 1 pen and paper, 2 a WPS template sent by WeChat, 1 MechanicDesk, 1 Workshop Software. So 3 of 5 have no workshop software. With five answers the true share could be about 25–90%, and two of the five run on WeChat, so don't scale this up to all workshops.
+
+Value for each type of workshop, a month ex GST, using the prices in `claims.md`:
+
+| Workshop today | Cheapest way to get customer approval | Are we better value? |
+|---|---|---|
+| Paper or WeChat | RepairFair at $49, against $85–149 for a full system | Yes, clearly |
+| MechanicDesk | Add RepairFair: from $134 | Probably, but its lack of an approval link is a competitor's claim |
+| Workshop Software Silver | Gold for $30 more, or RepairFair for $49 | About even at 200 texts a month, once Gold's 11c texts are counted |
+| Workshop Software Gold | Already has an approval link | Hard to justify |
+
+The MechanicDesk workshop said about $30–50 a month, because it already pays for MechanicDesk. Another workshop called MechanicDesk too expensive and hard to learn. Workshop Software's "thousands of workshops" is its own marketing claim.
+
 ## Market
 
 | Fact | Figure | Source |

@@ -113,6 +113,8 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Do people trust their mechanic?** Yes, 71% do in AAAA's research. That's our point: the problem is the missing record, not dishonest mechanics.
 - **Isn't this already required?** NSW advice is to get a quote in writing, and repairers must only do authorised work. We make that record easy to create and keep.
 - **Isn't another startup doing this?** Yes, there are recent startups offering full workshop systems. That's a good sign the problem is real. They replace your system, and we add one step.
+- **Aren't you more expensive than Workshop Software?** Our $49 is below its plans, but for a workshop already on one, it's an extra cost. Don't say "we're cheaper". If you're on a top-tier system, we're probably not for you yet. Our first customers are the workshops on paper or basic software. For them it's about what Workshop Software's two-way texting add-on costs alone, with nothing to switch.
+- **How many workshops have no software?** Of the five workshops where we recorded it, three had no workshop software. That's a small sample, so we wouldn't scale it up, but they're our first customers.
 - **What would stop a competitor copying you?** Features can be copied. Our focus is workshops that won't switch, and a full system has little reason to plug into rivals.
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
 - **How big can this get?** At $49, Australian workshops alone are worth about $16.5M a year. The larger pool is the $10 billion spent on repairs, with fleets and insurers as later options.
