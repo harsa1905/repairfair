@@ -37,12 +37,15 @@ Return JSON only, in exactly this shape:
       "kind": "part" | "labour" | "service",
       "status": "needed_now" | "can_wait" | "optional" | "to_confirm",
       "evidence": "measurement or photo note from the notes, else null",
+      "why": "one plain-English sentence for the driver on why this item is on the quote, else null",
       "price": number or null,          // for items without part options
       "hours": number or null,          // labour only
       "rate": number or null,           // labour only, dollars per hour
       "warranty": "warranty text if given, else null",
+      "brand": "brand if given, else null",
+      "part_no": "part number if given, else null",
       "options": [                      // only if the notes give part options
-        {"tier": "Used" | "Economy" | "OEM" | "Premium", "price": number or null, "warranty": "text or null", "brand": "brand or null"}
+        {"tier": "Used" | "Economy" | "OEM" | "Premium", "price": number or null, "warranty": "text or null", "brand": "brand or null", "part_no": "part number or null"}
       ]
     }
   ],
@@ -58,6 +61,9 @@ Rules:
 - missing_info: the most important things still to confirm, at most 4, most important first. Start with missing prices
   for items needed now, then missing brands or part numbers for the main parts (e.g. "Brand and part number for the pad options"),
   then missing warranties.
+- why: explain to a driver who isn't a mechanic, in under 25 words, why this item is recommended at its status, using only
+  what the mechanic observed (e.g. "Your front pads are worn to 2 mm, so braking is weaker and they can damage the rotors.").
+  Don't add measurements, limits, prices or brands that aren't in the notes. For labour, say what the time covers.
 - Part tiers: "Used" = second-hand or recycled part; "Economy" = budget aftermarket; "OEM" = genuine or same as factory;
   "Premium" = better than OEM. Only include tiers the mechanic mentions.
 - Labour is its own item with kind "labour", hours and rate, and its warranty if given.
@@ -66,6 +72,18 @@ Rules:
 
 EXTRA_NOTE = ("These notes describe EXTRA work found mid-job. Return the same JSON shape, "
               "with only the new item(s) and their labour.")
+
+CHECKS_PROMPT = """You help an Australian mechanic decide what to inspect, based on what a customer reported about their car.
+Suggest 3 to 5 things to check. You are not diagnosing the car, and the customer never sees this.
+
+Return JSON only, in exactly this shape:
+{"checks": [{"check": "short thing to inspect, e.g. Measure front pad thickness", "why": "short reason, under 12 words"}]}
+
+Rules:
+- Each check is an inspection or test, starting with a verb such as Check, Inspect, Measure or Test.
+- Never say what is wrong with the car. Use "can" or "may" in the reason.
+- Never recommend a repair or replacement. Never mention prices, brands, part numbers or how long work takes.
+- Most useful check first. Plain words. No extra commentary outside the JSON."""
 
 
 def _num(v):
@@ -91,14 +109,16 @@ def normalise(raw):
         for o in it.get("options") or []:
             if isinstance(o, dict) and o.get("tier") in TIERS:
                 opts.append({"tier": o["tier"], "price": _num(o.get("price")),
-                             "warranty": _str(o.get("warranty")), "brand": _str(o.get("brand"))})
+                             "warranty": _str(o.get("warranty")), "brand": _str(o.get("brand")),
+                             "part_no": _str(o.get("part_no"))})
         opts.sort(key=lambda o: TIERS.index(o["tier"]))
         hours, rate, price = _num(it.get("hours")), _num(it.get("rate")), _num(it.get("price"))
         if kind == "labour" and price is None and hours is not None and rate is not None:
             price = round(hours * rate, 2)
         items.append({"name": _str(it["name"]), "kind": kind, "status": status,
-                      "evidence": _str(it.get("evidence")), "price": price, "hours": hours, "rate": rate,
-                      "warranty": _str(it.get("warranty")), "options": opts})
+                      "evidence": _str(it.get("evidence")), "why": (_str(it.get("why")) or "")[:220] or None, "price": price, "hours": hours, "rate": rate,
+                      "warranty": _str(it.get("warranty")), "brand": _str(it.get("brand")),
+                      "part_no": _str(it.get("part_no")), "options": opts})
     # Labour belongs to the job: if any part is needed now and the AI left labour unclear, mark labour needed now too
     if any(i["kind"] != "labour" and i["status"] == "needed_now" for i in items):
         for i in items:
@@ -108,6 +128,32 @@ def normalise(raw):
             "customer": _str(raw.get("customer")), "items": items,
             "missing_info": [str(m) for m in (raw.get("missing_info") or []) if m],
             "eta_note": _str(raw.get("eta_note"))}
+
+
+def normalise_checks(raw):
+    """Keep 3 to 5 suggestions and drop anything that talks about money."""
+    checks = []
+    for c in raw.get("checks") or []:
+        if not isinstance(c, dict) or not _str(c.get("check")):
+            continue
+        check, why = _str(c["check"])[:90], (_str(c.get("why")) or "")[:140]
+        if "$" not in check + why:
+            checks.append({"check": check, "why": why or None})
+    return checks[:5]
+
+
+def ask_ai(messages):
+    """Send messages to the model and return its JSON reply."""
+    from openai import OpenAI  # imported here so demo mode works even without the package configured
+    client = OpenAI(api_key=API_KEY, timeout=40)
+    args = dict(model=MODEL, messages=messages, response_format={"type": "json_object"}, max_completion_tokens=2000)
+    try:
+        resp = client.chat.completions.create(**args, **({"reasoning_effort": REASONING} if REASONING else {}))
+    except Exception as e:  # some models don't accept this reasoning setting: retry without it
+        if "reasoning" not in str(e).lower():
+            raise
+        resp = client.chat.completions.create(**args)
+    return json.loads(resp.choices[0].message.content or "{}")
 
 
 def demo_response(kind):
@@ -135,28 +181,37 @@ def quote():
     if not notes:
         return jsonify({"error": "Please type some notes first."}), 400
 
-    from openai import OpenAI  # imported here so demo mode works even without the package configured
     try:
-        client = OpenAI(api_key=API_KEY, timeout=40)
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
         if kind == "extra":
             messages.append({"role": "system", "content": EXTRA_NOTE})
         messages.append({"role": "user", "content": notes})
-        args = dict(model=MODEL, messages=messages, response_format={"type": "json_object"}, max_completion_tokens=2000)
-        try:
-            resp = client.chat.completions.create(**args, **({"reasoning_effort": REASONING} if REASONING else {}))
-        except Exception as e:  # some models don't accept this reasoning setting: retry without it
-            if "reasoning" not in str(e).lower():
-                raise
-            resp = client.chat.completions.create(**args)
-        raw = json.loads(resp.choices[0].message.content or "{}")
-        data = normalise(raw)
+        data = normalise(ask_ai(messages))
         if not data["items"]:
             return jsonify({"error": "The AI didn't return any items. Try again or switch on demo mode."}), 502
         return jsonify({"source": "ai", **data})
     except Exception as e:  # show a short, readable error on the page
         return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}. "
                                  "Check your key and model in .env, or switch on demo mode."}), 502
+
+
+@app.post("/api/checks")
+def checks():
+    """Suggestions for the mechanic only. They never reach the quote or the driver."""
+    body = request.get_json(silent=True) or {}
+    issue = (body.get("issue") or "").strip()
+    if body.get("demo") or not API_KEY:
+        with open(HERE / "demo_data" / "checks.json", encoding="utf-8") as f:
+            return jsonify({"source": "demo", "checks": normalise_checks(json.load(f))})
+    if not issue:
+        return jsonify({"error": "Please type what the customer reported first."}), 400
+    try:
+        found = normalise_checks(ask_ai([{"role": "system", "content": CHECKS_PROMPT}, {"role": "user", "content": issue}]))
+        if len(found) < 3:
+            return jsonify({"error": "The AI didn't return enough checks. Try again or switch on demo mode."}), 502
+        return jsonify({"source": "ai", "checks": found})
+    except Exception as e:
+        return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}."}), 502
 
 
 if __name__ == "__main__":

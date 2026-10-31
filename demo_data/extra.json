@@ -4,13 +4,15 @@
   "customer": null,
   "items": [
     {"name": "Rear brake hose", "kind": "part", "status": "needed_now", "evidence": "Crack in hose (photo taken). Shouldn't drive until replaced",
+     "why": "The rear brake hose is cracked. If it leaks you can lose braking, so the car isn't safe to drive.",
      "price": null, "hours": null, "rate": null, "warranty": null,
      "options": [
        {"tier": "Economy", "price": 45, "warranty": "12 months", "brand": null},
        {"tier": "OEM", "price": 70, "warranty": "12 months", "brand": null}
      ]},
     {"name": "Labour (hose)", "kind": "labour", "status": "needed_now", "evidence": null,
-     "price": 45, "hours": 0.5, "rate": 90, "warranty": null, "options": []}
+     "why": "Half an hour to replace the cracked hose.",
+     "price": 60, "hours": 0.5, "rate": 120, "warranty": null, "options": []}
   ],
   "missing_info": ["Brand and part number for the hose options"]
 }
