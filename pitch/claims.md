@@ -10,7 +10,7 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 - **USP:** every repair is quoted item by item and every extra is approved in writing, so nothing reaches the bill that the driver didn't agree to.
 - **Tool first, network later:** workshops pay for quicker replies and proof of what was agreed. As more join, the shared quote format and driver-owned record grow into a network of garages drivers can trust. The network is the long-term vision and what stops copycats, not a reason to pay on day one.
 - **Say "network", not "platform":** we don't replace workshop software.
-- **Founding Workshop offer (a plan, not a result):** once the app is deployed, the first 20–30 Inner West workshops get 12 months free, then $49 a month locked in. They sign a letter of intent to pay and use it on all their quotes. The free plan (about 20 quotes a month) stays for everyone else. Nobody has signed yet.
+- **Founding Workshop offer (a plan, not a result):** once the app is deployed, the first 20–30 Inner West workshops get 6 months free, then $49 a month locked in. They sign a letter of intent to pay and use it on all their quotes. The free plan (about 20 quotes a month) stays for everyone else. Pro includes 300 texts a month (about 150 quotes), then 12c a text. Nobody has signed yet.
 
 **Competition update (31 Oct):** Meckly, an Australian workshop system, already sells SMS quote approval and a car logbook across shops. Our edge is now **nothing to switch**, not the driver side. See `qa-evidence.md` before writing slide 5.
 
@@ -78,7 +78,7 @@ These are never shown as results.
 | 6 | "One hour of follow-up work a month covers the $49" | Break-even, not a forecast. Based on about 40% left after parts and wages, from the closest ATO benchmark (automotive electrical), so $49 ÷ 40% ≈ $120, about an hour at metro labour rates. See `qa-evidence.md`. One real workshop's answer would be better |
 | 6 | 5% of about 28,000 workshops × $49 × 12 ≈ $820k a year | Illustrative |
 | 7 | 96 Inner West workshops, 607 across 21 Sydney councils, about 28,000 in Australia | The first two are minimums from our search; the third is IBISWorld |
-| 7 | "About $105 to sign one workshop" | Estimate from stated interest: 14 approached and 4 said they'd pay is 3.5 approaches each. Assumes 1 hour each at $30 an hour. About two months of fees, and the free year delays getting it back |
+| 7 | "About $105 to sign one workshop" | Estimate from stated interest: 14 approached and 4 said they'd pay is 3.5 approaches each. Assumes 1 hour each at $30 an hour. About two months of fees, and the free months delay getting it back |
 | 8 | Pilot goals (draft below) | Goals, not predictions |
 
 **Scale Q&A:** $820k takes about 1,400 paying workshops, more than double the 607 we found in Sydney, so it depends on going national. Signing that many by hand isn't realistic: local referrals and software connections are the plan, and neither is built or proven. The limits are setup and support time, and needing enough garages in each area.
@@ -113,7 +113,7 @@ All in AUD a month excluding GST, unless noted.
 - **Correct the old figure:** our progress deck said MechanicDesk starts at about $70. It's now $85.
 - **Fair comparison:** $49 is less than these entry prices, but they do far more, so "we're cheaper" isn't like-for-like. A fairer line: **"$49 a month, about what Workshop Software's two-way texting add-on costs alone, with nothing to switch."**
 - **Not confirmed:** whether these products offer AI quote drafting or item-by-item approval. Workshop Software says it offers no permanent free plan, only a 14-day trial. Don't claim anyone lacks a feature until it's checked.
-- **Cost of the free year (illustrative):** at about 10c a text, 30 workshops × 100 quotes a month × 2 texts is about $600 a month, or $7,200 a year, before AI, hosting and support. Real volumes and rates are still needed.
+- **Cost of the free months (illustrative):** at about 10c a text, 30 workshops × 100 quotes a month × 2 texts is about $600 a month. With about $105 of hosting and a few dollars of AI, that's about $710 a month, or $4,300 for 6 months, before support. Real volumes and rates are still needed. The full breakdown is in `qa-evidence.md`.
 
 ## Sources
 1. Workshop Software, "AI Information", https://workshopsoftware.com/ai-info/ (page updated 5 Aug 2026; pricing effective 1 Dec 2025; accessed 30 Oct 2026)

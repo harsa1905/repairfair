@@ -51,7 +51,7 @@ Everything another agent needs to continue the final pitch work. Read this first
 - **USP:** every item is quoted and every extra is approved in writing, so nothing reaches the bill that the driver didn't agree to.
 - **Tool first, network later:** workshops pay for quicker replies and proof of what was agreed. The shared format and driver-owned record grow into a network, which is the long-term vision and what stops copycats. Say "network", not "platform".
 - **No pilot:** the app isn't deployed and there's no time. Say "working prototype", and say that nobody has paid yet. The ask is help deploying it and running the first Inner West pilot.
-- **Founding Workshop offer (a plan):** the first 20–30 Inner West workshops get 12 months free, then $49 locked in, with a letter of intent and use on all quotes. The free plan stays for everyone else.
+- **Founding Workshop offer (a plan):** the first 20–30 Inner West workshops get 6 months free, then $49 locked in, with a letter of intent and use on all quotes. The free plan stays for everyone else.
 
 ## 5. Slide plan (4:50, with 0:10 spare)
 
@@ -62,7 +62,7 @@ Everything another agent needs to continue the final pitch work. Read this first
 | 3 | Solution and demo | 1:00 | Speaker 0:15, video 0:30, speaker 0:15. Opens on "clear, fair and in writing" |
 | 4 | Traction | 0:45 | 6 of 10, 4 of 10, working prototype, what changed after feedback, optional timing test. No pilot |
 | 5 | Competition | 0:35 | "We work alongside your software." Concede that others have approval features |
-| 6 | Business model | 0:25 | A subscription, $49 a month, Founding Workshops free for a year, break-even |
+| 6 | Business model | 0:25 | A subscription, $49 a month, Founding Workshops free for six months, break-even |
 | 7 | Go-to-market, scale, cost | 0:30 | Dot map; 96, then 607, then about 28,000; estimated $105 to sign a workshop |
 | 8 | Team and ask | 0:20 | Pilot ask and goals, email, QR code. No "Thank you" slide. Full brand colour |
 
@@ -191,6 +191,6 @@ Run it last. The steps are in `claims.md`. Results go there before the deck is l
 ## 12. Known gaps
 - Competitors: prices are current to 30 Oct (`claims.md`). Whether they offer AI quoting or item-by-item approval is not confirmed, so don't claim they lack these.
 - Xero and workshop software connections are planned, not built.
-- The free-year cost ($7,200 a year) and the $105 cost to sign a workshop are illustrative.
+- The free-months cost (about $4,300 for 30 workshops) and the $105 cost to sign a workshop are illustrative.
 - `design-research.md` still describes Inter and sand (section 7).
 - Google's terms prohibit scraping. The plan's limitation note covers this as a small, one-off, non-commercial study, and the team has the ethics go-ahead (confirmed by Sameep on 30 Oct).

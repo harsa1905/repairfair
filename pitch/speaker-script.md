@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:39 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:50 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:32). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -17,8 +17,8 @@ The story takes about 4:39 with pauses. Safaa opens and tells Mia's story throug
 | 11 | Why now | Safaa | 0:18 |
 | 12 | Traction | Safaa | 0:22 |
 | 13 | Competition | Sameep | 0:18 |
-| 14 | Business model | Sameep | 0:15 |
-| 15 | Market | Sameep | 0:20 |
+| 14 | Business model | Sameep | 0:22 |
+| 15 | Market | Sameep | 0:24 |
 | 16 | Team | Sameep | 0:10 |
 | 17 | Ask | Sameep | 0:18 |
 
@@ -78,11 +78,11 @@ Workshop software does far more than we do, and owners rarely switch. So we don'
 
 **14. Business model** (Sameep)
 
-Workshops pay forty-nine dollars a month. Drivers pay nothing. When a driver says "not now", we remind them later. About one hour of that work a month covers the fee.
+Workshops pay forty-nine dollars a month. Drivers pay nothing. There's a free plan for up to twenty quotes, and our first workshops get six months free. When a driver says "not now", we remind them later. About one hour of that work a month covers the fee.
 
 **15. Market** (Sameep)
 
-Australians spend about ten billion dollars a year on servicing and repairs, across twenty-eight thousand workshops. We start in Sydney's Inner West, where garages sit close together, and go suburb by suburb. Every garage that joins makes a clear quote something drivers look for.
+Australians spend about ten billion dollars a year on servicing and repairs. We start with ninety-six garages in the Inner West, where they sit close together. Then six hundred across Sydney, then twenty-eight thousand nationally. Later, fleets and insurers. Every garage that joins makes a clear quote something drivers look for.
 
 **16. Team** (Sameep)
 
@@ -117,5 +117,12 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
 - **How big can this get?** At $49, Australian workshops alone are worth about $16.5M a year. The larger pool is the $10 billion spent on repairs, with fleets and insurers as later options.
 - **Is the price too low?** We don't know yet, which is one thing the pilot would test, along with support costs.
+- **What does a quote cost you?** About 20c, almost all of it two text messages. The AI is under half a cent. Hosting is about $20–105 a month. These are estimates from price lists, because we haven't deployed yet.
+- **What are your margins?** At 100 quotes a month, we keep about $25 of the $49, roughly half, before card fees and support. The 100 quotes is an assumption.
+- **What stops one busy workshop costing you more than $49?** Pro includes 300 texts a month, about 150 quotes, then 12c a text. Without a limit we'd lose money from about 245 quotes.
+- **When do you make money?** Founding workshops start paying after six months, and the free plan stops at 20 quotes. The offer costs about $4,300 for 30 workshops, which is illustrative.
+- **Why not take a cut of each job?** We'd earn more when drivers say yes. A flat fee keeps us neutral.
+- **Is 607 all of Sydney?** No, it's the workshops we found, so there are at least that many.
+- **Do fleets or insurers want this?** We haven't spoken to any. They're ideas for later.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
 - **Do workshops have to enter jobs twice?** Today, yes, in their main system. We add no new form for the quote, and a Xero export is the planned first step towards fixing that.

@@ -101,7 +101,25 @@ Meckly claims most customers respond within the hour [19]. That supports the wai
 
 ## Costs (rough)
 
-Text messages cost workshops about 10–11c through competitors [1][3][5]. Our own supplier rate and AI cost per quote haven't been checked.
+Text messages cost workshops about 10–11c through competitors [1][3][5].
+
+Our own costs are estimates from price lists (accessed 1 Nov 2026), in AUD at an assumed A$1.50 to US$1. The app isn't deployed and sends no real texts, so none of this is measured.
+
+| Cost | Estimate | Basis |
+|---|---|---|
+| AI | Under 0.5c a quote | GPT-6 Luna at US$0.10 in and US$0.50 out per million tokens. About 1,000 tokens in, and capped at 2,000 out. The price comes from press and blog reports, not OpenAI's own page [C1] |
+| Texts | About 20c a quote | 2 texts at 10c. Twilio lists US$0.0515 a segment in Australia, about 8c, and carrier fees may apply [C2] |
+| Hosting, small | About $20 a month | Render web service US$7 plus database US$6 [C3] |
+| Hosting, about 30 workshops | About $105 a month | Render Pro US$25, 1 CPU web service US$25, database US$19 [C3] |
+
+- **Margin at 100 quotes a month:** $49 less about $20 of texts and $3.50 of hosting leaves about $25, roughly 50%, before card fees and support. The 100 quotes is an assumption.
+- **Why Pro has a text limit:** at 20c a quote, an unlimited plan loses money from about 245 quotes a month.
+- **Free plan:** 20 quotes costs about $4 a month per workshop.
+- **Founding offer:** about $710 a month for 30 workshops, or $4,300 for 6 months. Illustrative.
+
+C1. VentureBeat, GPT-6 Sol and Luna, https://venturebeat.com/technology/openai-releases-gpt-6-sol-and-luna-models-slashing-api-costs-50-or-more
+C2. Twilio SMS pricing, Australia, https://www.twilio.com/en-us/sms/pricing/au
+C3. Render pricing, https://render.com/pricing
 
 ## Sources (all accessed 31 Oct 2026)
 1. Meckly pricing, https://meckly.com/workshop-software-pricing

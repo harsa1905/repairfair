@@ -8,7 +8,7 @@
 3. Solution, value proposition and demo: "Clear, fair and in writing", then a 30-second narrated video, ending on the final bill matching what was approved; incl. the mechanic checking the AI quote (1:00)
 4. Traction: 10 workshop interviews, working prototype, what changed after feedback, prototype timing test; no pilot yet (0:45)
 5. Competition: we work alongside existing software; competitor prices; what stops copycats (0:35)
-6. Business model (planned): a subscription, charging workshops $49 a month, with Founding Workshops free for a year; why a workshop pays; break-even estimate (0:25)
+6. Business model (planned): a subscription, charging workshops $49 a month, with Founding Workshops free for six months; why a workshop pays; break-even estimate (0:25)
 7. Go-to-market, scale and cost: Inner West first, then Sydney, then Australia, building a network of garages drivers can trust; estimated cost to sign a workshop (0:30)
 8. Team + ask: deploy the app and run the first Inner West pilot, with pilot goals (0:20)
 Backup: references, EV, research detail, review study method.
