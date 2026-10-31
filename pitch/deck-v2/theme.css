@@ -41,13 +41,18 @@ h1 em{font-style:normal;color:var(--sky)}
 .amount{font-family:var(--display);font-weight:700;font-size:470px;line-height:.9;letter-spacing:-.02em;margin:0;font-variant-numeric:tabular-nums}
 .amount.bad{color:#FF6B60}
 .receipt>div{text-align:center}
+.receipt .sub{margin:44px auto 0}
+.is-active .after{animation:rise .5s 1.7s both}
 
 /* No answer */
 .call{position:absolute;right:130px;top:118px;width:520px;background:var(--brand-50);border-radius:48px;padding:64px 44px;text-align:center}
 .call b{display:block;font-family:var(--display);font-size:68px}
 .call span{display:block;font-size:40px;color:var(--muted);margin-top:8px}
 .call i{display:block;width:124px;height:124px;border-radius:50%;background:var(--red);margin:64px auto 0;position:relative}
-.call i::after{content:"";position:absolute;left:30px;right:30px;top:54px;height:16px;border-radius:9px;background:#fff}
+.call i.ring{background:var(--green);padding:28px;box-sizing:border-box}
+.call i.ring svg{display:block;width:100%;height:100%}
+.is-active .call i.ring{animation:ring 1.2s ease-out infinite}
+@keyframes ring{from{box-shadow:0 0 0 0 rgba(30,110,68,.45)}to{box-shadow:0 0 0 44px rgba(30,110,68,0)}}
 
 /* Quote lines */
 .bill{max-width:1250px;margin-top:40px}
@@ -110,5 +115,5 @@ ul.plain{margin:0;padding:0 0 0 40px;font-size:36px}ul.plain li{margin:0 0 16px}
 .two{display:flex;gap:70px}.two>div{flex:1}.two h2{font-family:var(--display);font-size:42px;color:var(--brand);margin:0 0 14px}
 .refs{font-size:29px;line-height:1.3;margin:0;padding-left:44px}.refs li{margin:0 0 7px}
 
-@media (prefers-reduced-motion:reduce){.is-active .bill .line{animation:none}}
-@media print{html,body{background:#fff}.slide.video video,.tap{display:none!important}.bill .line{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.is-active .bill .line,.is-active .after,.is-active .call i.ring{animation:none}}
+@media print{html,body{background:#fff}.slide.video video,.tap{display:none!important}.bill .line,.after,.call i.ring{animation:none!important}}

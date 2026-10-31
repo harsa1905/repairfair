@@ -1,19 +1,19 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:13 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:22). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:34 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:43). Sameep takes over at competition and closes on the ask (1:21). The video takes 0:30. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
 | 1 | RepairFair | Safaa | 0:10 |
-| 2 | The quote | Safaa | 0:12 |
-| 3 | The bill | Safaa | 0:12 |
-| 4 | The trap | Safaa | 0:12 |
-| 5 | No answer | Safaa | 0:18 |
-| 6 | 1 in 5 | Safaa | 0:14 |
-| 7 | The insight | Safaa | 0:12 |
+| 2 | The estimate | Safaa | 0:12 |
+| 3 | The call | Safaa | 0:18 |
+| 4 | The yes | Safaa | 0:14 |
+| 5 | The bill | Safaa | 0:22 |
+| 6 | 1 in 5 | Safaa | 0:15 |
+| 7 | The insight | Safaa | 0:16 |
 | 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:30 |
-| 10 | Mia's new bill | Safaa | 0:10 |
+| 10 | Mia's new bill | Safaa | 0:14 |
 | 11 | Why now | Safaa | 0:12 |
 | 12 | Traction | Safaa | 0:22 |
 | 13 | Competition | Sameep | 0:18 |
@@ -28,29 +28,29 @@ The story takes about 4:13 with pauses. Safaa opens and tells Mia's story throug
 
 We're RepairFair. Workshops send quotes by text, and drivers approve them line by line.
 
-**2. The quote** (Safaa)
+**2. The estimate** (Safaa)
 
-Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The quote is three hundred dollars. She says yes.
+Meet Mia. Her brakes need doing, so she drops her car at a local workshop on her way to work. The estimate is three hundred dollars. She says yes.
 
-**3. The bill** (Safaa)
+**3. The call** (Safaa)
 
-When she comes back, the bill is eleven hundred and twenty. [Pause.] Mia's made up. That bill isn't. A Sydney driver really got it.
+Mid-morning, her phone rings. It's the workshop, and they're doing the right thing by calling. The rotors are bad too. The car came with ceramic pads from the factory, so those cost more. And the caliper needs a service.
 
-**4. The trap** (Safaa)
+**4. The yes** (Safaa)
 
-And that's the trap. The work is already done. She can't tell what she's paying for, and she can't send it back.
+Mia's at work, and the explanation is rushed. She's confused. But she needs her car for the commute, so she says yes. She isn't sure what she's just approved.
 
-**5. No answer** (Safaa)
+**5. The bill** (Safaa)
 
-Now stand on the other side of the counter. The mechanic isn't the villain here. They find a problem and ring Mia. She's at work. No answer. The car sits on the hoist, the next job waits, and if they go ahead anyway, she can say she never agreed.
+When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Was any of it urgent? She can't tell. Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
 
 **6. 1 in 5** (Safaa)
 
-We read over a thousand bad reviews of Sydney mechanics. One in five is about this: a surprise bill, work nobody approved, or work nobody needed.
+Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five is about this: a surprise bill, work nobody approved, or work nobody needed.
 
 **7. The insight** (Safaa)
 
-But most people trust their local mechanic. So trust isn't the problem. The missing record is. Repairs get agreed in a quick phone call, and nobody can check what was said.
+But most people trust their local mechanic. So trust isn't the problem. The missing record is. Repairs get agreed in a rushed phone call. Afterwards the driver can't check what was said, and neither can the mechanic.
 
 **8. The solution** (Safaa)
 
@@ -62,7 +62,7 @@ Plays with its own voice. Stay silent.
 
 **10. Mia's new bill** (Safaa)
 
-Same brakes. Same Mia. This time, every line on the bill is one she approved, and the mechanic has proof.
+Same brakes. Same Mia. This time it's on her phone, so she can read it properly. The pads are urgent and the rotors can wait. Every line on the bill is one she approved, and the mechanic has proof.
 
 **11. Why now** (Safaa)
 
@@ -106,7 +106,8 @@ Filming shortcuts and the full demo order are in the shared `app-dev-features.md
 
 ## Likely questions
 - **How was the review number checked?** It was AI-coded, and two more AI coders agreed on 90%+ of a 60-review sample. Say a person hasn't checked it, unless the human check gets done.
-- **Is Mia real?** Mia is a made-up character. The $300 quote and $1,120 bill come from a real Sydney driver in our research, and the $470 bill is the demo.
+- **Is Mia real?** Mia is a made-up character, and so is her phone call, including the rotors, pads and caliper. The $300 quote and $1,120 bill come from a real Sydney driver's brake job in our research, and the $470 bill is the demo.
+- **Was the $1,120 a rip-off?** We don't know, and that's the point. A typical brake job is about $450–600 on AutoGuru, but extra work can be genuine. Without a written record, the driver can't tell.
 - **Do people trust their mechanic?** Yes, 71% do in AAAA's research. That's our point: the problem is the missing record, not dishonest mechanics.
 - **Isn't this already required?** NSW advice is to get a quote in writing, and repairers must only do authorised work. We make that record easy to create and keep.
 - **Isn't another startup doing this?** Yes, there are recent startups offering full workshop systems. That's a good sign the problem is real. They replace your system, and we add one step.
