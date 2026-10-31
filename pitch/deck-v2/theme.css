@@ -7,7 +7,7 @@
 @font-face{font-family:"Barlow Semi Condensed";font-weight:700;font-display:swap;src:url(assets/fonts/barlow-semi-condensed-700.woff2) format("woff2")}
 
 :root{
-  --ink:#10191F;--white:#fff;--brand:#0F5F78;--brand-100:#CDE6EC;--brand-50:#E6F3F6;--muted:#55656B;--line:#DCE8EB;
+  --ink:#071A3D;--white:#fff;--brand:#0A3CA8;--sky:#00AAFC;--brand-100:#CFE6FD;--brand-50:#E8F3FE;--muted:#54627A;--line:#DEE7F2;
   --red:#D9423A;--amber:#FFD56E;--green:#1E6E44;
   --display:"Barlow Semi Condensed",Barlow,"Segoe UI",sans-serif;--body:Barlow,"Segoe UI",system-ui,sans-serif;
   --bg:var(--white);--text-1:var(--ink);--text-2:var(--muted);--text-3:var(--muted);--surface:var(--white);--border:var(--line);--accent:var(--brand);--font-sans:var(--body);
@@ -19,13 +19,13 @@ html,body{background:var(--ink)}
 .slide.teal{background:var(--brand);color:var(--white)}
 h1{font-family:var(--display);font-weight:700;font-size:196px;line-height:.98;letter-spacing:-.014em;margin:0;color:inherit;max-width:1720px}
 h1.mid{font-size:138px}
-h1 em{font-style:normal;color:var(--amber)}
+h1 em{font-style:normal;color:var(--sky)}
 .white-h em{color:var(--brand)}
 .sub{font-size:66px;line-height:1.14;font-weight:500;margin:36px 0 0;max-width:1500px;color:inherit}
-.dark .sub{color:#C4D2D7}
-.teal .sub{color:#DDF0F4}
+.dark .sub{color:#C5D3E6}
+.teal .sub{color:#DCEBFF}
 .source{position:absolute;left:110px;bottom:56px;font-size:26px;color:var(--muted);margin:0}
-.dark .source,.teal .source{color:#A9BDC4}
+.dark .source,.teal .source{color:#AFC4E2}
 
 /* Title */
 .slide.logo{align-items:center;justify-content:center;padding:0}
@@ -37,7 +37,7 @@ h1 em{font-style:normal;color:var(--amber)}
 /* The bill */
 .receipt{align-items:center;justify-content:center;padding:0}
 .amount-label{font-family:var(--display);font-weight:600;font-size:64px;margin:0 0 6px;color:var(--muted)}
-.dark .amount-label{color:#C4D2D7}
+.dark .amount-label{color:#C5D3E6}
 .amount{font-family:var(--display);font-weight:700;font-size:470px;line-height:.9;letter-spacing:-.02em;margin:0;font-variant-numeric:tabular-nums}
 .amount.bad{color:#FF6B60}
 .receipt>div{text-align:center}
@@ -86,15 +86,15 @@ h1 em{font-style:normal;color:var(--amber)}
 /* Numbers row */
 .nums{display:flex;gap:90px;margin-top:64px}
 .nums div{flex:0 1 auto}.nums b{display:block;font-family:var(--display);font-weight:700;font-size:230px;line-height:1;color:var(--brand)}
-.teal .nums b,.dark .nums b{color:var(--amber)}
+.teal .nums b,.dark .nums b{color:var(--sky)}
 .nums span{font-size:50px;line-height:1.15;display:block;margin-top:8px}
 
 .nums.tight{gap:22px!important;margin-top:36px!important;flex-direction:column}.nums.tight b{font-size:136px}.nums.tight span{font-size:42px;margin-top:0}
 .split{display:flex;gap:40px;flex:1;min-height:0}
 .split>div:first-child{flex:1;min-width:0}
 .map{height:880px;display:block;margin:-40px -30px 0 0}
-.map .lga{fill:#EDF3F5;stroke:#fff;stroke-width:2}.map .lga.iw{fill:var(--brand-100)}
-.map .d{fill:#9DB1B8}.map .d.iw{fill:var(--brand)}
+.map .lga{fill:#EEF3FA;stroke:#fff;stroke-width:2}.map .lga.iw{fill:var(--brand-100)}
+.map .d{fill:#A3B3CC}.map .d.iw{fill:var(--brand)}
 
 .todo{background:var(--amber);color:var(--ink);font-weight:700;border-radius:10px;padding:8px 20px;display:inline-block;font-size:36px;margin:0 14px 14px 0}
 
