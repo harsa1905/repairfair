@@ -124,7 +124,7 @@ Also needed: **the two teammates' names** for the human check.
 
 Scripts are in `pitch/review-study/scripts/`. Use `PYTHONIOENCODING=utf-8` on Windows.
 
-**Collection is now handed to a separate agent:** see [DATA-COLLECTION-HANDOVER.md](DATA-COLLECTION-HANDOVER.md), which covers steps 1 and 2 here, plus app prices and Q&A evidence. It uses `make_batches.py` and `save_batch.py`. Its results come back through `work\run\RETURN.md`, and this session then does steps 3 to 5.
+Use `make_batches.py` to prepare the requests and `save_batch.py` to check and store each result.
 
 ### Step 1: download reviews
 No batches have been downloaded yet. Take workshops **evenly across regions**, in the order IW01, EA01, NO01, SO01, WE01, SW01, IW02, and so on. Within a region the numbering is already random, so taking the first N keeps the sample random. Stop at a full round of regions if credits run out.
