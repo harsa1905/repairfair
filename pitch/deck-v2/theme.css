@@ -28,6 +28,8 @@ h1 em{font-style:normal;color:var(--amber)}
 .dark .source,.teal .source{color:#A9BDC4}
 
 /* Title */
+.slide.logo{align-items:center;justify-content:center;padding:0}
+.slide.logo img{width:1640px;display:block}
 .brandmark{display:flex;align-items:center;gap:44px;margin-top:200px}
 .brandmark img{height:170px;border-radius:30px;background:#fff}
 .brandmark span{font-family:var(--display);font-weight:700;font-size:210px;line-height:1;letter-spacing:-.012em}
