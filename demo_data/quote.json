@@ -19,7 +19,7 @@
      "price": null, "hours": null, "rate": null, "warranty": null, "options": []},
     {"name": "Labour", "kind": "labour", "status": "needed_now", "evidence": null,
      "why": "1.5 hours to fit the new pads and check the brakes, with a 12-month workmanship warranty.",
-     "price": 135, "hours": 1.5, "rate": 90, "warranty": "12 months workmanship", "options": []}
+     "price": 180, "hours": 1.5, "rate": 120, "warranty": "12 months workmanship", "options": []}
   ],
   "missing_info": ["Price for the brake fluid flush", "Brand and part number for each pad option", "Rotor brand and warranty"]
 }

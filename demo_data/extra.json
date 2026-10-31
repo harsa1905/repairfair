@@ -12,7 +12,7 @@
      ]},
     {"name": "Labour (hose)", "kind": "labour", "status": "needed_now", "evidence": null,
      "why": "Half an hour to replace the cracked hose.",
-     "price": 45, "hours": 0.5, "rate": 90, "warranty": null, "options": []}
+     "price": 60, "hours": 0.5, "rate": 120, "warranty": null, "options": []}
   ],
   "missing_info": ["Brand and part number for the hose options"]
 }

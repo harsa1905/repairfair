@@ -5,13 +5,13 @@ const DEFAULT_NOTES = `2017 Mazda 3, customer Mia.
 Front pads at 2mm, need doing now (photo taken). Pad options: economy $90 12 months, OEM $160 12 months/20,000 km, premium ceramic $210 24 months.
 Front rotors 22.4mm, min 22mm, can wait till next service, $240 a pair.
 Brake fluid last change unknown, optional flush.
-Labour 1.5 hrs at $90/hr, 12 month workmanship warranty.`;
+Labour 1.5 hrs at $120/hr, 12 month workmanship warranty.`;
 
 const DEFAULT_REPORTED = "Grinding noise when braking";
 
 const DEFAULT_EXTRA = `Found a cracked rear brake hose (photo taken), needs doing now, shouldn't drive like this.
 Hose options: economy $45 12 months, OEM $70 12 months.
-Labour 0.5 hr at $90/hr.`;
+Labour 0.5 hr at $120/hr.`;
 
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
@@ -43,10 +43,11 @@ const SEED_BOOK = [
   { item: "Brake fluid flush", key: "fluid", tier: null, price: 90, warranty: "3 months", brand: "DOT 4 fluid", part_no: null },
   { item: "Rear brake hose", key: "hose", tier: "Economy", price: 45, warranty: "12 months", brand: "Value line", part_no: "BH-310E" },
   { item: "Rear brake hose", key: "hose", tier: "OEM", price: 70, warranty: "12 months", brand: "Genuine", part_no: "BH-310G" },
-  { item: "Labour rate", key: "labour", tier: null, price: 90, unit: "/hr", warranty: "12 months workmanship", brand: null, part_no: null },
+  { item: "Labour rate", key: "labour", tier: null, price: 120, unit: "/hr", warranty: "12 months workmanship", brand: null, part_no: null },
 ];
 
-// Sample "typical price" ranges for the fair price check. Illustrative only: real ranges would come from quotes across workshops.
+// "Typical price" ranges for the fair price check. Parts are illustrative samples; real ranges would come from quotes across
+// workshops. Labour follows published Australian workshop rates (see pitch/qa-evidence.md on the pitch-dev branch).
 const FAIR_RANGES = [
   { key: "pad", tier: "Economy", low: 70, high: 120 },
   { key: "pad", tier: "OEM", low: 130, high: 190 },
@@ -55,7 +56,7 @@ const FAIR_RANGES = [
   { key: "fluid", low: 70, high: 120 },
   { key: "hose", tier: "Economy", low: 35, high: 70 },
   { key: "hose", tier: "OEM", low: 60, high: 100 },
-  { key: "labour", low: 80, high: 130 },
+  { key: "labour", low: 120, high: 180 },
 ];
 
 // Sample month for the owner's Results screen. Illustrative only; the live demo job is added on top.
@@ -655,7 +656,7 @@ function renderDriver() {
         <div class="lead">${esc(customer())}, choose what we do today</div>
         <div class="sheet">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
         <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
-        <div class="small">Typical price ranges are sample data for this demo.</div>`;
+        <div class="small">Typical part prices are sample data for this demo. The labour range comes from published workshop rates.</div>`;
     case "approved":
       return `<div class="cluster"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>
           <div class="readout green">${money(sumApproved(q.items))}</div>

@@ -93,7 +93,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Human in the loop.** The AI drafts and a person decides. `canSend()` keeps **Send** locked until every gap is handled and the mechanic has ticked the box. The rule is enforced in code, not just suggested.
 
-**Fair price check.** `fairCheck()` compares each price (for labour, the hourly rate) with a typical range in `FAIR_RANGES`. The ranges are invented samples for the demo. Real ones would come from quotes across many workshops, which is the long-term moat.
+**Fair price check.** `fairCheck()` compares each price (for labour, the hourly rate) with a typical range in `FAIR_RANGES`. Part ranges are invented samples for the demo, and the labour range of $120 to $180 an hour comes from published Australian workshop rates. Real ranges would come from quotes across many workshops, which is the long-term moat.
 
 **Results screen.** `wsResultsTab()` adds today's demo job to `SAMPLE_MONTH`, a set of invented figures for one workshop's month. It shows how the product would prove its value, not real results.
 
@@ -111,7 +111,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 - **Both phones run on one page.** There is no real second device.
 - **No real text messages.** Nothing leaves your computer except the notes sent to OpenAI.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
-- **Sample data only.** The history, price book, follow-ups, typical price ranges and Results figures are invented examples.
+- **Sample data only.** The history, price book, follow-ups, typical part prices and Results figures are invented examples.
 - **Local only.** It runs on your computer and isn't hosted online.
 
 Taking it to real users would need a database, sign-in, a text-message service such as Twilio, online hosting, and privacy handling for customer details.
