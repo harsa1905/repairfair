@@ -135,5 +135,5 @@ The scraper's own extended-reviews option is blocked by Google (HTTP 403) and re
 ## Files
 - `queries.txt`: the 30 searches.
 - `codebook.md`: codes and decision rules.
-- `scripts/clean_sample.py`, `scripts/prep_reviews.py`, `scripts/make_check.py`, `scripts/analyse.py`.
+- `scripts/clean_sample.py`, `scripts/make_batches.py`, `scripts/save_batch.py`, `scripts/prep_reviews.py`, `scripts/make_check.py`, `scripts/analyse.py`.
 - Later: **aggregated** results only.

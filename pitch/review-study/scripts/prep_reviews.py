@@ -74,8 +74,11 @@ def main():
 
     reviews, missing, capped = [], [], []
     for manifest in sorted(Path(args.batches).glob("batch_*.manifest.csv")):
+        saved = Path(str(manifest).replace(".manifest.csv", ".json"))
+        if not saved.exists():  # batch prepared but not fetched, e.g. the credits ran out
+            continue
         order = list(csv.DictReader(open(manifest, encoding="utf-8")))
-        result = json.loads(Path(str(manifest).replace(".manifest.csv", ".json")).read_text(encoding="utf-8"))
+        result = json.loads(saved.read_text(encoding="utf-8"))
         lists = find_review_lists(result)
         for row, revs in zip(order, lists):
             wid = row["workshop_id"]
