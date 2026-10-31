@@ -7,6 +7,8 @@ Front rotors 22.4mm, min 22mm, can wait till next service, $240 a pair.
 Brake fluid last change unknown, optional flush.
 Labour 1.5 hrs at $90/hr, 12 month workmanship warranty.`;
 
+const DEFAULT_REPORTED = "Grinding noise when braking";
+
 const DEFAULT_EXTRA = `Found a cracked rear brake hose (photo taken), needs doing now, shouldn't drive like this.
 Hose options: economy $45 12 months, OEM $70 12 months.
 Labour 0.5 hr at $90/hr.`;
@@ -62,7 +64,7 @@ const PRO_PRICE = 49;
 
 const fresh = () => ({
   tab: "quote", ws: "compose", dr: "home", drBanner: null, stage: null, stageAt: {}, readyBy: null,
-  notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA,
+  notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA, reported: DEFAULT_REPORTED, suggest: null, suggesting: false,
   quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null,
@@ -214,16 +216,33 @@ const itemLabel = (i) => i.name + (i.options.length ? ` (${i.options[i.opt].tier
 const smsText = () => `Hi ${customer()}, your quote for the ${carName()} is ready. Please review and approve: repairfair.au/q/8F2K`;
 
 // ---------- AI call with auto-fallback ----------
-async function callApi(notes, kind, demo) {
+async function post(url, body) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), AI_TIMEOUT_MS);
   try {
-    const r = await fetch("/api/quote", { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ notes, kind, demo }), signal: ctrl.signal });
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body), signal: ctrl.signal });
     const data = await r.json();
     if (!r.ok || data.error) throw new Error(data.error || "Something went wrong.");
     return data;
   } finally { clearTimeout(timer); }
+}
+const callApi = (notes, kind, demo) => post("/api/quote", { notes, kind, demo });
+
+// Suggested checks are for the mechanic only: they stay in state.suggest and are never sent to the quote or the driver
+async function suggestChecks() {
+  state.suggesting = true; state.suggest = null; render();
+  let data, notice = null;
+  try {
+    data = await post("/api/checks", { issue: state.reported, demo: demoOn() });
+  } catch (e) {
+    notice = e.name === "AbortError" ? "The AI was slow, so a saved example is shown." : "The AI wasn't reachable, so a saved example is shown.";
+    data = await post("/api/checks", { issue: state.reported, demo: true }).catch(() => null);
+  }
+  state.suggesting = false;
+  state.suggest = data ? { source: data.source, notice, items: data.checks.map((c) => ({ ...c, done: false })) } : null;
+  if (!data) toast("Couldn't get suggestions. Carry on with your notes.");
+  render();
 }
 
 async function build(kind) {
@@ -244,7 +263,8 @@ async function build(kind) {
     state.extra = prepare(data); state.extra.items.forEach((i) => (i.approved = false));
     state.extraSource = data.source; state.extraNotice = notice; state.ws = "extra_draft";
   } else {
-    state.quote = prepare(data); state.source = data.source; state.notice = notice; state.ws = "draft";
+    state.quote = prepare(data); state.quote.reported = state.reported.trim() || null;
+    state.source = data.source; state.notice = notice; state.ws = "draft";
   }
   render();
 }
@@ -320,13 +340,26 @@ function wsCard(it, i, group) {
   return `<div class="card ${it.edited ? "edited" : ""}"><div class="ch"><span class="it">${ic(itemIcon(it), 22, "ic " + lightOf(it))}${esc(it.name)}<span class="tag ed">Edited</span>${it.fromBook ? '<span class="tag bk">Price book</span>' : ""}</span>${sel}</div>${b}</div>`;
 }
 
+function wsReported() {
+  const s = state.suggest;
+  const list = state.suggesting ? `<div class="loading"><span class="spin"></span>Finding things to check…</div>`
+    : s ? `<div class="sg-head"><b>Suggestions to check, not a diagnosis</b><button class="ck-link" data-act="suggest">Suggest again</button></div>
+        ${s.notice ? `<div class="notice">${esc(s.notice)}</div>` : ""}
+        ${s.items.map((c, i) => `<label class="sg-row"><input type="checkbox" data-act="sg-tick" data-i="${i}" ${c.done ? "checked" : ""}><span>${esc(c.check)}${c.why ? `<small>${esc(c.why)}</small>` : ""}</span></label>`).join("")}
+        <div class="sg-foot">${s.source === "ai" ? "From AI" : "Saved example"}. Only you see these. Nothing goes on the quote unless you write it in your notes.</div>`
+    : `<button class="ck-fill sg-btn" data-act="suggest">Suggest what to check</button>`;
+  return `<div class="reported"><label class="rp-l" for="reported">Customer reported</label>
+    <input id="reported" value="${esc(state.reported)}" placeholder="In the customer's words">${list}</div>`;
+}
+const reportedLine = (q, label) => (q.reported ? `<div class="said"><span>${label}</span>“${esc(q.reported)}”</div>` : "");
+
 function wsQuoteTab() {
   const q = state.quote;
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   switch (state.ws) {
     case "compose":
       // The notes fill the screen like a job card; the build button sits in the dock below
-      return `<label class="notes-card"><span class="nc-top"><b>Mechanic's notes</b><span>Job 1044, checked in 8:05 am</span></span>
+      return `${wsReported()}<label class="notes-card"><span class="nc-top"><b>Mechanic's notes</b><span>Job 1044, checked in 8:05 am</span></span>
           <textarea id="notes">${esc(state.notes)}</textarea>
           <span class="photos"><span class="ph">${ic("camera", 18)}</span><span class="ph">${ic("camera", 18)}</span><span class="ph-t">2 photos attached</span></span></label>${err}`;
     case "loading":
@@ -335,6 +368,7 @@ function wsQuoteTab() {
     case "draft":
       return `${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}<div id="checks-quote">${checkPanel(q, "quote")}</div>
         <div class="lead">${esc(q.job_title)}${q.car ? `, ${esc(q.car)}` : ""}</div>
+        ${reportedLine(q, "Customer reported")}
         ${q.items.map((it, i) => wsCard(it, i, "quote")).join("")}
         <div class="etaline">${ic("time", 18)}Ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))} if approved now (from labour hours)</div>
         <div class="preview"><div class="to"><span>Text message to ${esc(customer())}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(smsText())}</div></div>
@@ -617,6 +651,7 @@ function renderDriver() {
       return `${drQuotePanel(q)}
         <div class="etaline">${ic("time", 18)}${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
         ${tbcBox(q)}
+        ${reportedLine(q, "You told us")}
         <div class="lead">${esc(customer())}, choose what we do today</div>
         <div class="sheet">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
         <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
@@ -769,6 +804,11 @@ document.addEventListener("click", (e) => {
   if (!b || b.tagName === "SELECT" || b.tagName === "INPUT" || b.tagName === "TEXTAREA") return;
   if (b.dataset.tab) { state.tab = b.dataset.tab; render(); return; }
   const act = b.dataset.act, i = Number(b.dataset.i);
+  if (act === "suggest") {
+    state.reported = $("reported").value;
+    if (state.reported.trim()) suggestChecks(); else toast("Type what the customer reported first");
+    return;
+  }
   if (act === "build") { state.notes = $("notes").value; build("quote"); return; }
   if (act === "build-extra") { state.extraNotes = $("extraNotes").value; build("extra"); return; }
   if (act === "use-demo") { $("demoMode").checked = true; saveDemo(); state.err = null; badge(); render(); return; }
@@ -857,6 +897,7 @@ document.addEventListener("change", (e) => {
     const it = grp(s.dataset.group)[Number(s.dataset.i)];
     it.status = s.value; it.approved = s.value === "needed_now"; it.edited = true; render();
   }
+  if (s.dataset && s.dataset.act === "sg-tick") { state.suggest.items[Number(s.dataset.i)].done = s.checked; return; }
   if (s.dataset && s.dataset.act === "fu-due") {
     const f = state.followups.find((x) => x.id === s.dataset.id);
     f.months = Number(s.value); f.due = addMonths(state.approvedAt, f.months); render();
@@ -885,6 +926,7 @@ document.addEventListener("input", (e) => {
   }
   if (e.target.id === "search") { state.search = e.target.value; render(); }
   if (e.target.id === "notes") state.notes = e.target.value;
+  if (e.target.id === "reported") state.reported = e.target.value;
   if (e.target.id === "extraNotes") state.extraNotes = e.target.value;
 });
 

@@ -1,0 +1,9 @@
+{
+  "checks": [
+    {"check": "Measure front pad thickness", "why": "Grinding can mean pads are worn close to the backing plate."},
+    {"check": "Inspect rotor surfaces for scoring", "why": "Grooves can show metal-on-metal contact."},
+    {"check": "Check calipers and slide pins move freely", "why": "A sticking caliper can wear pads unevenly."},
+    {"check": "Look for a stone or debris near the rotor", "why": "Trapped debris can cause a similar noise."},
+    {"check": "Test drive and note when the noise happens", "why": "Timing helps narrow down where it comes from."}
+  ]
+}
