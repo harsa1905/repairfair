@@ -1,6 +1,8 @@
 # RepairFair speaker script (5 minutes)
 
-The target is 4:50, leaving 10 seconds for handovers. Speak at about 150 words a minute. The same script is in the deck's presenter window (press S).
+The target is 4:50, leaving 10 seconds for handovers. Speak at about 150 words a minute.
+
+The script tells one story, and the slides carry the data. Don't read the numbers out; give people a moment to see them. The exact figures and their sources are on the slides and in `claims.md`, for Q&A. The same script is in the deck's presenter window (press S).
 
 | Time | Slide | Speaker |
 |---|---|---|
@@ -14,32 +16,32 @@ The target is 4:50, leaving 10 seconds for handovers. Speak at about 150 words a
 | 4:30–4:50 | Team and ask | To confirm |
 
 ## 1. Hook (0:25)
-A Sydney driver was quoted three hundred dollars for brakes. The bill came to eleven hundred and twenty. That job typically costs four-fifty to six hundred. We're RepairFair. We let workshops send itemised quotes that drivers approve by text, so nothing reaches the bill without their OK.
+Imagine dropping your car in for brakes. You're quoted three hundred dollars. When you come back, the bill is eleven hundred and twenty. The work is done, you can't tell what you're paying for, and you're standing at the counter with no way to push back. We built RepairFair to stop that moment.
 
 ## 2. Problem (0:50)
-This isn't a one-off. In our research, 5 of 10 bills rose by more than 10%, and all 11 quotes we reviewed showed labour as a single lump sum. Drivers rarely check: none of the 12 we surveyed got a second quote, and only 1 of 13 interviewees did. We also read 1,079 bad Google reviews of Sydney mechanics. About 1 in 5 were about surprise bills, unapproved work or unnecessary work. Workshops lose too. Cars sit on the hoist waiting for a reply, and 3 of 10 workshops struggle to reach customers. When someone later denies approving an extra, the shop can wear the cost. The people who feel this most are owner-run independents with one to five mechanics.
+That driver isn't unusual. Look at the numbers behind me. Almost nobody gets a second quote, because they can't judge the first one. And it isn't only drivers who lose. Stand on the other side of the counter. A mechanic finds a problem mid-job and rings the customer. No answer. The car sits on the hoist, and the next job waits. At one workshop, a customer later denied agreeing to brake fluid, and the owner wore the cost. Nobody here is the villain. Repairs simply get agreed without a clear record. That hits owner-run workshops hardest, because every stalled car is their own time and their own name.
 
 ## 3. Solution (1:00)
-**Before the video (0:15):** So here's what we built. It's clear, fair and in writing. Watch one real job go through our working prototype, from the mechanic's notes to the final bill.
+**Before the video (0:15):** So we built something simple. It's clear, fair and in writing. Watch one real job go through our working prototype, from the mechanic's notes to the final bill.
 
 **Video (0:30):** it plays with its own voice. Nobody talks over it.
 
 **After the video (0:15):** That's the whole point. Everything on the bill was approved in writing. The AI drafts, but the mechanic always checks, and the driver never needs an app.
 
 ## 4. Traction (0:45)
-We tested this with workshops. We interviewed ten. Six would trial it free, and four said they'd pay 29 to 79 dollars a month. That feedback changed the product. Two had lost money on extras, so written approval of extras became the core. Our mentors asked how mechanics check AI quotes, so we added a mechanic check before anything is sent. Some shops already quote in minutes, so AI drafting is optional. We want to be straight about where we are: this is a working prototype. We haven't run a pilot yet, and nobody has paid. Interest isn't revenue, which is why our ask today is a pilot.
+We took this to workshops, and they changed what we built. Owners told us about extras they'd lost money on, so written approval became the core. Our mentors asked who checks the AI, so now the mechanic signs off every quote. Some shops already quote in minutes, so AI drafting became optional. The interest on this slide is real, but it's only interest. We haven't run a pilot, and nobody has paid us yet. That's exactly why we're here.
 
 ## 5. Competition (0:35)
-Full workshop systems do a lot more than we do, at about 85 to 120 dollars a month, and workshops rarely switch. Some already offer customer approval. We don't compete with them. We're a 49 dollar add-on: keep your system, and add the part that gets the yes. Our difference is helping the driver decide: what's urgent, what can wait, the part options, and a plain reason for each item. A full system has little reason to plug into its rivals. We can work beside all of them.
+Workshops already have software, and full systems do far more than we ever will. Some even offer customer approval. But a busy owner doesn't want to rip out the system their shop runs on, so we don't ask them to. Keep your system, and add the part that gets the yes. We also go further than a yes button: we help the driver decide what's urgent, what can wait, and why. A full system has little reason to plug into its rivals. We can sit beside all of them.
 
 ## 6. Business model (0:25)
-Workshops pay; drivers are free. It's a subscription at 49 dollars a month. Our first Inner West workshops would get a year free, then lock in that price. One hour of follow-up work a month should cover it. That's a break-even estimate, not a forecast. At 5% of Australia's 28,000 workshops, that's about 820 thousand a year, as an illustration.
+Workshops pay, and drivers don't. Our first workshops get a year free, so all they risk is trying it. After that, it's a simple monthly subscription. Every driver who says "not now" gets a reminder later. If that brings back about an hour of work a month, it pays for itself. That's an estimate, and the pilot will test it.
 
 ## 7. Go-to-market (0:30)
-We start in the Inner West, where we've already interviewed, and where garages sit close together: 96 found, nearly all independent, typically 26 others within two kilometres. We grow suburb by suburb across Sydney, where we've found over 600, then nationally. We estimate about 105 dollars of our time to sign a workshop, from the 14 we approached. Local referrals and software connections should lower that, but they're not built or proven yet. As more garages join, we build a network drivers can trust.
+We start in the Inner West, where we've been talking to workshops and where garages sit close together. We win one suburb, let owners tell owners, then move to the next. As more garages use the same clear quote, drivers start to look for it. That's how a tool becomes a network of garages people trust. Those referrals aren't proven yet, and finding out is the next step.
 
 ## 8. Team and ask (0:20)
-Our ask is simple. Help us deploy the app and run our first pilot: six Inner West workshops for three months. We'll measure reply times and whether every charge was approved, and ask three of them to pay. If you know a workshop owner, talk to us today.
+So here's our ask. Help us take this out of the prototype and into real workshops: one pilot, six Inner West garages, three months. Picture that driver at the counter again. This time, every charge is one they approved. If you know a workshop owner, come and talk to us.
 
 ## Demo video script (0:30)
 
