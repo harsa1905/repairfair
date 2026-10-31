@@ -68,7 +68,7 @@ const fresh = () => ({
   notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA, reported: DEFAULT_REPORTED, suggest: null, suggesting: false,
   quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
-  sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null,
+  sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null,
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
   history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null, extraOpen: false,
   book: SEED_BOOK.map((e) => ({ ...e })),
@@ -400,6 +400,7 @@ function wsQuoteTab() {
 
 // The job in progress: everything that happens after the driver approves
 function wsJobTab() {
+  if (state.xero) return wsXero();
   const q = state.quote, x = state.extra;
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   if (state.stage == null) return `<div class="blank">${ic("part", 36)}<b>No job in progress</b>A job starts here as soon as a customer approves a quote.</div>`;
@@ -429,9 +430,73 @@ function wsJobTab() {
       { read: r === "approved" ? "Approved" : r === "call" ? `Call ${esc(customer())}` : "Declined", cls: r === "approved" ? "green" : "amber",
         sub: r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work." })}
       <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
+      <button class="btn primary" data-act="xero-open">Send to Xero</button>
       <button class="btn soft" data-act="go-history">View in History</button>`;
   }
+  if (state.ws === "approved" && state.stage === 4) {
+    h += `<div class="totalrow" style="margin:12px 2px 4px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items))}</b></div>
+      <button class="btn primary" data-act="xero-open">Send to Xero</button>`;
+  }
   return h;
+}
+
+// Xero demo: a preview and a simulated send, plus a real CSV laid out for Xero's sales invoice import. There is no connection to Xero.
+// Demo prices include GST, as Australian consumer prices must, so GST is one eleventh of the total.
+function invoice() {
+  const q = state.quote, x = state.extra;
+  const items = [...q.items, ...(state.extraResult === "approved" ? x.items : [])].filter((i) => i.approved);
+  const lines = items.map((i) => {
+    const hourly = i.kind === "labour" && i.hours && i.rate && Math.abs(i.hours * i.rate - i.price) < 0.005;
+    return { desc: itemLabel(i), qty: hourly ? i.hours : 1, unit: hourly ? i.rate : priceOf(i) || 0, amount: priceOf(i) || 0, hours: hourly };
+  });
+  const total = lines.reduce((s, l) => s + l.amount, 0), gst = Math.round((total / 11) * 100) / 100;
+  return { number: "INV-1044", contact: customer(), date: new Date(), lines, total, gst, ex: total - gst };
+}
+const cents = (n) => "$" + n.toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const auDate = (d) => [d.getDate(), d.getMonth() + 1].map((n) => String(n).padStart(2, "0")).join("/") + "/" + d.getFullYear();
+const XERO_COLUMNS = ["*ContactName", "EmailAddress", "POAddressLine1", "POAddressLine2", "POAddressLine3", "POAddressLine4", "POCity", "PORegion", "POPostalCode", "POCountry",
+  "*InvoiceNumber", "Reference", "*InvoiceDate", "*DueDate", "InventoryItemCode", "*Description", "*Quantity", "*UnitAmount", "Discount", "*AccountCode", "*TaxType",
+  "TrackingName1", "TrackingOption1", "TrackingName2", "TrackingOption2", "Currency", "BrandingTheme"];
+function xeroCsv() {
+  const inv = invoice(), date = auDate(inv.date);
+  const cell = (v) => {
+    let s = String(v ?? "");
+    if (/^[=+\-@]/.test(s)) s = "'" + s;  // stops a spreadsheet reading it as a formula
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const rows = inv.lines.map((l) => {
+    const row = { "*ContactName": inv.contact, "*InvoiceNumber": inv.number, Reference: state.quote.job_title, "*InvoiceDate": date, "*DueDate": date,
+      "*Description": l.desc, "*Quantity": l.qty, "*UnitAmount": l.unit.toFixed(2), "*AccountCode": "200", "*TaxType": "GST on Income" };
+    return XERO_COLUMNS.map((c) => cell(row[c])).join(",");
+  });
+  return [XERO_COLUMNS.join(","), ...rows].join("\r\n") + "\r\n";
+}
+function downloadXeroCsv() {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([xeroCsv()], { type: "text/csv" }));
+  a.download = `repairfair-${invoice().number}-xero-import.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function wsXero() {
+  const inv = invoice(), sent = state.xero === "sent";
+  const row = (label, value, sub) => `<div class="res"><span>${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><b>${value}</b></div>`;
+  return `<div class="demo-flag"><b>Demo only.</b> There's no live connection, and nothing is sent to Xero.</div>
+    ${sent ? `<div class="cluster"><div class="cl-top"><b>Sent to Xero (demo)</b><span>${inv.number}</span></div>
+        <div class="readout md green">${cents(inv.total)}</div>
+        <div class="cl-sub">In a real setup this would arrive as a draft invoice for ${esc(inv.contact)}.</div></div>`
+      : `<div class="lead">Draft invoice preview</div>`}
+    <div class="sheet">
+      ${row(inv.contact, inv.number, `${state.quote.car || ""}, ${dayOf(inv.date)}`)}
+      ${inv.lines.map((l) => row(l.desc, cents(l.amount), l.hours ? `${l.qty} hrs at ${cents(l.unit)}` : "")).join("")}
+      ${row("Subtotal excluding GST", cents(inv.ex))}
+      ${row("GST (10%)", cents(inv.gst))}
+      ${row("Total including GST", cents(inv.total))}
+    </div>
+    ${sent ? "" : `<button class="btn primary" data-act="xero-send">Send to Xero (demo)</button>`}
+    <button class="btn soft" data-act="xero-csv">Download import file (CSV)</button>
+    <div class="small">Laid out for Xero's sales invoice import. Choose tax inclusive when importing. Not yet tested in Xero.</div>
+    <button class="btn soft" data-act="xero-close">Back to the job</button>`;
 }
 
 // Fixed bar under a draft: "I've checked this quote" unlocks Send once every flagged gap is handled
@@ -898,6 +963,10 @@ document.addEventListener("click", (e) => {
     state.readyBy = new Date(state.readyBy.getTime() + (act === "eta+" ? 15 : -15) * 60000);
     toast(`${customer()} notified: ready ${etaText(state.readyBy)}`);
   }
+  if (act === "xero-open") { state.xero = "preview"; $("ws").scrollTop = 0; }
+  if (act === "xero-send") { state.xero = "sent"; $("ws").scrollTop = 0; }
+  if (act === "xero-close") state.xero = null;
+  if (act === "xero-csv") { downloadXeroCsv(); toast("Import file downloaded"); return; }
   if (act === "go-history") { state.tab = "history"; state.open = "J-1044"; }
   if (act === "job") state.open = state.open === b.dataset.id ? null : b.dataset.id;
   render();
@@ -987,7 +1056,7 @@ async function runScene(scene) {
     click('[data-act="checked"]'); await sleep(200);
   };
   $("demoMode").checked = true; badge();
-  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history", "booked"];
+  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history", "booked", "xero"];
   const stop = order.indexOf(scene);
   const steps = [
     async () => { await waitFor(() => document.querySelector('[data-act="build"]')); click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
@@ -1003,6 +1072,7 @@ async function runScene(scene) {
     async () => { click('[data-act="start"]'); await sleep(200); click('[data-act="qc"]'); await sleep(200); click('[data-act="ready"]'); await sleep(1200); click('[data-act="open-ready"]'); await sleep(500); },
     async () => { click('[data-act="go-history"]'); await sleep(400); },
     async () => { click('#wsTabs [data-tab="followups"]'); await sleep(200); click('[data-act="fu-send"][data-id^="F-1044"]'); await sleep(1200); click('[data-act="open-book"]'); await sleep(400); click('[data-act="book-slot"]'); await sleep(900); },
+    async () => { click('#wsTabs [data-tab="job"]'); await sleep(200); click('[data-act="xero-open"]'); await sleep(300); click('[data-act="xero-send"]'); await sleep(300); },
   ];
   for (let k = 0; k <= stop; k++) await steps[k]();
   document.body.dataset.sceneReady = "1";

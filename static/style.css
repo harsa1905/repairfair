@@ -496,3 +496,6 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .ev-ed span { display: block; font-size: 13px; font-weight: 600; color: var(--amber-t); margin-bottom: 3px; }
 .ev-ed input { width: 100%; min-height: 40px; border: 1.5px solid var(--amber); border-radius: 10px; background: var(--amber-bg); padding: 6px 10px; font-size: 14.5px; color: var(--ink); }
 .ev-ed input:focus { outline: none; box-shadow: 0 0 0 3px var(--brand-100); }
+
+/* Xero demo */
+.demo-flag { background: var(--amber-bg); color: #5E3E00; border-radius: 12px; padding: 8px 12px; font-size: 13.5px; line-height: 1.4; margin: 2px 0 10px; }

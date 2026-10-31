@@ -55,13 +55,13 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 | File | What it is for | Size |
 |---|---|---|
-| `app.py` | The Flask server, AI rules and clean-up code | 173 lines |
+| `app.py` | The Flask server, AI rules and clean-up code | About 220 lines |
 | `static/index.html` | The page frame: both phones, the tab bar and the icon set | 101 lines |
-| `static/app.js` | All app logic: state, screens, price book, follow-ups | 836 lines |
-| `static/style.css` | All visual design: colours, type, layout | About 450 lines |
+| `static/app.js` | All app logic: state, screens, price book, follow-ups | About 1,100 lines |
+| `static/style.css` | All visual design: colours, type, layout | About 500 lines |
 | `static/logo.svg` | The logo | Small |
 | `static/vendor/` | The fonts and Motion, stored locally | Small |
-| `demo_data/quote.json`, `extra.json` | Saved example quotes for Demo mode | Small |
+| `demo_data/quote.json`, `extra.json`, `checks.json` | Saved examples for Demo mode | Small |
 | `example-notes.txt` | Sample mechanic's notes to paste in | Small |
 | `check_ai.py` | Tests that your API key and model work | Small |
 | `.env` | Your private OpenAI key. Git ignores it, so it is never committed | Private |
@@ -78,6 +78,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | `/` | GET | The page |
 | `/api/status` | GET | Whether a key exists, and the model name |
 | `/api/quote` | POST | A quote built from the notes, or a saved example |
+| `/api/checks` | POST | Suggested things to inspect, for the mechanic only |
 
 **JSON.** A simple text format for structured data. Asking the AI for JSON means the app gets named fields, like `price` and `status`, not a paragraph it would have to interpret.
 
@@ -99,6 +100,8 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Price book.** `bookFill()` fills only empty fields from the workshop's saved prices. It never overwrites what the mechanic typed, so prices come from the workshop rather than the AI.
 
+**Xero demo.** `wsXero()` shows a draft invoice and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
+
 ## Reliability
 
 - **Demo mode:** returns the saved examples, with no AI call.
@@ -109,7 +112,8 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 ## What is simulated
 
 - **Both phones run on one page.** There is no real second device.
-- **No real text messages.** Nothing leaves your computer except the notes sent to OpenAI.
+- **No real text messages.** Reminders and booking links stay on the simulated phones. Nothing leaves your computer except what's sent to OpenAI: the notes and the customer-reported issue.
+- **No Xero connection.** The send is a demo. Only the CSV download is real.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
 - **Sample data only.** The history, price book, follow-ups, typical part prices and Results figures are invented examples.
 - **Local only.** It runs on your computer and isn't hosted online.
