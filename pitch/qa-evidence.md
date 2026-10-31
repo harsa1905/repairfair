@@ -45,6 +45,8 @@ Value for each type of workshop, a month ex GST, using the prices in `claims.md`
 | Workshop Software Silver | Gold for $30 more, or RepairFair for $49 | About even at 200 texts a month, once Gold's 11c texts are counted |
 | Workshop Software Gold | Already has an approval link | Hard to justify |
 
+That same workshop is the $60 story on slide 12: a customer denied approving a brake fluid change and it absorbed the cost, while it still got approvals by phone and WeChat. The workshop stays unnamed (`RepairFair_Workshop_Interview_Findings.docx`).
+
 The MechanicDesk workshop said about $30–50 a month, because it already pays for MechanicDesk. Another workshop called MechanicDesk too expensive and hard to learn. Workshop Software's "thousands of workshops" is its own marketing claim.
 
 ## Market

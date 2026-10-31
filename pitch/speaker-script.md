@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:50 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:32). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:54 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:51). Sameep takes over at competition and closes on the ask (1:34). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -9,18 +9,18 @@ The story takes about 4:50 with pauses. Safaa opens and tells Mia's story throug
 | 3 | The call | Safaa | 0:18 |
 | 4 | The yes | Safaa | 0:14 |
 | 5 | The bill | Safaa | 0:22 |
-| 6 | 1 in 5 | Safaa | 0:15 |
+| 6 | 1 in 5 | Safaa | 0:16 |
 | 7 | The insight | Safaa | 0:16 |
 | 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:29 |
 | 10 | Mia's new bill | Safaa | 0:14 |
 | 11 | Why now | Safaa | 0:18 |
-| 12 | Traction | Safaa | 0:22 |
-| 13 | Competition | Sameep | 0:18 |
+| 12 | Traction | Safaa | 0:23 |
+| 13 | Competition | Sameep | 0:19 |
 | 14 | Business model | Sameep | 0:22 |
-| 15 | Market | Sameep | 0:24 |
+| 15 | Market | Sameep | 0:22 |
 | 16 | Team | Sameep | 0:10 |
-| 17 | Ask | Sameep | 0:18 |
+| 17 | Ask | Sameep | 0:21 |
 
 ## Script
 
@@ -46,7 +46,7 @@ When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did s
 
 **6. 1 in 5** (Safaa)
 
-Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five is about this: a surprise bill, work nobody approved, or work nobody needed.
+Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five of them is about this: a surprise bill, work nobody approved, or work nobody needed.
 
 **7. The insight** (Safaa)
 
@@ -66,15 +66,15 @@ Same brakes. Same Mia. This time it's on her phone, so she can read it properly.
 
 **11. Why now** (Safaa)
 
-This works now because AI can read a mechanic's rough notes and write a clear quote in seconds. The mechanic checks it, and it goes out. And it's no new paperwork for the mechanic. The notes they already write become the quote, and the driver's yes is saved as the record.
+This works now because AI can turn a mechanic's rough notes into a clear quote in seconds, so the record takes no extra effort. The mechanic checks it, and it goes out. It's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
 
 **12. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. They also changed what we built: written approval came from owners who'd lost money on extras. We've got a working prototype. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. At one workshop, a customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it. That's who we're for: honest workshops. We've got a working prototype. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **13. Competition** (Sameep)
 
-Workshop software does far more than we do, and owners rarely switch. So we don't ask them to. Keep your system, and add the part that gets the yes. We help the driver decide what's urgent, what can wait, and why.
+That workshop already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. Keep your system, and add the part that gets the yes. We help the driver decide what's urgent, what can wait, and why.
 
 **14. Business model** (Sameep)
 
@@ -82,7 +82,7 @@ Workshops pay forty-nine dollars a month. Drivers pay nothing. There's a free pl
 
 **15. Market** (Sameep)
 
-Australians spend about ten billion dollars a year on servicing and repairs. We start with ninety-six garages in the Inner West, where they sit close together. Then six hundred across Sydney, then twenty-eight thousand nationally. Later, fleets and insurers. Every garage that joins makes a clear quote something drivers look for.
+Australians spend about ten billion dollars a year on servicing and repairs. We start with the ninety-six garages we've found in the Inner West. They sit close together, so we can sign them in person. Then over six hundred across Sydney, and about twenty-eight thousand nationally. Later, fleets and insurers.
 
 **16. Team** (Sameep)
 
@@ -90,7 +90,7 @@ We're Safaa and Sameep, presenting for Group 8. This semester we've interviewed 
 
 **17. Ask** (Sameep)
 
-Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
+Now we need real workshops. Help us run one pilot: six Inner West garages, three months. It's a success if three of them agree to pay. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
 ## Demo video script (0:29)
 
@@ -115,16 +115,22 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Isn't another startup doing this?** Yes, there are recent startups offering full workshop systems. That's a good sign the problem is real. They replace your system, and we add one step.
 - **Aren't you more expensive than Workshop Software?** Our $49 is below its plans, but for a workshop already on one, it's an extra cost. Don't say "we're cheaper". If you're on a top-tier system, we're probably not for you yet. Our first customers are the workshops on paper or basic software. For them it's about what Workshop Software's two-way texting add-on costs alone, with nothing to switch.
 - **How many workshops have no software?** Of the five workshops where we recorded it, three had no workshop software. That's a small sample, so we wouldn't scale it up, but they're our first customers.
+- **Why would dodgy workshops use this?** They wouldn't, and they're not our customer. We're for honest workshops, who lose money when a customer says "I never agreed to that". Two of our ten had lost money on extras.
+- **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
+- **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
+- **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. We haven't tried it, so we can't say how it compares with line-by-line approval. Top-tier users aren't our first customers.
+- **Do pilot garages pay?** Not during the pilot. It's a success if three of six agree to pay $49 afterwards.
 - **What would stop a competitor copying you?** Features can be copied. Our focus is workshops that won't switch, and a full system has little reason to plug into rivals.
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
-- **How big can this get?** At $49, Australian workshops alone are worth about $16.5M a year. The larger pool is the $10 billion spent on repairs, with fleets and insurers as later options.
+- **How big can this get?** At $49, even every workshop in Australia is worth about $16.5M a year. That's a solid small business. It only gets bigger through fleets or insurers, and we haven't tested either.
+- **Are there really 28,000 workshops?** About. AAAA says 27,700 independents and IBISWorld says about 29,000 businesses, but that includes sole traders and specialists, so our real market is smaller.
 - **Is the price too low?** We don't know yet, which is one thing the pilot would test, along with support costs.
 - **What does a quote cost you?** About 20c, almost all of it two text messages. The AI is under half a cent. Hosting is about $20–105 a month. These are estimates from price lists, because we haven't deployed yet.
 - **What are your margins?** At 100 quotes a month, we keep about $25 of the $49, roughly half, before card fees and support. The 100 quotes is an assumption.
 - **What stops one busy workshop costing you more than $49?** Pro includes 300 texts a month, about 150 quotes, then 12c a text. Without a limit we'd lose money from about 245 quotes.
 - **When do you make money?** Founding workshops start paying after six months, and the free plan stops at 20 quotes. The offer costs about $4,300 for 30 workshops, which is illustrative.
 - **Why not take a cut of each job?** We'd earn more when drivers say yes. A flat fee keeps us neutral.
-- **Is 607 all of Sydney?** No, it's the workshops we found, so there are at least that many.
+- **Is 607 all of Sydney?** No, it's the workshops we found across 21 councils, so it's a minimum. The real number is much higher.
 - **Do fleets or insurers want this?** We haven't spoken to any. They're ideas for later.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
 - **Do workshops have to enter jobs twice?** Today, yes, in their main system. We add no new form for the quote, and a Xero export is the planned first step towards fixing that.
