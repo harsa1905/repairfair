@@ -67,7 +67,7 @@ answers, not sales.
 - **Demo mode:** replays saved examples from `demo_data/`, so the demo works without internet or an API key.
 - **Offline:** fonts (Barlow, SIL Open Font License) and the Motion animation library (MIT) are stored in
   `static/vendor/`.
-- **Design:** each screen leads with a blue-teal "instrument panel" showing the number that matters and warning
+- **Design:** each screen leads with a deep blue "instrument panel" showing the number that matters and warning
   lights, above plain lists with normal phone controls. Colour only means urgency or state.
 - Built with AI coding assistance (Claude Code).
 
