@@ -490,3 +490,9 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .said { background: #fff; border-radius: 12px; padding: 8px 12px; margin: 0 0 8px; font-size: 15px; }
 .said span { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
 .key, .pill, .switch { white-space: nowrap; }
+
+/* proof check on "needed now" items */
+.ev-ed { display: block; margin-top: 8px; }
+.ev-ed span { display: block; font-size: 13px; font-weight: 600; color: var(--amber-t); margin-bottom: 3px; }
+.ev-ed input { width: 100%; min-height: 40px; border: 1.5px solid var(--amber); border-radius: 10px; background: var(--amber-bg); padding: 6px 10px; font-size: 14.5px; color: var(--ink); }
+.ev-ed input:focus { outline: none; box-shadow: 0 0 0 3px var(--brand-100); }

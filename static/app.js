@@ -148,9 +148,18 @@ function prepare(data) {
   return data;
 }
 const needsPrice = (it) => (it.options.length ? it.options.some((o) => o.price == null) : it.price == null);
+// Proof check: a "needed now" item must show a photo or a measurement. Only the mechanic can supply it; the app never fills it in.
+const hasProof = (it) => /photo|\d/i.test(it.evidence || "");
+const needsProof = (it) => it.status === "needed_now" && it.kind !== "labour";
+const proofGap = (it) => needsProof(it) && (it.proofAdded || !hasProof(it));
+function proofHint(it) {
+  const n = it.name.toLowerCase();
+  return /rotor|disc/.test(n) ? "the rotor thickness" : /pad|shoe/.test(n) ? "the pad thickness" : /tyre|tire/.test(n) ? "the tread depth" : "a photo or measurement";
+}
 function checkRows(q) {
   const rows = [];
   q.items.forEach((it, i) => { if (it.priceGap) rows.push({ kind: "price", i, text: `Price for ${it.name}`, how: !needsPrice(it) ? "resolved" : it.priceTbc ? "tbc" : null }); });
+  q.items.forEach((it, i) => { if (proofGap(it)) rows.push({ kind: "proof", i, text: `Add ${proofHint(it)} for ${it.name} before sending`, tbcText: `Photo or measurement for ${it.name}`, how: hasProof(it) ? "resolved" : it.proofTbc ? "tbc" : null }); });
   q.checks.forEach((c, i) => rows.push({ kind: "info", i, text: c.text, how: c.how, by: c.by }));
   return rows;
 }
@@ -185,7 +194,7 @@ function bookFill(q, dry) {
 }
 const openChecks = (q) => checkRows(q).filter((r) => !r.how).length;
 const canSend = (q) => !openChecks(q) && q.checked;
-const tbcList = (q) => checkRows(q).filter((r) => r.how === "tbc").map((r) => r.text);
+const tbcList = (q) => checkRows(q).filter((r) => r.how === "tbc").map((r) => r.tbcText || r.text);
 const priceOf = (it) => (it.options.length ? it.options[it.opt].price : it.price);
 const warrantyOf = (it) => (it.options.length ? it.options[it.opt].warranty : it.warranty);
 const sumApproved = (items) => items.filter((i) => i.approved).reduce((s, i) => s + (priceOf(i) || 0), 0);
@@ -284,9 +293,9 @@ function checkPanel(q, group) {
     <div class="ck-sub">${open ? `Fix each gap, or mark it to confirm with ${esc(customer())}.` : `Every gap is sorted. Check the items, then sign it off.`}</div>${fillBtn}
     ${rows.map((r) => {
       const d = `data-group="${group}" data-i="${r.i}" data-kind="${r.kind}"`;
-      const acts = r.how === "resolved" ? `<span class="ck-done">${r.by === "book" ? "From price book" : r.kind === "price" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
+      const acts = r.how === "resolved" ? `<span class="ck-done">${r.by === "book" ? "From price book" : r.kind !== "info" ? "Added" : "Resolved"}</span>${r.kind === "info" ? `<button class="ck-link" data-act="ck-undo" ${d}>Undo</button>` : ""}`
         : r.how === "tbc" ? `<span class="ck-tbc">To confirm</span><button class="ck-link" data-act="ck-undo" ${d}>Undo</button>`
-        : `${r.kind === "price" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Confirm later</button>`;
+        : `${r.kind !== "info" ? `<span class="ck-hint">Add below or</span>` : `<button class="ck-btn" data-act="ck-ok" ${d}>Resolved</button>`}<button class="ck-btn" data-act="ck-tbc" ${d}>Confirm later</button>`;
       return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic"></span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
     }).join("")}</div>`;
 }
@@ -325,7 +334,8 @@ function wsCard(it, i, group) {
   const sel = `<select class="status-sel ${it.status}" data-act="status" ${d} aria-label="Urgency">
     ${Object.keys(STATUS).map((k) => `<option value="${k}" ${k === it.status ? "selected" : ""}>${STATUS[k]}</option>`).join("")}</select>`;
   let b = "";
-  if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? ic("camera", 16) : ""}${esc(it.evidence)}</div>`;
+  if (proofGap(it)) b += `<label class="ev-ed"><span>Photo or measurement</span><input data-act="evidence" ${d} value="${esc(it.evidence || "")}" placeholder="What you measured, or photo taken"></label>`;
+  else if (it.evidence) b += `<div class="ev">${/photo/i.test(it.evidence) ? ic("camera", 16) : ""}${esc(it.evidence)}</div>`;
   if (it.options.length) {
     b += `<div class="tiers">${it.options.map((o, k) => `<div class="tier ${k === it.opt ? "pre" : ""}" data-act="pre" ${d} data-k="${k}">
       <button class="pick" data-act="pre" ${d} data-k="${k}" title="Pre-select this option for ${esc(customer())}" aria-label="Pre-select ${esc(o.tier)}"></button>
@@ -818,6 +828,7 @@ document.addEventListener("click", (e) => {
   if (act === "ck-ok" || act === "ck-tbc" || act === "ck-undo") {
     const g = b.dataset.group, how = act === "ck-ok" ? "resolved" : act === "ck-tbc" ? "tbc" : null;
     if (b.dataset.kind === "price") grp(g)[i].priceTbc = how === "tbc";
+    else if (b.dataset.kind === "proof") grp(g)[i].proofTbc = how === "tbc";
     else doc(g).checks[i].how = how;
     refreshCheck(g); return;
   }
@@ -910,6 +921,11 @@ document.addEventListener("input", (e) => {
   if (t.dataset.act === "why") {
     const it = grp(t.dataset.group)[Number(t.dataset.i)];
     it.why = t.value.trim() || null; it.edited = true; t.closest(".card").classList.add("edited"); return;
+  }
+  if (t.dataset.act === "evidence") {
+    const it = grp(t.dataset.group)[Number(t.dataset.i)];
+    it.evidence = t.value.trim() || null; it.proofAdded = true; it.edited = true;
+    t.closest(".card").classList.add("edited"); refreshCheck(t.dataset.group); return;
   }
   if (t.dataset.act === "book") { state.book[Number(t.dataset.i)].price = t.value === "" ? null : Math.max(0, Number(t.value)); t.parentElement.classList.toggle("empty", t.value === ""); return; }
   if (t.classList.contains("num")) {
