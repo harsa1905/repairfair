@@ -426,6 +426,8 @@ function wsDecisions() {
   const rows = q.items.map((it, k) => {
     const f = fs.find((x) => x.id === `F-1044-${k}`);
     const remind = !f ? "" : f.status === "off" ? `<span class="fu-off">${esc(f.customer)} opted out of a reminder</span>`
+      : f.status === "booked" ? `<span class="fu-booked">Booked ${esc(slotText(f.bookedAt))}</span>`
+      : f.status === "sent" ? `<span class="fu-off">Reminder sent</span>`
       : `<select class="fu-sel" data-act="fu-due" data-id="${f.id}" aria-label="Reminder for ${esc(f.item)}">${FU_CHOICES.map(([m, l]) => `<option value="${m}" ${m === f.months ? "selected" : ""}>Remind in ${l}</option>`).join("")}</select>`;
     return `<div class="dec ${it.approved ? "" : "no"}"><span class="n">${ic(it.approved ? "check" : "dash", 16, it.approved ? "y" : "x")}${esc(itemLabel(it))}</span><span class="s">${money(priceOf(it))}</span>${remind ? `<div class="dec-fu">${remind}</div>` : ""}</div>`;
   }).join("");
@@ -435,15 +437,19 @@ function wsDecisions() {
 function wsFollowupsDue() {
   const fs = [...state.followups].sort((a, b) => a.due - b.due);
   const due = fs.filter((f) => f.status === "due").reduce((s, f) => s + (f.price || 0), 0);
-  return `<div class="fu-head"><b>Follow-ups</b><span class="pro">Pro</span><span class="fu-sum">${due ? `${money(due)} of advised work due` : "All caught up"}</span></div>
+  const booked = fs.filter((f) => f.status === "booked").reduce((s, f) => s + (f.price || 0), 0);
+  return `<div class="fu-head"><b>Follow-ups</b><span class="pro">Pro</span><span class="fu-sum">${due ? `${money(due)} of advised work due` : "All caught up"}${booked ? `, ${money(booked)} booked` : ""}</span></div>
     <div class="sheet fu">${fs.map((f) => {
       const late = f.due < Date.now();
-      const right = f.status === "due" ? `<button class="ck-btn" data-act="fu-send" data-id="${f.id}">Send reminder</button>`
+      const right = f.status === "due" || f.status === "scheduled" ? `<button class="ck-btn" data-act="fu-send" data-id="${f.id}">Send reminder</button>`
         : f.status === "sent" ? `<span class="ck-done">Reminder sent</span>`
-        : f.status === "off" ? `<span class="fu-off">Opted out</span>` : `<span class="fu-when">${esc(whenOf(f.due))}</span>`;
+        : f.status === "booked" ? `<span class="ck-done">Booked</span>`
+        : `<span class="fu-off">Opted out</span>`;
       return `<div class="fu-row ${f.ours ? "new" : ""}"><div class="fu-t"><b>${esc(f.item)}, ${money(f.price)}</b>
         <span>${esc(f.customer)}, ${esc(f.car)}. Advised ${esc(f.advised.split(" · ")[1] || "")}</span>
-        ${f.status === "due" ? `<span class="fu-due ${late ? "late" : ""}">${late ? "Due since" : "Due"} ${esc(dayOf(f.due))}</span>` : ""}</div>${right}</div>
+        ${f.status === "due" ? `<span class="fu-due ${late ? "late" : ""}">${late ? "Due since" : "Due"} ${esc(dayOf(f.due))}</span>` : ""}
+        ${f.status === "scheduled" ? `<span>Due around ${esc(whenOf(f.due))}</span>` : ""}
+        ${f.status === "booked" ? `<span class="fu-booked">Booked ${esc(slotText(f.bookedAt))}, ${money(f.price)}</span>` : ""}</div>${right}</div>
         ${f.status === "sent" ? `<div class="bubble me fu-bub">${esc(reminderText(f))}</div>` : ""}`;
     }).join("")}</div>`;
 }
@@ -455,7 +461,8 @@ function wsResultsTab() {
   if (state.approvedAt) s.approved++;
   if (state.xSentAt) s.extraAsked++;
   if (state.extraResult === "approved") { s.extraApproved++; s.extraValue += sumApproved(state.extra.items); }
-  s.reminders += state.followups.filter((f) => f.status === "sent").length;
+  s.reminders += state.followups.filter((f) => f.reminded).length;
+  state.followups.filter((f) => f.status === "booked").forEach((f) => { s.booked++; s.bookedValue += f.price || 0; });
   const won = s.extraValue + s.bookedValue;
   const row = (label, value, sub) => `<div class="res"><span>${label}${sub ? `<small>${sub}</small>` : ""}</span><b>${value}</b></div>`;
   return `<div class="cluster"><div class="cl-top"><b>Extra revenue won</b><span>Sample month</span></div>
@@ -561,8 +568,8 @@ function drFollowups() {
   const fs = ourFollowups();
   if (!fs.length) return "";
   return `<div class="lbl">Not now, but not forgotten</div><div class="sheet fu">${fs.map((f) => `<div class="fu-row ${f.status}">
-      <div class="fu-t"><b>${esc(f.item)}</b><span>${f.status === "off" ? "No reminder" : `We'll text you around ${esc(whenOf(f.due))}`}</span></div>
-      <button class="ck-link" data-act="fu-toggle" data-id="${f.id}">${f.status === "off" ? "Remind me" : "Don't remind me"}</button></div>`).join("")}
+      <div class="fu-t"><b>${esc(f.item)}</b><span>${f.status === "booked" ? `Booked ${esc(slotText(f.bookedAt))}` : f.status === "sent" ? "Reminder sent" : f.status === "off" ? "No reminder" : `We'll text you around ${esc(whenOf(f.due))}`}</span></div>
+      ${f.status === "booked" || f.status === "sent" ? "" : `<button class="ck-link" data-act="fu-toggle" data-id="${f.id}">${f.status === "off" ? "Remind me" : "Don't remind me"}</button>`}</div>`).join("")}
     <div class="small" style="text-align:left">Nothing is booked. City Auto just checks in when it's due.</div></div>`;
 }
 
@@ -642,6 +649,23 @@ function renderDriver() {
         ${drStatus()}
         <div class="small">Only what you approved. No surprises.</div>`;
     }
+    case "book": {
+      const f = activeFu();
+      return `<div class="cluster"><div class="cl-top"><b>City Auto</b><span>${esc(f.car)}</span></div>
+          <div class="readout md">${money(f.price)}</div>
+          <div class="cl-sub"><b>${esc(f.item)}</b>, advised on your ${esc(f.advised.split(" · ")[0])} job.</div></div>
+        <div class="lead">Pick a time that suits you</div>
+        <div class="sheet">${f.slots.map((t, k) => `<button class="slot" data-act="book-slot" data-k="${k}"><span>${esc(dayOf(t))}</span><b>${esc(timeOf(t))}</b></button>`).join("")}</div>
+        <button class="btn soft" data-act="book-done">Not right now</button>
+        <div class="small">Reply STOP to the text to opt out of reminders.</div>`;
+    }
+    case "booked": {
+      const f = activeFu();
+      return `<div class="cluster"><div class="cl-top"><b>You're booked in</b><span>${esc(f.car)}</span></div>
+          <div class="readout md green">${esc(dayOf(f.bookedAt))}</div>
+          <div class="cl-sub">${esc(timeOf(f.bookedAt))} at City Auto for ${esc(f.item)}.</div></div>
+        <button class="btn soft" data-act="book-done">Done</button>`;
+    }
     case "ready": {
       const total = sumApproved(q.items) + (x && state.extraResult === "approved" ? sumApproved(x.items) : 0);
       return `<div class="cluster"><div class="cl-top"><b>Your car is ready</b><span>Open until 5:30 pm</span></div>
@@ -663,6 +687,9 @@ function renderDriverChrome() {
   $("drBanner").innerHTML = state.drBanner === "ready" ? `<div class="notif" data-act="open-ready"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
       <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your car is ready</div>
       <div class="tx">Your ${esc(carName())} is ready to collect. Tap to view your final bill.</div></div></div>`
+    : state.drBanner === "reminder" ? `<div class="notif" data-act="open-book"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
+      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Time for your ${esc(activeFu().item)}</div>
+      <div class="tx">Hi ${esc(activeFu().customer)}, want to book it in? Tap to pick a time.</div></div></div>`
     : state.drBanner === "extra" ? `<div class="notif" data-act="open-extra"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
       <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">We found something</div>
       <div class="tx">${esc(state.extra.items[0].name)}: needs your OK before we continue. Tap to view.</div></div></div>` : "";
@@ -720,7 +747,14 @@ function bookFollowups() {
   });
 }
 const ourFollowups = () => state.followups.filter((f) => f.ours);
-const reminderText = (f) => `Hi ${f.customer}, it's City Auto. When we did your ${f.advised.split(" · ")[0]} we advised: ${f.item}${f.price != null ? ` (${money(f.price)})` : ""}. Want to book it in? Reply YES and we'll call. Reply STOP to opt out.`;
+const reminderText = (f) => `Hi ${f.customer}, it's City Auto. When we did your ${f.advised.split(" · ")[0]} we advised: ${f.item}${f.price != null ? ` (${money(f.price)})` : ""}. Want to book it in? Pick a time: repairfair.au/b/7K3D. Reply STOP to opt out.`;
+const activeFu = () => state.followups.find((f) => f.id === state.fuActive);
+const slotText = (t) => `${dayOf(t)}, ${timeOf(t)}`;
+// Three times to offer from a reminder link, on the next open days. This isn't a calendar: the workshop just sees what was picked.
+function offerSlots() {
+  let day = new Date();
+  return [[9, 0], [13, 30], [10, 0]].map(([h, m]) => { day = nextOpenDay(day); const t = new Date(day); t.setHours(h, m, 0, 0); return t; });
+}
 
 function recordJob() {
   const q = state.quote;
@@ -762,7 +796,21 @@ document.addEventListener("click", (e) => {
   if (act === "opt") grp(b.dataset.group)[i].opt = Number(b.dataset.k);
   const fu = b.dataset.id && state.followups.find((f) => f.id === b.dataset.id);
   if (act === "fu-toggle") fu.status = fu.status === "off" ? "scheduled" : "off";
-  if (act === "fu-send") { fu.status = "sent"; later(400, () => toast(`Reminder sent to ${fu.customer}`)); }
+  if (act === "fu-send") {
+    if (fu.ours && state.drBanner) { toast(`${fu.customer} has a message waiting. Send this once it's opened.`); return; }
+    fu.status = "sent"; fu.reminded = true; later(400, () => toast(`Reminder sent to ${fu.customer}`));
+    if (fu.ours) {  // the driver on the right-hand phone gets the link; seeded customers have no phone in the demo
+      fu.slots = offerSlots(); state.fuActive = fu.id; fly("packetOut");
+      later(950, () => { state.drBanner = "reminder"; render(); });
+    }
+  }
+  if (act === "open-book") { state.drBanner = null; if (state.dr !== "book" && state.dr !== "booked") state.drPrev = state.dr; state.dr = "book"; }
+  if (act === "book-slot") {
+    const f = activeFu();
+    f.status = "booked"; f.bookedAt = f.slots[Number(b.dataset.k)]; state.dr = "booked"; fly("packetBack");
+    later(700, () => toast(`${f.customer} booked ${slotText(f.bookedAt)}`));
+  }
+  if (act === "book-done") state.dr = state.drPrev || "home";
   if (act === "why-toggle") { const it = grp(b.dataset.group)[i]; it.whyOpen = !it.whyOpen; }
   if (act === "sw") { toggleItem(b.dataset.group, i); return; }
   if (act === "approve") {
@@ -880,7 +928,7 @@ async function runScene(scene) {
     click('[data-act="checked"]'); await sleep(200);
   };
   $("demoMode").checked = true; badge();
-  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history"];
+  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history", "booked"];
   const stop = order.indexOf(scene);
   const steps = [
     async () => { await waitFor(() => document.querySelector('[data-act="build"]')); click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
@@ -895,6 +943,7 @@ async function runScene(scene) {
     async () => { click('[data-act="x-approve"]'); await sleep(900); },
     async () => { click('[data-act="start"]'); await sleep(200); click('[data-act="qc"]'); await sleep(200); click('[data-act="ready"]'); await sleep(1200); click('[data-act="open-ready"]'); await sleep(500); },
     async () => { click('[data-act="go-history"]'); await sleep(400); },
+    async () => { click('#wsTabs [data-tab="followups"]'); await sleep(200); click('[data-act="fu-send"][data-id^="F-1044"]'); await sleep(1200); click('[data-act="open-book"]'); await sleep(400); click('[data-act="book-slot"]'); await sleep(900); },
   ];
   for (let k = 0; k <= stop; k++) await steps[k]();
   document.body.dataset.sceneReady = "1";

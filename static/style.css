@@ -463,3 +463,10 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .res + .res { border-top: 1px solid var(--line); }
 .res small { display: block; font-size: 13px; color: var(--muted); }
 .res b { font: 600 21px/1.1 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* booking from a reminder link */
+.slot { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; min-height: 54px; padding: 8px 14px; border: none; background: transparent; font-size: 15.5px; transition: background .12s var(--ease-out); }
+.slot + .slot { border-top: 1px solid var(--line); }
+.slot b { font: 600 20px/1.1 var(--display); color: var(--brand); font-variant-numeric: tabular-nums; }
+.slot:active { background: var(--brand-50); }
+.fu-t .fu-booked, .fu-booked { color: var(--green-t); font-weight: 600; font-size: 13.5px; }
