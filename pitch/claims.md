@@ -14,6 +14,19 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 
 **Competition update (31 Oct):** Meckly, an Australian workshop system, already sells SMS quote approval and a car logbook across shops. Our edge is now **nothing to switch**, not the driver side. See `qa-evidence.md` before writing slide 5.
 
+**Review study first results (31 Oct, before the human check; nothing here is cleared for a slide yet):** 90 workshops, 1,079 one- and two-star reviews with text.
+
+| Claim | Result | Bar | Status |
+|---|---|---|---|
+| Bad reviews about surprise bills, unapproved or unnecessary work | 20.5%, range 15–25% | At least 20% and under 3 points' change without flagged reviews (20.6%) | Passes narrowly, if the human check passes |
+| Top-3 complaint | 4th, after staff 37%, workmanship 32%, price 27% | Top 3 | **Dropped** |
+| Typical rise when bills jump | 58%, but only 18 reviews give both amounts | At least 30 reviews | **Dropped** |
+| Clear quotes praised in good reviews | 12%, 49 of 400 | At least 10% | Passes if the check passes; indicative only |
+
+The 20.5% leans on a few workshops: it's 16% without the three biggest and 15% averaged across workshops. Only 6% is bills or unapproved work; the rest is mostly unnecessary work. Say "about 1 in 5" at most.
+
+The praise set was coded by reading 80 reviews in full and the relevant sentences of the other 320, found with a broad keyword search, so it may slightly undercount.
+
 ## Already supported
 
 | Claim | Slide | Evidence |
