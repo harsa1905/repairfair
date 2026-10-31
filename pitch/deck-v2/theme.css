@@ -1,0 +1,110 @@
+/* RepairFair pitch, YC style: legible, simple, obvious. One idea per slide, huge type at the top. */
+@font-face{font-family:Barlow;font-weight:400;font-display:swap;src:url(assets/fonts/barlow-400.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:500;font-display:swap;src:url(assets/fonts/barlow-500.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:600;font-display:swap;src:url(assets/fonts/barlow-600.woff2) format("woff2")}
+@font-face{font-family:Barlow;font-weight:700;font-display:swap;src:url(assets/fonts/barlow-700.woff2) format("woff2")}
+@font-face{font-family:"Barlow Semi Condensed";font-weight:600;font-display:swap;src:url(assets/fonts/barlow-semi-condensed-600.woff2) format("woff2")}
+@font-face{font-family:"Barlow Semi Condensed";font-weight:700;font-display:swap;src:url(assets/fonts/barlow-semi-condensed-700.woff2) format("woff2")}
+
+:root{
+  --ink:#10191F;--white:#fff;--brand:#0F5F78;--brand-100:#CDE6EC;--brand-50:#E6F3F6;--muted:#55656B;--line:#DCE8EB;
+  --red:#D9423A;--amber:#FFD56E;--green:#1E6E44;
+  --display:"Barlow Semi Condensed",Barlow,"Segoe UI",sans-serif;--body:Barlow,"Segoe UI",system-ui,sans-serif;
+  --bg:var(--white);--text-1:var(--ink);--text-2:var(--muted);--text-3:var(--muted);--surface:var(--white);--border:var(--line);--accent:var(--brand);--font-sans:var(--body);
+}
+html,body{background:var(--ink)}
+.slide{padding:96px 110px 70px;background:var(--white);color:var(--ink);font-family:var(--body);font-size:44px;line-height:1.2;
+  display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;text-align:left;box-sizing:border-box;overflow:hidden}
+.slide.dark{background:var(--ink);color:var(--white)}
+.slide.teal{background:var(--brand);color:var(--white)}
+h1{font-family:var(--display);font-weight:700;font-size:196px;line-height:.98;letter-spacing:-.014em;margin:0;color:inherit;max-width:1720px}
+h1.mid{font-size:138px}
+h1 em{font-style:normal;color:var(--amber)}
+.white-h em{color:var(--brand)}
+.sub{font-size:66px;line-height:1.14;font-weight:500;margin:36px 0 0;max-width:1500px;color:inherit}
+.dark .sub{color:#C4D2D7}
+.teal .sub{color:#DDF0F4}
+.source{position:absolute;left:110px;bottom:56px;font-size:26px;color:var(--muted);margin:0}
+.dark .source,.teal .source{color:#A9BDC4}
+
+/* Title */
+.brandmark{display:flex;align-items:center;gap:44px;margin-top:200px}
+.brandmark img{height:170px;border-radius:30px;background:#fff}
+.brandmark span{font-family:var(--display);font-weight:700;font-size:210px;line-height:1;letter-spacing:-.012em}
+
+/* The bill */
+.receipt{align-items:center;justify-content:center;padding:0}
+.amount-label{font-family:var(--display);font-weight:600;font-size:64px;margin:0 0 6px;color:var(--muted)}
+.dark .amount-label{color:#C4D2D7}
+.amount{font-family:var(--display);font-weight:700;font-size:470px;line-height:.9;letter-spacing:-.02em;margin:0;font-variant-numeric:tabular-nums}
+.amount.bad{color:#FF6B60}
+.receipt>div{text-align:center}
+
+/* No answer */
+.call{position:absolute;right:130px;top:118px;width:520px;background:var(--brand-50);border-radius:48px;padding:64px 44px;text-align:center}
+.call b{display:block;font-family:var(--display);font-size:68px}
+.call span{display:block;font-size:40px;color:var(--muted);margin-top:8px}
+.call i{display:block;width:124px;height:124px;border-radius:50%;background:var(--red);margin:64px auto 0;position:relative}
+.call i::after{content:"";position:absolute;left:30px;right:30px;top:54px;height:16px;border-radius:9px;background:#fff}
+
+/* Quote lines */
+.bill{max-width:1250px;margin-top:40px}
+.line{display:flex;align-items:center;gap:30px;padding:21px 0;border-bottom:3px solid var(--line);font-size:54px;font-weight:500}
+.line b{margin-left:auto;font-family:var(--display);font-size:70px}
+.tick{flex:0 0 58px;height:58px;border-radius:50%;background:var(--green);position:relative}
+.tick::after{content:"";position:absolute;left:15px;top:15px;width:26px;height:13px;border-left:7px solid #fff;border-bottom:7px solid #fff;transform:rotate(-45deg)}
+.no{flex:0 0 58px;height:58px;border-radius:50%;background:var(--line)}
+.line.off{color:var(--muted)}.line.off b{text-decoration:line-through;color:var(--muted)}
+.line.total{border-bottom:0;font-weight:700}.line.total b{font-size:112px;color:var(--green)}
+.is-active .bill .line{animation:rise .45s both}
+.is-active .bill .line:nth-child(2){animation-delay:.35s}.is-active .bill .line:nth-child(3){animation-delay:.7s}
+.is-active .bill .line:nth-child(4){animation-delay:1.05s}.is-active .bill .line:nth-child(5){animation-delay:1.5s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* Notes to quote */
+.notes-to-quote{display:flex;gap:64px;margin-top:58px;align-items:stretch}
+.scribble{flex:1;background:#FFF8E0;border-radius:18px;padding:48px 48px;font-size:50px;line-height:1.3;font-weight:500}
+.arrow{align-self:center;font-family:var(--display);font-size:110px;color:var(--brand);font-weight:700}
+.clean{flex:1;background:var(--brand-50);border-radius:18px;padding:30px 44px}
+.clean div{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:34px 0;font-size:48px;font-weight:600;border-bottom:3px solid var(--brand-100)}
+.clean div:last-child{border:0}.clean small{font-size:36px;font-weight:500;color:var(--red)}.clean small.wait{color:#8A5A00}
+
+.slide.video{padding:0;background:var(--ink)}
+.slide.video img,.slide.video video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--ink)}
+.slide.video video{opacity:0}.slide.video.playing video{opacity:1}
+.tap{position:absolute;left:50%;bottom:44px;transform:translateX(-50%);background:#000;color:#fff;padding:12px 28px;border-radius:999px;font-size:28px;display:none}
+.slide.video.blocked .tap{display:block}
+
+/* Layers */
+.layers{margin-top:70px;max-width:1700px}
+.layer{border-radius:20px;padding:50px 54px;font-family:var(--display);font-weight:700;font-size:76px;line-height:1}
+.layer.us{background:var(--brand);color:#fff;margin-bottom:18px;width:60%}
+.layer.them{background:var(--line);color:var(--ink)}
+
+/* Numbers row */
+.nums{display:flex;gap:90px;margin-top:64px}
+.nums div{flex:0 1 auto}.nums b{display:block;font-family:var(--display);font-weight:700;font-size:230px;line-height:1;color:var(--brand)}
+.teal .nums b,.dark .nums b{color:var(--amber)}
+.nums span{font-size:50px;line-height:1.15;display:block;margin-top:8px}
+
+.nums.tight{gap:22px!important;margin-top:36px!important;flex-direction:column}.nums.tight b{font-size:136px}.nums.tight span{font-size:42px;margin-top:0}
+.split{display:flex;gap:40px;flex:1;min-height:0}
+.split>div:first-child{flex:1;min-width:0}
+.map{height:880px;display:block;margin:-40px -30px 0 0}
+.map .lga{fill:#EDF3F5;stroke:#fff;stroke-width:2}.map .lga.iw{fill:var(--brand-100)}
+.map .d{fill:#9DB1B8}.map .d.iw{fill:var(--brand)}
+
+.todo{background:var(--amber);color:var(--ink);font-weight:700;border-radius:10px;padding:8px 20px;display:inline-block;font-size:36px;margin:0 14px 14px 0}
+
+.backup{padding:64px 110px 56px;font-size:32px}
+.backup h1{font-size:72px;margin-bottom:28px}
+.eyebrow{font-family:var(--display);font-weight:600;font-size:32px;color:var(--brand);margin:0 0 10px;letter-spacing:0;text-transform:none}
+table.b{border-collapse:collapse;width:100%;font-size:31px;line-height:1.25}
+table.b th{font-family:var(--display);font-weight:700;font-size:32px;text-align:left;color:var(--brand);padding:10px 16px 10px 0;border-bottom:3px solid var(--brand-100)}
+table.b td{padding:12px 16px 12px 0;border-bottom:2px solid var(--line);vertical-align:top}
+ul.plain{margin:0;padding:0 0 0 40px;font-size:36px}ul.plain li{margin:0 0 16px}
+.two{display:flex;gap:70px}.two>div{flex:1}.two h2{font-family:var(--display);font-size:42px;color:var(--brand);margin:0 0 14px}
+.refs{font-size:29px;line-height:1.3;margin:0;padding-left:44px}.refs li{margin:0 0 7px}
+
+@media (prefers-reduced-motion:reduce){.is-active .bill .line{animation:none}}
+@media print{html,body{background:#fff}.slide.video video,.tap{display:none!important}.bill .line{animation:none!important}}
