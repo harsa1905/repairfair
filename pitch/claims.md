@@ -12,6 +12,8 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 - **Say "network", not "platform":** we don't replace workshop software.
 - **Founding Workshop offer (a plan, not a result):** once the app is deployed, the first 20–30 Inner West workshops get 12 months free, then $49 a month locked in. They sign a letter of intent to pay and use it on all their quotes. The free plan (about 20 quotes a month) stays for everyone else. Nobody has signed yet.
 
+**Competition update (31 Oct):** Meckly, an Australian workshop system, already sells SMS quote approval and a car logbook across shops. Our edge is now **nothing to switch**, not the driver side. See `qa-evidence.md` before writing slide 5.
+
 ## Already supported
 
 | Claim | Slide | Evidence |
@@ -58,7 +60,7 @@ These are never shown as results.
 
 | Slide | What to show | Label |
 |---|---|---|
-| 6 | "One follow-up job of about $100 a month covers the $49" | Break-even, not a forecast. Assumes a 50% gross margin, a mostly US benchmark [5], so $49 ÷ 50% ≈ $100. That's about an hour's work at the A$90–140 independents typically charge [6]. Ask one workshop to confirm it |
+| 6 | "One hour of follow-up work a month covers the $49" | Break-even, not a forecast. Based on about 40% left after parts and wages, from the closest ATO benchmark (automotive electrical), so $49 ÷ 40% ≈ $120, about an hour at metro labour rates. See `qa-evidence.md`. One real workshop's answer would be better |
 | 6 | 5% of about 28,000 workshops × $49 × 12 ≈ $820k a year | Illustrative |
 | 7 | 96 Inner West workshops, 607 across 21 Sydney councils, about 28,000 in Australia | The first two are minimums from our search; the third is IBISWorld |
 | 7 | "About $105 to sign one workshop" | Estimate from stated interest: 14 approached and 4 said they'd pay is 3.5 approaches each. Assumes 1 hour each at $30 an hour. About two months of fees, and the free year delays getting it back |
