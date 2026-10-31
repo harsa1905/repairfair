@@ -14,12 +14,17 @@ Facts for judges' questions and for replacing the app's sample numbers. Everythi
 | **Auxo Workshop** | NZ$99 | Not checked | Not found | Own page [6] |
 | **AutoGuru** | Marketplace, fees not found | Drivers compare quotes and book | Not found | Startup Daily, undated [7] |
 
-**Still unknown:** whether any of them does AI drafting from rough notes, item-by-item approval with urgency levels, or a typical price check. "Not found" doesn't mean they lack it.
+**Meckly's quote feature (checked 31 Oct):** quotes are drafted from the booking, with photos beside the price, sent by text and approved with a tap. Partial approval exists: "tap the items they say no to". It also offers bookings, job cards, stock, parts ordering, payments, staff rosters, reports, review requests, a customer portal and fleet accounts. It says the old and new systems can run side by side while a shop switches.
+
+**Not found on Meckly's pages:** AI drafting from a mechanic's rough notes, urgency levels on each item, part tiers with warranties, a plain reason for each item, follow-ups on declined work, and a typical price check. "Not found" doesn't mean they lack it. A team member should use its 30-day trial to confirm before slide 5 is locked.
+
+**Unverified:** Meckly's "trusted by thousands" and 4.9-star claims. Its review link only goes to the Google Maps home page, and Sameep notes its Instagram page opened only last week.
 
 **What's left of our edge:**
 1. **Nothing to switch.** Meckly and the others are full workshop systems that replace what a shop uses. We're a $49 add-on, and workshops rarely switch. This is the strongest point.
-2. **Rough notes to an itemised quote,** checked by the mechanic.
-3. **Item-by-item choice,** with urgency and reasons, on a plain text link.
+2. **Helping the driver decide.** Urgency, part options and a plain reason on each item, on a text link. Item-by-item approval alone is no longer unique.
+3. **Rough notes to an itemised quote,** checked by the mechanic.
+4. **Winning back "Not now" work** with timed follow-ups.
 
 **What no longer works:** "the driver side they don't have", and the driver-owned record as our main defence, because Meckly already sells one. The independent network still has value, but Meckly is ahead on it.
 
