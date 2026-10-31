@@ -76,6 +76,7 @@ The claims and the bar each must clear are in [../claims.md](../claims.md). In s
       - Sameep settles disagreements.
    4. **Pass mark:** at least 80% agreement and kappa ≥ 0.6. Below that, the codebook is tightened, the reviews are recoded and the check is repeated.
    5. **Disclosed on the method slide:** "AI-assisted coding (Claude), checked by two team members on 60 reviews: X% agreement."
+   6. **Status (31 Oct):** Sameep ran two AI coders on the 60 reviews instead. They agreed with Claude 90–93% of the time on A or D, but no person has checked the coding, so the sentence above can't be used. See `../claims.md` for the required label.
 9. **Results** (`scripts/analyse.py`, written before the run and tested only on made-up codes):
    - % of 1–2★ reviews coded A, D, and A or D, overall and by region, with a 95% range that resamples whole workshops because a few workshops hold most reviews;
    - every review counts equally for the headline; the average across workshops, the last 5 years, and removing the 3 biggest workshops are reported as checks;

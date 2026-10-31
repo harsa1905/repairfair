@@ -14,7 +14,7 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 
 **Competition update (31 Oct):** Meckly, an Australian workshop system, already sells SMS quote approval and a car logbook across shops. Our edge is now **nothing to switch**, not the driver side. See `qa-evidence.md` before writing slide 5.
 
-**Review study first results (31 Oct, before the human check; nothing here is cleared for a slide yet):** 90 workshops, 1,079 one- and two-star reviews with text.
+**Review study first results (31 Oct; no human check yet):** 90 workshops, 1,079 one- and two-star reviews with text.
 
 | Claim | Result | Bar | Status |
 |---|---|---|---|
@@ -26,6 +26,8 @@ Each claim the pitch might make, the evidence it needs, and the bar it must clea
 The 20.5% leans on a few workshops: it's 16% without the three biggest and 15% averaged across workshops. Only 6% is bills or unapproved work; the rest is mostly unnecessary work. Say "about 1 in 5" at most.
 
 The praise set was coded by reading 80 reviews in full and the relevant sentences of the other 320, found with a broad keyword search, so it may slightly undercount.
+
+**AI coder check (31 Oct):** instead of the human check, two further AI coders coded the same 60 reviews. On whether a review is A or D, they agreed with Claude 93% and 90% of the time (kappa 0.87 and 0.80), and 97% with each other (kappa 0.93). They found slightly more A or D reviews than Claude, so 20.5% looks cautious, not inflated. **This is not a human check.** It shows the rules give consistent results across AI coders, and those coders may share the same blind spots. If the number is used without a person checking it, the label must be: "AI-coded; two more AI coders agreed on 90%+ of a 60-review sample; not checked by a person."
 
 ## Already supported
 
