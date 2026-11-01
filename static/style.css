@@ -516,3 +516,10 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .voice-btn.busy { border-color: var(--line); color: var(--muted); }
 .voice-btn .spin { width: 14px; height: 14px; border-width: 2px; }
 .voice-done { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.35; }
+
+/* add-ons sit apart from the work the car needs */
+.addons { margin-top: 18px; padding-top: 14px; border-top: 1.5px dashed var(--stage-line); }
+.addons .lead { margin-top: 0; margin-bottom: 3px; }
+.addons p { font-size: 14px; color: var(--muted); margin: 0 2px 9px; line-height: 1.35; }
+.ph-t { white-space: nowrap; }
+.photos .ph { width: 38px; flex: none; }

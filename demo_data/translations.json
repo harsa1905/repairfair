@@ -20,7 +20,10 @@
   "Why can this wait?": "为什么可以稍后再做？",
   "Why is this suggested?": "为什么建议做这项？",
   "Why is this on the quote?": "为什么这项在报价单上？",
-  "What does this cover?": "这包括哪些内容？"
+  "What does this cover?": "这包括哪些内容？",
+  "What your car needs": "您的车需要的项目",
+  "Optional add-ons": "可选附加项目",
+  "City Auto recommends these, but your car doesn't need them today. They stay off unless you add them.": "这些是 City Auto 的建议，但您的车今天并不需要。除非您选择添加，否则不会包含在内。"
  },
  "vi": {
   "Front brake pads": "Má phanh trước",
@@ -43,6 +46,9 @@
   "Why can this wait?": "Vì sao có thể chờ?",
   "Why is this suggested?": "Vì sao được đề xuất?",
   "Why is this on the quote?": "Vì sao mục này có trong báo giá?",
-  "What does this cover?": "Mục này gồm những gì?"
+  "What does this cover?": "Mục này gồm những gì?",
+  "What your car needs": "Những gì xe của bạn cần",
+  "Optional add-ons": "Dịch vụ thêm không bắt buộc",
+  "City Auto recommends these, but your car doesn't need them today. They stay off unless you add them.": "City Auto đề xuất các mục này, nhưng hôm nay xe của bạn chưa cần. Các mục này sẽ không được tính trừ khi bạn thêm vào."
  }
 }

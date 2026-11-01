@@ -14,6 +14,7 @@ Hose options: economy $45 12 months, OEM $70 12 months.
 Labour 0.5 hr at $120/hr.`;
 
 const LANGS = [["en", "English"], ["zh-Hans", "中文"], ["vi", "Tiếng Việt"]];
+const ADDON_NOTE = "City Auto recommends these, but your car doesn't need them today. They stay off unless you add them.";
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
 const VOICE_MAX_SECONDS = 60;
@@ -247,7 +248,7 @@ const callApi = (notes, kind, demo) => post("/api/quote", { notes, kind, demo })
 const tr = (s) => (state.lang !== "en" && state.trans[state.lang]?.[s]) || s;
 function driverStrings() {
   const items = [...(state.quote?.items || []), ...(state.extra?.items || [])];
-  return [...new Set([...items.flatMap((i) => [i.name, i.why, whyLabel(i)]), ...Object.values(STATUS)].filter(Boolean))];
+  return [...new Set([...items.flatMap((i) => [i.name, i.why, whyLabel(i)]), ...Object.values(STATUS), "What your car needs", "Optional add-ons", ADDON_NOTE].filter(Boolean))];
 }
 async function setLang(lang) {
   state.transNotice = null;
@@ -283,6 +284,7 @@ function addVoiceText(text, source) {
   render();
   const n = $("notes");
   if (n) n.scrollTop = n.scrollHeight;
+  $("ws").scrollTop = $("ws").scrollHeight;  // keeps the "added" message in view
 }
 async function sendVoice(form) {
   state.voice = { mode: "working", source: null }; render();
@@ -328,7 +330,7 @@ function voiceControl() {
     : v.mode === "working" ? `<span class="voice-btn busy"><span class="spin"></span>Writing it down…</span>`
     : `<button class="voice-btn" data-act="voice-start">${ic("mic", 18)}Record voice note</button>`;
 }
-const voiceDone = () => (state.voice.source === "demo" ? `<span class="voice-done">Saved example added below your notes. Nothing was recorded.</span>`
+const voiceDone = () => (state.voice.source === "demo" ? `<span class="voice-done">Saved example added. Nothing was recorded.</span>`
   : state.voice.source === "ai" ? `<span class="voice-done">Added to your notes. Check the words and edit them. The recording wasn't kept.</span>` : "");
 
 // Suggested checks are for the mechanic only: they stay in state.suggest and are never sent to the quote or the driver
@@ -744,6 +746,15 @@ function drRow(it, i, group, toggle = true) {
 }
 // The driver's instrument panel: the total being approved, and one light per item that's on
 const lamps = (items, group) => `<div class="lights">${items.map((it, i) => `<span class="lamp ${lightOf(it)} ${it.approved ? "on" : ""}" id="lamp-${group}-${i}" title="${esc(it.name)}">${ic(itemIcon(it), 26)}</span>`).join("")}</div>`;
+// Add-ons the garage recommends sit apart from the work the car needs, so they don't read as required work.
+// Each row keeps its index in q.items, so switches, totals and lights work the same in either section.
+function drSections(q) {
+  const rows = q.items.map((it, i) => ({ it, i }));
+  const list = (part) => `<div class="sheet" lang="${state.lang}">${part.map(({ it, i }) => drRow(it, i, "quote")).join("")}</div>`;
+  const needs = rows.filter(({ it }) => it.status !== "optional"), addons = rows.filter(({ it }) => it.status === "optional");
+  return `${needs.length ? `<div class="lead" lang="${state.lang}">${esc(tr("What your car needs"))}</div>${list(needs)}` : ""}
+    ${addons.length ? `<div class="addons" lang="${state.lang}"><div class="lead">${esc(tr("Optional add-ons"))}</div><p>${esc(tr(ADDON_NOTE))}</p></div>${list(addons)}` : ""}`;
+}
 function drQuotePanel(q) {
   return `<div class="cluster"><div class="cl-top"><b>City Auto</b><span>${esc(carName())}</span></div>
     <div class="readout" id="drRead">${money(sumApproved(q.items))}</div>
@@ -820,8 +831,7 @@ function renderDriver() {
         <div class="etaline">${ic("time", 18)}${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
         ${tbcBox(q)}
         ${reportedLine(q, "You told us")}
-        <div class="lead">${esc(customer())}, choose what we do today</div>
-        <div class="sheet" lang="${state.lang}">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
+        ${drSections(q)}
         <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
         <div class="small">Typical part prices are sample data for this demo. The labour range comes from published workshop rates.</div>`;
     case "approved":

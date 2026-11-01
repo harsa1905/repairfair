@@ -106,6 +106,8 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Voice notes.** The browser records with `MediaRecorder`, and `/api/transcribe` sends the audio to OpenAI and returns text for the notes box. The server keeps the audio in memory for that request only, and the browser drops it, so only the text remains.
 
+**Add-ons.** `drSections()` splits Mia's quote: "optional" items go in their own section, and everything else stays under what the car needs. Only the layout changes, so switches and totals work as before.
+
 **Xero demo.** `wsXero()` shows a draft invoice and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
 
 ## Reliability

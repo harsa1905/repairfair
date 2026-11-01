@@ -48,6 +48,8 @@ answers, not sales.
 
 **Driver side**
 - Opens the quote from a text link, with no app to download.
+- Sees the work the car needs first, with add-ons the garage recommends in their own section, so an add-on doesn't read
+  like required work.
 - Switches items on or off one by one, and items left off become "not now" for later.
 - Reads a plain-English reason for each item and a fair price check against typical ranges.
 - Can view item names, reasons and urgency labels in Chinese or Vietnamese. These are AI translations, and the English quote
@@ -93,12 +95,14 @@ Then open http://localhost:5000 in Chrome or Edge. On Windows you can double-cli
 
 **Demo flow:**
 1. Workshop: under **Customer reported**, tap **Suggest what to check** and tick what you've looked at. These are for
-   the mechanic only. Then tap **Build standard quote with AI**.
+   the mechanic only. Optionally tap **Record voice note**, and the words go into the notes box to edit. In Demo mode this
+   adds a saved example. Then tap **Build standard quote with AI**.
 2. In the **Mechanic check**, fill the gaps from your price book, mark anything left **Resolved** or **Confirm later**,
    tick **I've checked this quote**, then **Send to Mia by text**. Any "needed now" item without a photo or measurement
    is flagged too. To show this, set Brake fluid flush to **Needed now**, then back to **Optional** before sending.
-3. Driver: check the fair price line on each item, tap **Why is this needed now?** on the pads, pick a part option,
-   and leave rotors and brake fluid switched off. Their lights stay dark in the panel at the top. Then
+3. Driver: optionally switch to 中文 or Tiếng Việt and back. Prices and approvals don't change. Check the fair price line
+   on each item, tap **Why is this needed now?** on the pads, pick a part option, and leave rotors and brake fluid
+   switched off. Brake fluid sits apart under **Optional add-ons**. The dark lights in the top panel show what's off. Then
    **Approve selected items**. The approved total is $340.
 4. Workshop: the app moves to the **Job** tab once Mia approves. Tap **Found something extra mid-job?**, then
    **Build extra item with AI**, resolve its check the same way, tick **I've checked this extra item**, then
