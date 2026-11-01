@@ -49,6 +49,8 @@ answers, not sales.
 - Opens the quote from a text link, with no app to download.
 - Switches items on or off one by one, and items left off become "not now" for later.
 - Reads a plain-English reason for each item and a fair price check against typical ranges.
+- Can view item names, reasons and urgency labels in Chinese or Vietnamese. These are AI translations, and the English quote
+  stays the record. Prices and approvals don't change.
 - Sees the job's progress and the estimated ready time.
 - Every approval is timestamped and kept in a searchable job history.
 
@@ -117,7 +119,7 @@ Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (i
 This is a student prototype that runs locally, not a launched product. There are no paying customers. The next step
 is a 10-day pilot with two workshops, with continue and stop criteria set in advance. Names, phone numbers and
 prices in the demo are illustrative. Parts price ranges and Results figures are samples, and texts, booking and Send
-to Xero are simulated.
+to Xero are simulated. Translations haven't been checked by fluent speakers, and part names can be wrong.
 
 ## Team
 

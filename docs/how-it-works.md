@@ -79,6 +79,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | `/api/status` | GET | Whether a key exists, and the model name |
 | `/api/quote` | POST | A quote built from the notes, or a saved example |
 | `/api/checks` | POST | Suggested things to inspect, for the mechanic only |
+| `/api/translate` | POST | Translated words for the driver's screen, or saved ones in Demo mode |
 
 **JSON.** A simple text format for structured data. Asking the AI for JSON means the app gets named fields, like `price` and `status`, not a paragraph it would have to interpret.
 
@@ -99,6 +100,8 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 **Results screen.** `wsResultsTab()` adds today's demo job to `SAMPLE_MONTH`, a set of invented figures for one workshop's month. It shows how the product would prove its value, not real results.
 
 **Price book.** `bookFill()` fills only empty fields from the workshop's saved prices. It never overwrites what the mechanic typed, so prices come from the workshop rather than the AI.
+
+**Language view.** `setLang()` asks the server to translate only the words on Mia's screen: item names, reasons and urgency labels. The server drops any translation whose numbers differ from the English, so that line stays in English. Records, prices and approvals stay in English.
 
 **Xero demo.** `wsXero()` shows a draft invoice and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
 

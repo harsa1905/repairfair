@@ -5,6 +5,7 @@ The OpenAI key is read from the .env file next to this script (never from the we
 """
 import json
 import os
+import re
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -85,6 +86,16 @@ Rules:
 - Never recommend a repair or replacement. Never mention prices, brands, part numbers or how long work takes.
 - Most useful check first. Plain words. No extra commentary outside the JSON."""
 
+LANGUAGES = {"zh-Hans": "Simplified Chinese", "vi": "Vietnamese"}
+
+TRANSLATE_PROMPT = """You translate parts of an Australian car repair quote into {language} for a driver who isn't a mechanic.
+You get a JSON list of English strings. Return JSON only: {{"translations": ["...", "..."]}}, with one translation per string, in the same order.
+
+Rules:
+- Use plain words a driver would use. Use the usual local term for each car part.
+- Keep every number and unit exactly as written, and keep brand names and part numbers.
+- Don't add, remove or explain anything. Don't add advice, prices or warnings."""
+
 
 def _num(v):
     try:
@@ -156,6 +167,10 @@ def ask_ai(messages):
     return json.loads(resp.choices[0].message.content or "{}")
 
 
+def numbers_in(text):
+    return sorted(re.findall(r"\d+(?:\.\d+)?", text.replace(",", ".")))
+
+
 def demo_response(kind):
     with open(HERE / "demo_data" / f"{kind}.json", encoding="utf-8") as f:
         return normalise(json.load(f))
@@ -193,6 +208,30 @@ def quote():
     except Exception as e:  # show a short, readable error on the page
         return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}. "
                                  "Check your key and model in .env, or switch on demo mode."}), 502
+
+
+@app.post("/api/translate")
+def translate():
+    """Driver's view only. Returns {english: translated}. The English quote stays the record."""
+    body = request.get_json(silent=True) or {}
+    lang, strings = body.get("lang"), [s for s in (body.get("strings") or []) if isinstance(s, str) and s.strip()][:60]
+    if lang not in LANGUAGES:
+        return jsonify({"error": "That language isn't available."}), 400
+    if body.get("demo") or not API_KEY:
+        with open(HERE / "demo_data" / "translations.json", encoding="utf-8") as f:
+            saved = json.load(f)[lang]
+        return jsonify({"source": "demo", "translations": {s: saved[s] for s in strings if s in saved}})
+    try:
+        raw = ask_ai([{"role": "system", "content": TRANSLATE_PROMPT.format(language=LANGUAGES[lang])},
+                      {"role": "user", "content": json.dumps([s[:400] for s in strings], ensure_ascii=False)}])
+        out = raw.get("translations") or []
+        if len(out) != len(strings):
+            return jsonify({"error": "The translation came back incomplete. Try again."}), 502
+        # A translation that changes a number is dropped, so that line stays in English
+        return jsonify({"source": "ai", "translations": {s: t.strip() for s, t in zip(strings, out)
+                                                         if isinstance(t, str) and t.strip() and numbers_in(s) == numbers_in(t)}})
+    except Exception as e:
+        return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}."}), 502
 
 
 @app.post("/api/checks")

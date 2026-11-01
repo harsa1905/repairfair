@@ -13,6 +13,7 @@ const DEFAULT_EXTRA = `Found a cracked rear brake hose (photo taken), needs doin
 Hose options: economy $45 12 months, OEM $70 12 months.
 Labour 0.5 hr at $120/hr.`;
 
+const LANGS = [["en", "English"], ["zh-Hans", "中文"], ["vi", "Tiếng Việt"]];
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
 const WORKSHOP = "City Auto";
@@ -69,6 +70,7 @@ const fresh = () => ({
   quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null,
+  lang: "en", trans: {}, transSource: null, transNotice: null, translating: false,
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
   history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null, extraOpen: false,
   book: SEED_BOOK.map((e) => ({ ...e })),
@@ -238,6 +240,38 @@ async function post(url, body) {
   } finally { clearTimeout(timer); }
 }
 const callApi = (notes, kind, demo) => post("/api/quote", { notes, kind, demo });
+
+// Driver's language view. Only the words on Mia's screen change: records, prices and approvals stay in English.
+const tr = (s) => (state.lang !== "en" && state.trans[state.lang]?.[s]) || s;
+function driverStrings() {
+  const items = [...(state.quote?.items || []), ...(state.extra?.items || [])];
+  return [...new Set([...items.flatMap((i) => [i.name, i.why, whyLabel(i)]), ...Object.values(STATUS)].filter(Boolean))];
+}
+async function setLang(lang) {
+  state.transNotice = null;
+  if (lang === "en") { state.lang = "en"; render(); return; }
+  const have = state.trans[lang] || {}, need = driverStrings().filter((s) => !have[s]);
+  if (!need.length) { state.lang = lang; render(); return; }
+  state.lang = lang; state.translating = true; render();
+  let data = null;
+  try {
+    data = await post("/api/translate", { lang, strings: need, demo: demoOn() });
+  } catch (e) {
+    data = await post("/api/translate", { lang, strings: need, demo: true }).catch(() => null);
+    state.transNotice = data && Object.keys(data.translations).length ? "The AI wasn't reachable, so saved translations are shown. Some lines may stay in English."
+      : "Translation isn't available right now, so this stays in English.";
+  }
+  state.translating = false;
+  if (data) { state.trans[lang] = { ...have, ...data.translations }; state.transSource = data.source; }
+  if (need.some((s) => !state.trans[lang]?.[s]) && !state.transNotice) state.transNotice = "Some lines stay in English because they couldn't be checked.";
+  render();
+}
+function langBar() {
+  return `<div class="lang-bar"><div class="lang-pick" role="group" aria-label="Language">${LANGS.map(([k, n]) => `<button class="${k === state.lang ? "on" : ""}" data-act="lang" data-lang="${k}" lang="${k}" aria-pressed="${k === state.lang}">${n}</button>`).join("")}</div>
+    ${state.translating ? `<div class="tr-note"><span class="spin"></span>Translating…</div>`
+      : state.lang !== "en" ? `<div class="tr-note">Translated by AI. The English quote is the record.${state.transSource === "demo" ? " Saved translation for this demo." : ""}</div>` : ""}
+    ${state.transNotice ? `<div class="tr-note warn">${esc(state.transNotice)}</div>` : ""}</div>`;
+}
 
 // Suggested checks are for the mechanic only: they stay in state.suggest and are never sent to the quote or the driver
 async function suggestChecks() {
@@ -644,10 +678,10 @@ function drRow(it, i, group, toggle = true) {
     if (it.brand || it.part_no) m += `<div class="pn">${esc([it.brand, it.part_no && "part no. " + it.part_no].filter(Boolean).join(", "))}</div>`;
     if (warrantyOf(it)) m += `<div class="war">Warranty: ${esc(warrantyOf(it))}</div>`;
   }
-  if (it.why) m += `<button class="why-btn ${it.whyOpen ? "open" : ""}" data-act="why-toggle" ${d} aria-expanded="${!!it.whyOpen}">${whyLabel(it)}</button>${it.whyOpen ? `<div class="why">${esc(it.why)}<span>From your mechanic's inspection notes</span></div>` : ""}`;
+  if (it.why) m += `<button class="why-btn ${it.whyOpen ? "open" : ""}" data-act="why-toggle" ${d} aria-expanded="${!!it.whyOpen}">${esc(tr(whyLabel(it)))}</button>${it.whyOpen ? `<div class="why">${esc(tr(it.why))}<span>From your mechanic's inspection notes</span></div>` : ""}`;
   const sw = toggle ? `<button class="sw" role="switch" aria-checked="${!!it.approved}" aria-label="${esc(it.name)}" data-act="sw" ${d}></button>` : "<span></span>";
   return `<div class="row ${toggle && !it.approved ? "off" : ""}" id="row-${group}-${i}">${ic(itemIcon(it), 22, "ic " + lightOf(it))}
-    <div><div class="ch"><span class="it">${esc(it.name)}</span><span class="price">${money(priceOf(it))}</span></div>${it.kind === "labour" ? "" : stLabel(it)}</div>${sw}
+    <div><div class="ch"><span class="it">${esc(tr(it.name))}</span><span class="price">${money(priceOf(it))}</span></div>${it.kind === "labour" ? "" : `<span class="st ${it.status}">${esc(tr(STATUS[it.status]))}</span>`}</div>${sw}
     <div class="more">${m}</div></div>`;
 }
 // The driver's instrument panel: the total being approved, and one light per item that's on
@@ -724,12 +758,12 @@ function renderDriver() {
     case "notified": return lockScreen(true);
     case "thread": return thread();
     case "quote":
-      return `${drQuotePanel(q)}
+      return `${drQuotePanel(q)}${langBar()}
         <div class="etaline">${ic("time", 18)}${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
         ${tbcBox(q)}
         ${reportedLine(q, "You told us")}
         <div class="lead">${esc(customer())}, choose what we do today</div>
-        <div class="sheet">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
+        <div class="sheet" lang="${state.lang}">${q.items.map((it, i) => drRow(it, i, "quote")).join("")}</div>
         <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
         <div class="small">Typical part prices are sample data for this demo. The labour range comes from published workshop rates.</div>`;
     case "approved":
@@ -746,8 +780,8 @@ function renderDriver() {
           <div class="readout">${money(sumAll(x.items))}</div>
           <div class="cl-sub"><b>${esc(x.items[0].name)}</b> needs your OK before City Auto continues.</div>
           ${lamps(x.items.map((it) => ({ ...it, approved: true })), "extra")}</div>
-        <div class="bigphoto"><span>${ic("camera", 18)}Photo from City Auto</span><span>tap to enlarge</span></div>
-        ${tbcBox(x)}<div class="sheet">${x.items.map((it, i) => drRow(it, i, "extra", false)).join("")}</div>
+        ${langBar()}<div class="bigphoto"><span>${ic("camera", 18)}Photo from City Auto</span><span>tap to enlarge</span></div>
+        ${tbcBox(x)}<div class="sheet" lang="${state.lang}">${x.items.map((it, i) => drRow(it, i, "extra", false)).join("")}</div>
         <div class="small">The workshop won't start this until you decide.</div>`;
     case "extra_done": {
       const r = state.extraResult;
@@ -939,7 +973,11 @@ document.addEventListener("click", (e) => {
     state.ws = "extra_sent"; state.xSentAt = new Date(); fly("packetOut");
     later(950, () => { state.xDeliveredAt = new Date(); state.drBanner = "extra"; render(); });
   }
-  if (act === "open-extra") { state.drBanner = null; state.dr = "extra"; state.xViewedAt = new Date(); }
+  if (act === "open-extra") {
+    state.drBanner = null; state.dr = "extra"; state.xViewedAt = new Date();
+    if (state.lang !== "en") setLang(state.lang);  // the new item needs translating too
+  }
+  if (act === "lang") { setLang(b.dataset.lang); return; }
   if (act === "x-approve" || act === "x-decline" || act === "x-call") {
     state.extraResult = act === "x-approve" ? "approved" : act === "x-call" ? "call" : "declined";
     state.extra.items.forEach((it) => (it.approved = state.extraResult === "approved"));
