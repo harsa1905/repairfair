@@ -508,3 +508,11 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .tr-note { display: flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 600; color: var(--brand-700); margin: 6px 2px 0; line-height: 1.35; }
 .tr-note.warn { color: var(--amber-t); }
 .tr-note .spin { width: 14px; height: 14px; border-width: 2px; }
+
+/* voice notes */
+.voice-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-left: auto; min-height: 42px; padding: 0 12px; border: 1.5px solid var(--brand); border-radius: 12px; background: #fff; color: var(--brand); font-size: 14px; font-weight: 600; white-space: nowrap; transition: transform .14s var(--ease-out), background .15s; }
+.voice-btn:active { transform: scale(.97); }
+.voice-btn.on { background: var(--red-t); border-color: var(--red-t); color: #fff; }
+.voice-btn.busy { border-color: var(--line); color: var(--muted); }
+.voice-btn .spin { width: 14px; height: 14px; border-width: 2px; }
+.voice-done { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.35; }

@@ -16,6 +16,7 @@ Labour 0.5 hr at $120/hr.`;
 const LANGS = [["en", "English"], ["zh-Hans", "中文"], ["vi", "Tiếng Việt"]];
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
+const VOICE_MAX_SECONDS = 60;
 const WORKSHOP = "City Auto";
 const PHONE_MASK = "04•• ••• 812";
 
@@ -67,6 +68,7 @@ const PRO_PRICE = 49;
 const fresh = () => ({
   tab: "quote", ws: "compose", dr: "home", drBanner: null, stage: null, stageAt: {}, readyBy: null,
   notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA, reported: DEFAULT_REPORTED, suggest: null, suggesting: false,
+  voice: { mode: "idle", source: null },
   quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null,
@@ -273,6 +275,62 @@ function langBar() {
     ${state.transNotice ? `<div class="tr-note warn">${esc(state.transNotice)}</div>` : ""}</div>`;
 }
 
+// Voice notes: the words go into the notes box to edit. Only the text is kept; the recording is dropped once it's transcribed.
+let rec = null;
+function addVoiceText(text, source) {
+  state.notes = `${state.notes.trimEnd()}\n${text}`.trimStart();
+  state.voice = { mode: "idle", source };
+  render();
+  const n = $("notes");
+  if (n) n.scrollTop = n.scrollHeight;
+}
+async function sendVoice(form) {
+  state.voice = { mode: "working", source: null }; render();
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 30000);
+  try {
+    const r = await fetch("/api/transcribe", { method: "POST", body: form, signal: ctrl.signal });
+    const data = await r.json();
+    if (!r.ok || data.error) throw new Error(data.error);
+    addVoiceText(data.text, data.source);
+  } catch (e) {
+    state.voice = { mode: "idle", source: null }; render();
+    toast("That voice note didn't work. Try again, or type it.");
+  } finally { clearTimeout(timer); }
+}
+async function startVoice() {
+  if (demoOn() || !window.__aiReady) { const f = new FormData(); f.append("demo", "1"); sendVoice(f); return; }
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch (_) { toast("The microphone isn't available. You can type instead."); return; }
+  const recorder = new MediaRecorder(stream), chunks = [], started = Date.now();
+  const r = rec = { recorder, discard: false };
+  recorder.ondataavailable = (e) => chunks.push(e.data);
+  recorder.onstop = () => {
+    stream.getTracks().forEach((t) => t.stop());
+    clearInterval(r.timer); rec = null;
+    if (r.discard) return;
+    const type = recorder.mimeType.split(";")[0] || "audio/webm";
+    const f = new FormData();
+    f.append("audio", new Blob(chunks, { type }), `note.${type.includes("mp4") ? "mp4" : type.includes("ogg") ? "ogg" : "webm"}`);
+    sendVoice(f);
+  };
+  recorder.start();
+  state.voice = { mode: "recording", source: null }; render();
+  r.timer = setInterval(() => {
+    const secs = Math.floor((Date.now() - started) / 1000), el = $("voiceTime");
+    if (el) el.textContent = `0:${String(secs).padStart(2, "0")}`;
+    if (secs >= VOICE_MAX_SECONDS) recorder.stop();
+  }, 500);
+}
+function voiceControl() {
+  const v = state.voice;
+  return v.mode === "recording" ? `<button class="voice-btn on" data-act="voice-stop">${ic("mic", 18)}Stop <span id="voiceTime">0:00</span></button>`
+    : v.mode === "working" ? `<span class="voice-btn busy"><span class="spin"></span>Writing it down…</span>`
+    : `<button class="voice-btn" data-act="voice-start">${ic("mic", 18)}Record voice note</button>`;
+}
+const voiceDone = () => (state.voice.source === "demo" ? `<span class="voice-done">Saved example added below your notes. Nothing was recorded.</span>`
+  : state.voice.source === "ai" ? `<span class="voice-done">Added to your notes. Check the words and edit them. The recording wasn't kept.</span>` : "");
+
 // Suggested checks are for the mechanic only: they stay in state.suggest and are never sent to the quote or the driver
 async function suggestChecks() {
   state.suggesting = true; state.suggest = null; render();
@@ -406,7 +464,7 @@ function wsQuoteTab() {
       // The notes fill the screen like a job card; the build button sits in the dock below
       return `${wsReported()}<label class="notes-card"><span class="nc-top"><b>Mechanic's notes</b><span>Job 1044, checked in 8:05 am</span></span>
           <textarea id="notes">${esc(state.notes)}</textarea>
-          <span class="photos"><span class="ph">${ic("camera", 18)}</span><span class="ph">${ic("camera", 18)}</span><span class="ph-t">2 photos attached</span></span></label>${err}`;
+          <span class="photos"><span class="ph">${ic("camera", 18)}</span><span class="ph">${ic("camera", 18)}</span><span class="ph-t">2 photos</span>${voiceControl()}</span>${voiceDone()}</label>${err}`;
     case "loading":
       return `<div class="lbl">Mechanic's notes</div><textarea rows="11" disabled>${esc(state.notes)}</textarea>
         <div class="loading"><span class="spin"></span>AI is building the standard quote…</div><div class="skel"></div><div class="skel"></div>`;
@@ -914,6 +972,8 @@ document.addEventListener("click", (e) => {
   if (!b || b.tagName === "SELECT" || b.tagName === "INPUT" || b.tagName === "TEXTAREA") return;
   if (b.dataset.tab) { state.tab = b.dataset.tab; render(); return; }
   const act = b.dataset.act, i = Number(b.dataset.i);
+  if (act === "voice-start") { startVoice(); return; }
+  if (act === "voice-stop") { rec?.recorder.stop(); return; }
   if (act === "suggest") {
     state.reported = $("reported").value;
     if (state.reported.trim()) suggestChecks(); else toast("Type what the customer reported first");
@@ -1073,7 +1133,7 @@ function tick() {
   if (state.dr === "home" || state.dr === "notified") render();
 }
 $("demoMode").addEventListener("change", () => { saveDemo(); badge(); });
-$("resetBtn").addEventListener("click", () => { timers.forEach(clearTimeout); timers = []; state = fresh(); lastDr = lastWs = null; $("wsToast").classList.remove("show"); render(); });
+$("resetBtn").addEventListener("click", () => { if (rec) { rec.discard = true; rec.recorder.stop(); } timers.forEach(clearTimeout); timers = []; state = fresh(); lastDr = lastWs = null; $("wsToast").classList.remove("show"); render(); });
 window.addEventListener("resize", fit);
 
 (async function init() {

@@ -61,7 +61,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | `static/style.css` | All visual design: colours, type, layout | About 500 lines |
 | `static/logo-wordmark.png`, `logo-mark.png` | The logo, and the small symbol used for icons | Small |
 | `static/vendor/` | The fonts and Motion, stored locally | Small |
-| `demo_data/quote.json`, `extra.json`, `checks.json` | Saved examples for Demo mode | Small |
+| `demo_data/quote.json`, `extra.json`, `checks.json`, `translations.json`, `voice_note.json` | Saved examples for Demo mode | Small |
 | `example-notes.txt` | Sample mechanic's notes to paste in | Small |
 | `check_ai.py` | Tests that your API key and model work | Small |
 | `.env` | Your private OpenAI key. Git ignores it, so it is never committed | Private |
@@ -79,6 +79,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 | `/api/status` | GET | Whether a key exists, and the model name |
 | `/api/quote` | POST | A quote built from the notes, or a saved example |
 | `/api/checks` | POST | Suggested things to inspect, for the mechanic only |
+| `/api/transcribe` | POST | Turns a voice note into text, or returns a saved example in Demo mode |
 | `/api/translate` | POST | Translated words for the driver's screen, or saved ones in Demo mode |
 
 **JSON.** A simple text format for structured data. Asking the AI for JSON means the app gets named fields, like `price` and `status`, not a paragraph it would have to interpret.
@@ -103,6 +104,8 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Language view.** `setLang()` asks the server to translate only the words on Mia's screen: item names, reasons and urgency labels. The server drops any translation whose numbers differ from the English, so that line stays in English. Records, prices and approvals stay in English.
 
+**Voice notes.** The browser records with `MediaRecorder`, and `/api/transcribe` sends the audio to OpenAI and returns text for the notes box. The server keeps the audio in memory for that request only, and the browser drops it, so only the text remains.
+
 **Xero demo.** `wsXero()` shows a draft invoice and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
 
 ## Reliability
@@ -115,7 +118,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 ## What is simulated
 
 - **Both phones run on one page.** There is no real second device.
-- **No real text messages.** Reminders and booking links stay on the simulated phones. Nothing leaves your computer except what's sent to OpenAI: the notes and the customer-reported issue.
+- **No real text messages.** Reminders and booking links stay on the simulated phones. Nothing leaves your computer except what's sent to OpenAI: the notes, the customer-reported issue, voice notes and the words to translate.
 - **No Xero connection.** The send is a demo. Only the CSV download is real.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
 - **Sample data only.** The history, price book, follow-ups, typical part prices and Results figures are invented examples.

@@ -17,8 +17,10 @@ load_dotenv(HERE / ".env")
 MODEL = os.getenv("OPENAI_MODEL", "gpt-6-luna")
 REASONING = os.getenv("OPENAI_REASONING", "none").strip()  # "none" keeps gpt-6-luna fast (~4-5 s)
 API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+TRANSCRIBE_MODEL = os.getenv("OPENAI_TRANSCRIBE_MODEL", "gpt-4o-mini-transcribe")
 
 app = Flask(__name__, static_folder=str(HERE / "static"), static_url_path="/static")
+app.config["MAX_CONTENT_LENGTH"] = 12 * 1024 * 1024  # a voice note is under a minute
 
 STATUSES = {"needed_now", "can_wait", "optional", "to_confirm"}
 TIERS = ["Used", "Economy", "OEM", "Premium"]
@@ -230,6 +232,28 @@ def translate():
         # A translation that changes a number is dropped, so that line stays in English
         return jsonify({"source": "ai", "translations": {s: t.strip() for s, t in zip(strings, out)
                                                          if isinstance(t, str) and t.strip() and numbers_in(s) == numbers_in(t)}})
+    except Exception as e:
+        return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}."}), 502
+
+
+@app.post("/api/transcribe")
+def transcribe():
+    """Speech to text for the mechanic's notes. The audio stays in memory for this request and is never saved."""
+    if request.form.get("demo") or not API_KEY:
+        with open(HERE / "demo_data" / "voice_note.json", encoding="utf-8") as f:
+            return jsonify({"source": "demo", "text": json.load(f)["text"]})
+    audio = request.files.get("audio")
+    if not audio:
+        return jsonify({"error": "No recording was received."}), 400
+    from openai import OpenAI
+    try:
+        resp = OpenAI(api_key=API_KEY, timeout=40).audio.transcriptions.create(
+            model=TRANSCRIBE_MODEL, language="en", file=(audio.filename or "note.webm", audio.read(), audio.mimetype),
+            prompt="An Australian car mechanic's notes on a job: brake pads, rotors, millimetres, kilometres, part options, prices.")
+        text = (resp.text or "").strip()
+        if not text:
+            return jsonify({"error": "No speech was heard."}), 502
+        return jsonify({"source": "ai", "text": text})
     except Exception as e:
         return jsonify({"error": f"AI request failed ({type(e).__name__}): {str(e)[:200]}."}), 502
 

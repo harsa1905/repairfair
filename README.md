@@ -29,7 +29,8 @@ answers, not sales.
 **Workshop side**
 - The mechanic records what the customer reported, and the AI can suggest 3 to 5 things to check. These are
   suggestions, not a diagnosis. They stay on the workshop phone and never reach the quote or the driver.
-- The mechanic types rough notes ("Front pads at 2mm, need doing now (photo taken). Pad options: economy $90, OEM $160...") and the AI drafts a
+- The mechanic types rough notes, or records a voice note that turns into editable text. Only the text is kept, not the
+  recording. Notes like ("Front pads at 2mm, need doing now (photo taken). Pad options: economy $90, OEM $160...") and the AI drafts a
   structured quote: parts and labour itemised, labour shown as hours times rate.
 - Each item gets an urgency status: **needed now**, **can wait**, **optional** or **to confirm**, taken from the
   mechanic's own words.
@@ -119,7 +120,7 @@ Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (i
 This is a student prototype that runs locally, not a launched product. There are no paying customers. The next step
 is a 10-day pilot with two workshops, with continue and stop criteria set in advance. Names, phone numbers and
 prices in the demo are illustrative. Parts price ranges and Results figures are samples, and texts, booking and Send
-to Xero are simulated. Translations haven't been checked by fluent speakers, and part names can be wrong.
+to Xero are simulated. In Demo mode, voice notes add a saved example instead of recording. Translations haven't been checked by fluent speakers, and part names can be wrong.
 
 ## Team
 
