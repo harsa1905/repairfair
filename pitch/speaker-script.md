@@ -1,22 +1,22 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:51). Sameep takes over at competition and closes on the ask (1:40). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:50). Sameep takes over at competition and closes on the ask (1:41). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
 | 1 | RepairFair | Safaa | 0:10 |
-| 2 | The estimate | Safaa | 0:12 |
-| 3 | The call | Safaa | 0:18 |
+| 2 | The estimate | Safaa | 0:10 |
+| 3 | The call | Safaa | 0:12 |
 | 4 | The yes | Safaa | 0:14 |
-| 5 | The bill | Safaa | 0:22 |
-| 6 | 1 in 5 | Safaa | 0:16 |
-| 7 | The insight | Safaa | 0:16 |
+| 5 | The bill | Safaa | 0:21 |
+| 6 | 1 in 5 | Safaa | 0:18 |
+| 7 | The insight | Safaa | 0:26 |
 | 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:29 |
 | 10 | Mia's new bill | Safaa | 0:14 |
 | 11 | Why now | Safaa | 0:16 |
-| 12 | Traction | Safaa | 0:25 |
-| 13 | Competition | Sameep | 0:24 |
+| 12 | Traction | Safaa | 0:21 |
+| 13 | Competition | Sameep | 0:25 |
 | 14 | Business model | Sameep | 0:22 |
 | 15 | Market | Sameep | 0:19 |
 | 16 | Team | Sameep | 0:08 |
@@ -33,8 +33,8 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | 4 | "...the caliper needs a service." |
 | 5 | "...what she's just approved." |
 | 6 | "...billed eleven hundred and twenty for brakes." |
-| 7 | "...work nobody needed." |
-| 8 | "...neither can the mechanic." |
+| 7 | "...the workshop's own Google page." |
+| 8 | "...the workshop had to absorb it." |
 | 9 | "...start to finish." The video starts by itself. |
 | 10 | The video ends on "...what she approved." |
 | 11 | "...the mechanic has proof." |
@@ -55,11 +55,11 @@ We're RepairFair. Workshops send quotes by text, and drivers approve them line b
 
 **2. The estimate** (Safaa)
 
-Meet Mia. Her brakes need doing, so she drops her car at a local workshop on her way to work. The estimate is three hundred dollars. She says yes.
+Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The estimate is three hundred dollars. She says yes.
 
 **3. The call** (Safaa)
 
-Mid-morning, her phone rings. It's the workshop, and they're doing the right thing by calling. The rotors are bad too. The car came with ceramic pads from the factory, so those cost more. And the caliper needs a service.
+Mid-morning, her phone rings. It's the workshop, and they're doing the right thing by calling. The rotors are bad too. And the caliper needs a service.
 
 **4. The yes** (Safaa)
 
@@ -67,15 +67,15 @@ Mia's at work, and the explanation is rushed. She's confused. But she needs her 
 
 **5. The bill** (Safaa)
 
-When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Was any of it urgent? She can't tell. Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
+When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Was any of it urgent? Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
 
 **6. 1 in 5** (Safaa)
 
-Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five of them is about this: a surprise bill, work nobody approved, or work nobody needed.
+Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five of them is about this: a surprise bill, work nobody approved, or work nobody needed. And those reviews sit on the workshop's own Google page.
 
 **7. The insight** (Safaa)
 
-But most people trust their local mechanic. So trust isn't the problem. The missing record is. Repairs get agreed in a rushed phone call. Afterwards the driver can't check what was said, and neither can the mechanic.
+But most people trust their local mechanic. So trust isn't the problem. The missing record is. See that call from the workshop's side. The mechanic stops work and gets a rushed yes. The driver can't check it, and the workshop can't prove it. One customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it.
 
 **8. The solution** (Safaa)
 
@@ -95,11 +95,11 @@ This works now because AI can turn a mechanic's rough notes into a clear quote i
 
 **12. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. The gap was approving extras, so that's now our core. At one workshop, a customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. The gap was approving extras, so that's now our core. Two had already lost money on extras. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **13. Competition** (Sameep)
 
-That workshop already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. We're free to start, then forty-nine, with nothing to switch. Could they copy it? Yes. But approvals help sell their higher plans, and they have little reason to serve workshops that won't buy one.
+One of those workshops already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. We're free to start, then forty-nine, with nothing to switch. Could they copy it? Yes. But approvals help sell their higher plans, and they have little reason to serve workshops that won't buy one.
 
 **14. Business model** (Sameep)
 
@@ -133,7 +133,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 
 ## Likely questions
 - **How was the review number checked?** It was AI-coded, and two more AI coders agreed on 90%+ of a 60-review sample. Say a person hasn't checked it, unless the human check gets done.
-- **Is Mia real?** Mia is a made-up character, and so is her phone call, including the rotors, pads and caliper. The $300 quote and $1,120 bill come from a real Sydney driver's brake job in our research, and the $470 bill is the demo.
+- **Is Mia real?** Mia is a made-up character, and so is her phone call, including the rotors and caliper. The $300 quote and $1,120 bill come from a real Sydney driver's brake job in our research, and the $470 bill is the demo.
 - **Was the $1,120 a rip-off?** We don't know, and that's the point. A typical brake job is about $450–600 on AutoGuru, but extra work can be genuine. Without a written record, the driver can't tell.
 - **Do people trust their mechanic?** Yes, 71% do in AAAA's research. That's our point: the problem is the missing record, not dishonest mechanics.
 - **Isn't this already required?** NSW advice is to get a quote in writing, and repairers must only do authorised work. We make that record easy to create and keep.
@@ -144,11 +144,13 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
 - **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. We haven't tried it, so we can't say how it compares with line-by-line approval. Top-tier users aren't our first customers.
+- **Why would a workshop pay if the problem is the driver's?** It's one phone call with two victims. The workshop gets paid for extras because it can prove the yes, and two of ten had lost money on them. It spends less time chasing customers, and three of ten struggle to reach them. Work a driver declines becomes a reminder, not a lost job.
+- **Won't customers just reject more work?** Maybe, and we don't know yet. Declined items become reminders, and the pilot will show what happens.
 - **Do pilot garages pay?** Not during the pilot. Our target is three of six putting a card on file by the end, with billing starting after their free months. That's a target, not a result.
 - **What will the pilot measure?** Time spent explaining quotes, whether final bills match what was approved, and whether drivers understood what they approved. A driver declining an item isn't success, and a higher bill can be fine if it was authorised. It also tests whether workshops save enough time to justify paying.
 - **You promised a 10-day pilot with two workshops. What happened?** [Sameep: add the real reason.] We don't have pilot results. Say that plainly, then give any written commitments we have.
 - **Your Week 11 feedback form says 6 interviews, 4 trials and 2 willing to pay. Why 10, 6 and 4?** Our interview sheet and Week 11 script both say ten workshops, six would trial and four would pay. We can show the sheet with workshop names removed.
-- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. We cover extras mid-job as well as the first quote, there's nothing to switch, and there's a free plan. Next we plan extras-only use, an approval receipt for both sides, and sending by WeChat with translated quotes. We haven't tried competitors' products, so we talk about what we do, not what they lack.
+- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. We cover extras mid-job as well as the first quote, there's nothing to switch, and there's a free plan. Next we plan extras-only use, an approval receipt for both sides, and letting drivers view quotes in their own language. We haven't tried competitors' products, so we talk about what we do, not what they lack.
 - **What if the AI gets a quote wrong?** The mechanic checks every quote before it goes out, and the workshop stays responsible for it. AI writes it up, and the mechanic decides.
 - **What would stop a competitor copying you?** Nothing technical. Approvals help sell their higher plans, so they have little reason to offer them cheaply to workshops that won't buy a full system. That's our reasoning, not proof. Our evidence is one MechanicDesk workshop that still ran approvals by phone and WeChat. Speed in one area is our only head start, so we don't claim a moat yet.
 - **What about EVs?** An EV is just another car to us. It's a vehicle type in the same product, not a second market. The app has no EV option yet, so it's planned.
