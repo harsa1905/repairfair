@@ -90,6 +90,7 @@ These are never shown as results.
 - Every charge on the final bill was approved in writing.
 - At least 3 of the 6 workshops put a card on file, with billing starting after their free months.
 - Also measure time spent explaining quotes, bills matching approvals, and whether drivers understood. The card on file is the target.
+- Test the belief that transparency helps with new customers: compare how often new and regular customers approve work.
 
 ## Prototype timing test (run last, before the pitch)
 

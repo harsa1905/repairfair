@@ -16,10 +16,10 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 | 10 | Mia's new bill | Safaa | 0:14 |
 | 11 | Why now | Safaa | 0:16 |
 | 12 | Traction | Safaa | 0:21 |
-| 13 | Competition | Sameep | 0:25 |
-| 14 | Business model | Sameep | 0:22 |
-| 15 | Market | Sameep | 0:19 |
-| 16 | Team | Sameep | 0:08 |
+| 13 | Competition | Sameep | 0:24 |
+| 14 | Business model | Sameep | 0:15 |
+| 15 | Market | Sameep | 0:29 |
+| 16 | Team | Sameep | 0:06 |
 | 17 | Ask | Sameep | 0:27 |
 
 ## Slide operator
@@ -40,12 +40,12 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | 11 | "...the mechanic has proof." |
 | 12 | "...saved as the record." |
 | 13 | "...that's the next step." |
-| 14 | "...workshops that won't." |
+| 14 | "...learns to trust a workshop." |
 | 15 | "...fewer phone calls a month." |
-| 16 | "Later, invoicing." |
+| 16 | "...take on bigger systems." |
 | 17 | "...built a prototype." |
 
-Stop on slide 17 and leave it up for questions. In Q&A, press O and click a backup slide (18–21).
+Stop on slide 17 and leave it up for questions. In Q&A, press O and click a backup slide (18–22).
 
 ## Script
 
@@ -99,19 +99,19 @@ We took it to ten workshops. Six want to try it. Four said they'd pay. The gap w
 
 **13. Competition** (Sameep)
 
-One of those workshops already had workshop software. Approvals still ran on phone calls and messages. Owners rarely switch, so we don't ask them to. We're free to start, then forty-nine, with nothing to switch. Others already offer approval, but only if you move to their system. We're the add-on for workshops that won't.
+Three of the five workshops we recorded have no workshop software. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We make sure the driver understands, and the workshop can prove it. We believe that's how a new customer learns to trust a workshop.
 
 **14. Business model** (Sameep)
 
-Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. When a driver says "not now", we remind them later. One hour of that work covers the fee. We estimate up to fifty fewer phone calls a month.
+Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. We estimate up to fifty fewer phone calls a month.
 
 **15. Market** (Sameep)
 
-Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West, close enough to sign in person. Sydney comes once the pilot hits its target. Later, invoicing.
+Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West, close enough to sign in person. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we take on bigger systems.
 
 **16. Team** (Sameep)
 
-We're Safaa and Sameep, for Group 8. We've interviewed ten workshops, read over a thousand reviews and built a prototype.
+We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a prototype.
 
 **17. Ask** (Sameep)
 
@@ -144,8 +144,15 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
 - **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. Its help page says customers can approve or reject each item, and Workshop Hub's Shop plan does the same. So line-by-line approval isn't our difference. Nothing to switch is. We haven't tried either product.
-- **Who else does this?** Several Australian systems offer customer approval, including Workshop Software, Workshop Hub and OneBookPlus. Workshop Hub also has AI quotes and voice notes. All of them need you to use their system. We're for workshops that won't switch.
-- **Why not just use a cheap full system?** Many workshops should, if they're happy to switch. OneBookPlus's approval add-on can cost less than we do. Our customers are workshops that won't change what they use, such as paper, or accounting software like Xero or MYOB. We don't know yet how big that group is, and the pilot will test it.
+- **Who else does this?** Several Australian systems offer customer approval, including Workshop Software, Workshop Hub and OneBookPlus. Workshop Hub also has AI quotes and voice notes. All of them need you to use their system. We start with small workshops that don't have one.
+- **How are you different from Workshop Hub?** It's a full system for running a workshop, and it's live. We're a prototype built around the moment a driver says yes: urgency and a plain reason on each line, their own language, and no full system to learn. We haven't tried its product, so we talk about what we do.
+- **Why pay for a system and for you?** We don't target workshops with a full system first. We start with those that have none, so we're their first tool, not a second bill.
+- **Doesn't workshop software already solve this?** Not always. One workshop we spoke to had MechanicDesk and still got approvals by phone and messages. That's the workshop that absorbed the sixty dollars.
+- **Are you an add-on or a system?** Today we replace the paper quote, the phone call and the paper invoice. Next comes a light system, once the pilot works. An add-on for workshops with software stays an option, but it isn't our first market.
+- **Does transparency really win customers?** We believe a clear written quote helps a new customer trust a workshop they don't know yet. We have no proof, so the pilot would compare how often new and regular customers approve work.
+- **What will you do with the data?** With consent from workshops and drivers, approval records could show which garages quote clearly and how prices compare. Workshops couldn't pay for a better ranking, or the trust goes. It's a plan for later, not something we've built.
+- **How do drivers benefit?** They stay free. Later we plan a car history across garages, a way to find trusted garages, a fair-price check from real jobs, and verified reviews. Only 1 of 25 drivers got a second quote, so drivers may not shop around. That's why it's a later stage.
+- **Why not just use a cheap full system like OneBookPlus?** Many workshops should, if they're happy to switch. OneBookPlus's approval add-on can cost less than we do. Our customers are workshops that won't change what they use, such as paper, or accounting software like Xero or MYOB. We haven't proven that a simpler start beats that, and we don't know how many of these workshops exist. The pilot will test it.
 - **Why would a workshop pay if the problem is the driver's?** It's one phone call with two victims. The workshop gets paid for extras because it can prove the yes, and two of ten had lost money on them. It spends less time chasing customers, and three of ten struggle to reach them. Work a driver declines becomes a reminder, not a lost job.
 - **Won't customers just reject more work?** Maybe, and we don't know yet. Declined items become reminders, and the pilot will show what happens.
 - **Do pilot garages pay?** Not during the pilot. Our target is three of six putting a card on file by the end, with billing starting after their free months. That's a target, not a result.
@@ -169,4 +176,5 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Is 607 all of Sydney?** No, it's the workshops we found across 21 councils, so it's a minimum. The real number is much higher.
 - **Do fleets or insurers want this?** Not now. We haven't spoken to any, and the pilot stays on workshops as the payers. If we get there, fleets come first, because the business paying isn't the driver, so it has Mia's problem. Insurers are mostly crash repairs, so they're a possible later option.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
-- **Do workshops have to enter jobs twice?** Today, yes, if they run a main system, because we don't connect to it yet. We add no new form for the quote. Next on our roadmap, the approved quote becomes the invoice and goes to Xero, so paper-based workshops only enter it once. Full software needs a direct connection, which we haven't built.
+- **Is the invoice a real tax invoice?** Not yet. It's a prototype invoice with a sample ABN, and it hasn't been checked against tax invoice rules. It's built only from approved lines, and marking it paid moves no money.
+- **Do workshops have to enter jobs twice?** Paper workshops don't: in the prototype, the approved quote becomes the invoice. The Xero export file hasn't been tested in Xero, and we don't connect to MYOB. Workshops with full software would enter jobs twice, because we haven't built a direct connection.
