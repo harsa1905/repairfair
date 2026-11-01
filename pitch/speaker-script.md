@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 4:54 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:51). Sameep takes over at competition and closes on the ask (1:34). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 4:57 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:50). Sameep takes over at competition and closes on the ask (1:38). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -14,13 +14,38 @@ The story takes about 4:54 with pauses. Safaa opens and tells Mia's story throug
 | 8 | The solution | Safaa | 0:08 |
 | 9 | Demo | Video | 0:29 |
 | 10 | Mia's new bill | Safaa | 0:14 |
-| 11 | Why now | Safaa | 0:18 |
-| 12 | Traction | Safaa | 0:23 |
-| 13 | Competition | Sameep | 0:19 |
+| 11 | Why now | Safaa | 0:16 |
+| 12 | Traction | Safaa | 0:24 |
+| 13 | Competition | Sameep | 0:22 |
 | 14 | Business model | Sameep | 0:22 |
 | 15 | Market | Sameep | 0:22 |
 | 16 | Team | Sameep | 0:10 |
-| 17 | Ask | Sameep | 0:21 |
+| 17 | Ask | Sameep | 0:22 |
+
+## Slide operator
+
+One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video.
+
+| Go to slide | Press after |
+|---|---|
+| 2 | "...line by line." |
+| 3 | "She says yes." |
+| 4 | "...the caliper needs a service." |
+| 5 | "...what she's just approved." |
+| 6 | "...billed eleven hundred and twenty for brakes." |
+| 7 | "...work nobody needed." |
+| 8 | "...neither can the mechanic." |
+| 9 | "...start to finish." The video starts by itself. |
+| 10 | The video ends on "...what she approved." |
+| 11 | "...the mechanic has proof." |
+| 12 | "...saved as the record." |
+| 13 | "...that's the next step." |
+| 14 | "...what can wait, and why." |
+| 15 | "...covers the fee." |
+| 16 | "...fleets and insurers." |
+| 17 | "...a working prototype." |
+
+Stop on slide 17 and leave it up for questions. In Q&A, press O and click a backup slide (18–21).
 
 ## Script
 
@@ -66,15 +91,15 @@ Same brakes. Same Mia. This time it's on her phone, so she can read it properly.
 
 **11. Why now** (Safaa)
 
-This works now because AI can turn a mechanic's rough notes into a clear quote in seconds, so the record takes no extra effort. The mechanic checks it, and it goes out. It's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
+This works now because AI can turn a mechanic's rough notes into a clear quote in seconds. The mechanic checks it, and it goes out. It's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
 
 **12. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. At one workshop, a customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it. That's who we're for: honest workshops. We've got a working prototype. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. Three said they struggle to reach customers. At one workshop, a customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **13. Competition** (Sameep)
 
-That workshop already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. Keep your system, and add the part that gets the yes. We help the driver decide what's urgent, what can wait, and why.
+That workshop already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. Keep your system, and add the part that gets the yes, even when extras turn up mid-job. We help the driver decide what's urgent, what can wait, and why.
 
 **14. Business model** (Sameep)
 
@@ -90,7 +115,7 @@ We're Safaa and Sameep, presenting for Group 8. This semester we've interviewed 
 
 **17. Ask** (Sameep)
 
-Now we need real workshops. Help us run one pilot: six Inner West garages, three months. It's a success if three of them agree to pay. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
+Now we need real workshops. Help us run one pilot: six Inner West garages, three months. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
 ## Demo video script (0:29)
 
@@ -119,7 +144,9 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
 - **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. We haven't tried it, so we can't say how it compares with line-by-line approval. Top-tier users aren't our first customers.
-- **Do pilot garages pay?** Not during the pilot. It's a success if three of six agree to pay $49 afterwards.
+- **Do pilot garages pay?** Not during the pilot. Our target is three of six putting a card on file by the end, with billing starting after their free months, and 10 driver approvals a week. Both are targets, not results.
+- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. We cover extras mid-job as well as the first quote, there's nothing to switch, and there's a free plan. Next we plan extras-only use, an approval receipt for both sides, and sending by WeChat with translated quotes. We haven't tried competitors' products, so we talk about what we do, not what they lack.
+- **What if the AI gets a quote wrong?** The mechanic checks every quote before it goes out, and the workshop stays responsible for it. AI writes it up, and the mechanic decides.
 - **What would stop a competitor copying you?** Features can be copied. Our focus is workshops that won't switch, and a full system has little reason to plug into rivals.
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
 - **How big can this get?** At $49, even every workshop in Australia is worth about $16.5M a year. That's a solid small business. It only gets bigger through fleets or insurers, and we haven't tested either.

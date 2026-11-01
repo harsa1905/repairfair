@@ -87,7 +87,8 @@ These are never shown as results.
 - 6 Inner West workshops for 3 months, starting from those who said they'd trial it.
 - Half of quotes get a reply within 1 hour.
 - Every charge on the final bill was approved in writing.
-- At least 3 of the 6 workshops agree to pay $49 afterwards.
+- At least 3 of the 6 workshops put a card on file, with billing starting after their free months.
+- 10 driver approvals a week. Both are targets.
 
 ## Prototype timing test (run last, before the pitch)
 

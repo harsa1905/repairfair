@@ -7,6 +7,7 @@ Open `index.html` in Chrome or Edge. It works offline. Keep this whole folder to
 2. Press **F** for full screen.
 3. Press **S** to open the presenter window, with the current and next slides, the script and a timer. Share only the audience window.
 4. Use the arrow keys in either window. **O** shows all slides, and **N** shows the notes.
+5. One team member runs the slides, using the cues in `speaker-script.md`.
 
 Slide 9 is the demo video. It plays when the slide opens, and the speaker stays silent. If the browser blocks it, click the slide. If you're streaming, remember to share computer audio.
 
