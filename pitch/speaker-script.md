@@ -40,7 +40,7 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | 11 | "...the mechanic has proof." |
 | 12 | "...saved as the record." |
 | 13 | "...that's the next step." |
-| 14 | "...won't buy one." |
+| 14 | "...workshops that won't." |
 | 15 | "...fewer phone calls a month." |
 | 16 | "Later, invoicing." |
 | 17 | "...built a prototype." |
@@ -99,7 +99,7 @@ We took it to ten workshops. Six want to try it. Four said they'd pay. The gap w
 
 **13. Competition** (Sameep)
 
-One of those workshops already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. We're free to start, then forty-nine, with nothing to switch. Could they copy it? Yes. But approvals help sell their higher plans, and they have little reason to serve workshops that won't buy one.
+One of those workshops already had workshop software. Approvals still ran on phone calls and WeChat. Owners rarely switch, so we don't ask them to. We're free to start, then forty-nine, with nothing to switch. Others already offer approval, but only if you move to their system. We're the add-on for workshops that won't.
 
 **14. Business model** (Sameep)
 
@@ -143,16 +143,18 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Why would dodgy workshops use this?** They wouldn't, and they're not our customer. We're for honest workshops, who lose money when a customer says "I never agreed to that". Two of our ten had lost money on extras.
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
-- **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. We haven't tried it, so we can't say how it compares with line-by-line approval. Top-tier users aren't our first customers.
+- **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. Its help page says customers can approve or reject each item, and Workshop Hub's Shop plan does the same. So line-by-line approval isn't our difference. Nothing to switch is. We haven't tried either product.
+- **Who else does this?** Several Australian systems offer customer approval, including Workshop Software, Workshop Hub and OneBookPlus. Workshop Hub also has AI quotes and voice notes. All of them need you to use their system. We're for workshops that won't switch.
+- **Why not just use a cheap full system?** Many workshops should, if they're happy to switch. OneBookPlus's approval add-on can cost less than we do. Our customers are workshops that won't change what they use, often on paper, WeChat or MechanicDesk. We don't know yet how big that group is, and the pilot will test it.
 - **Why would a workshop pay if the problem is the driver's?** It's one phone call with two victims. The workshop gets paid for extras because it can prove the yes, and two of ten had lost money on them. It spends less time chasing customers, and three of ten struggle to reach them. Work a driver declines becomes a reminder, not a lost job.
 - **Won't customers just reject more work?** Maybe, and we don't know yet. Declined items become reminders, and the pilot will show what happens.
 - **Do pilot garages pay?** Not during the pilot. Our target is three of six putting a card on file by the end, with billing starting after their free months. That's a target, not a result.
 - **What will the pilot measure?** Time spent explaining quotes, whether final bills match what was approved, and whether drivers understood what they approved. A driver declining an item isn't success, and a higher bill can be fine if it was authorised. It also tests whether workshops save enough time to justify paying.
 - **You promised a 10-day pilot with two workshops. What happened?** [Sameep: add the real reason.] We don't have pilot results. Say that plainly, then give any written commitments we have.
 - **Your Week 11 feedback form says 6 interviews, 4 trials and 2 willing to pay. Why 10, 6 and 4?** Our interview sheet and Week 11 script both say ten workshops, six would trial and four would pay. We can show the sheet with workshop names removed.
-- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. We cover extras mid-job as well as the first quote, there's nothing to switch, and there's a free plan. Drivers can also view the quote in their own language in the prototype, though we haven't tested that with customers yet. Next we plan extras-only use and an approval receipt for both sides. We haven't tried competitors' products, so we talk about what we do, not what they lack.
+- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. There's nothing to switch, and there's a free plan. Drivers can also view the quote in their own language in the prototype, though we haven't tested that with customers yet. Next we plan extras-only use and an approval receipt for both sides. We haven't tried competitors' products, so we talk about what we do, not what they lack.
 - **What if the AI gets a quote wrong?** The mechanic checks every quote before it goes out, and the workshop stays responsible for it. AI writes it up, and the mechanic decides.
-- **What would stop a competitor copying you?** Nothing technical. Approvals help sell their higher plans, so they have little reason to offer them cheaply to workshops that won't buy a full system. That's our reasoning, not proof. Our evidence is one MechanicDesk workshop that still ran approvals by phone and WeChat. Speed in one area is our only head start, so we don't claim a moat yet.
+- **What would stop a competitor copying you?** Nothing technical. Approvals help sell their higher plans, so they have little reason to offer them cheaply to workshops that won't buy a full system. That's our reasoning, not proof. Our evidence is one MechanicDesk workshop that still ran approvals by phone and WeChat. Speed in one area is our only head start, so we don't claim a moat yet. The bigger risk is newer, cheaper systems that already bundle approval.
 - **What about EVs?** An EV is just another car to us. It's a vehicle type in the same product, not a second market. The app has no EV option yet, so it's planned.
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
 - **How big can this get?** At $49, even every workshop in Australia is worth about $16.5M a year. That's a solid small business. It only gets bigger through fleets or insurers, and we haven't tested either.
