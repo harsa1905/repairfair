@@ -41,7 +41,7 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | 12 | "...saved as the record." |
 | 13 | "...that's the next step." |
 | 14 | "...won't buy one." |
-| 15 | "...covers the fee." |
+| 15 | "...fewer phone calls a month." |
 | 16 | "Later, invoicing." |
 | 17 | "...built a prototype." |
 
@@ -103,7 +103,7 @@ That workshop already had workshop software. Approvals still ran on phone calls 
 
 **14. Business model** (Sameep)
 
-Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. Our first workshops get six months free. When a driver says "not now", we remind them later. One hour of that work covers the fee.
+Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. When a driver says "not now", we remind them later. One hour of that work covers the fee. We estimate up to fifty fewer phone calls a month.
 
 **15. Market** (Sameep)
 
@@ -157,6 +157,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Are there really 28,000 workshops?** About. AAAA says 27,700 independents and IBISWorld says about 29,000 businesses, but that includes sole traders and specialists, so our real market is smaller.
 - **Is the price too low?** It might be. Four workshops said $29–79, so we moved from the $29–49 we showed in Week 11 to $49. We'll log support and training hours for each workshop in the pilot, and test $79 on later workshops.
 - **What does a quote cost you?** About 20c, almost all of it two text messages. The AI is under half a cent. Hosting is about $20–105 a month. These are estimates from price lists, because we haven't deployed yet.
+- **Where does fifty fewer calls come from?** It's an estimate, not a measurement. We assume 100 quotes a month, and about half need a mid-job approval, based on 5 of 10 bills rising more than 10% in our driver interviews. "Up to" matters, because some customers will still want to talk. If each call takes about five minutes, that's roughly four hours, before counting the minute or so each app approval takes. The pilot would measure the real time.
 - **What are your margins?** At 100 quotes a month, we keep about $25 of the $49, roughly half, before card fees and support. The 100 quotes is an assumption.
 - **What stops one busy workshop costing you more than $49?** Pro includes 300 texts a month, about 150 quotes, then 12c a text. Without a limit we'd lose money from about 245 quotes.
 - **When do you make money?** Founding workshops start paying after six months, and the free plan stops at 20 quotes. The offer costs about $4,300 for 30 workshops, which is illustrative.

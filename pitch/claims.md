@@ -79,6 +79,7 @@ These are never shown as results.
 | 6 | 5% of about 28,000 workshops × $49 × 12 ≈ $820k a year | Illustrative |
 | 7 | 96 Inner West workshops, 607 across 21 Sydney councils, about 28,000 in Australia | The first two are minimums from our search; the third is IBISWorld |
 | 7 | "About $105 to sign one workshop" | Estimate from stated interest: 14 approached and 4 said they'd pay is 3.5 approaches each. Assumes 1 hour each at $30 an hour. About two months of fees, and the free months delay getting it back |
+| 14 | "Up to 50 fewer phone calls a month" | Estimate, not measured. Assumes 100 quotes a month, with about half needing a mid-job approval (5 of 10 bills rose more than 10% in driver interviews, a small sample) |
 | 8 | Pilot goals (draft below) | Goals, not predictions |
 
 **Scale Q&A:** $820k takes about 1,400 paying workshops, more than double the 607 we found in Sydney, so it depends on going national. Signing that many by hand isn't realistic: local referrals and software connections are the plan, and neither is built or proven. The limits are setup and support time, and needing enough garages in each area.
