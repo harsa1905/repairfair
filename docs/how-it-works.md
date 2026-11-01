@@ -108,7 +108,9 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Add-ons.** `drSections()` splits Mia's quote: "optional" items go in their own section, and everything else stays under what the car needs. Only the layout changes, so switches and totals work as before.
 
-**Xero demo.** `wsXero()` shows a draft invoice and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
+**Invoice.** `invoice()` builds the lines from Mia's approvals, so there's nothing to retype, and approved items with no agreed price are left off. The screen has no input for a line, so a new charge has to go through the extra-item approval. `wsInvoice()` shows the draft and the send. Sending freezes a copy in `state.inv` and links it to the job in History, and no new extra can start after that. `invoiceSheet()` draws the same invoice on both phones, in English only. Prices include GST, so GST is one eleventh of the total. The ABN is a sample, and the invoice hasn't been checked against tax invoice rules.
+
+**Xero demo.** The invoice's **Send to Xero** button opens `wsXero()`, which shows a draft preview and a simulated send, with no connection to Xero. `xeroCsv()` builds a real file with Xero's 27 sales invoice columns, where prices include GST, so choose tax inclusive when importing. The file hasn't been tested in Xero yet.
 
 ## Reliability
 
@@ -122,6 +124,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 - **Both phones run on one page.** There is no real second device.
 - **No real text messages.** Reminders and booking links stay on the simulated phones. Nothing leaves your computer except what's sent to OpenAI: the notes, the customer-reported issue, voice notes and the words to translate.
 - **No Xero connection.** The send is a demo. Only the CSV download is real.
+- **No payments.** **Mark as paid** only records that the customer paid. The invoice text is simulated like the others, and the ABN is a sample.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
 - **Sample data only.** The history, price book, follow-ups, typical part prices and Results figures are invented examples.
 - **Local only.** It runs on your computer and isn't hosted online.

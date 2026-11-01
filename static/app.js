@@ -19,6 +19,7 @@ const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Opti
 const AI_TIMEOUT_MS = 15000;
 const VOICE_MAX_SECONDS = 60;
 const WORKSHOP = "City Auto";
+const SAMPLE_ABN = "00 000 000 000";
 const PHONE_MASK = "04•• ••• 812";
 
 const SEED_HISTORY = [
@@ -72,7 +73,7 @@ const fresh = () => ({
   voice: { mode: "idle", source: null },
   quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
-  sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null,
+  sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null, inv: null, invOpen: false,
   lang: "en", trans: {}, transSource: null, transNotice: null, translating: false,
   xSentAt: null, xDeliveredAt: null, xViewedAt: null, extraAt: null,
   history: SEED_HISTORY.map((j) => ({ ...j })), search: "", open: null, extraOpen: false,
@@ -495,6 +496,7 @@ function wsQuoteTab() {
 // The job in progress: everything that happens after the driver approves
 function wsJobTab() {
   if (state.xero) return wsXero();
+  if (state.invOpen) return wsInvoice();
   const q = state.quote, x = state.extra;
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   if (state.stage == null) return `<div class="blank">${ic("part", 36)}<b>No job in progress</b>A job starts here as soon as a customer approves a quote.</div>`;
@@ -505,7 +507,7 @@ function wsJobTab() {
       ${lamps(q.items, "ws")}
       <div class="cl-foot">${ic("check", 18)}Approved by text link, ${esc(stampOf(state.approvedAt))}</div></div>
     ${wsJob()}${wsDecisions()}`;
-  if (state.ws === "approved") {
+  if (state.ws === "approved" && !state.inv) {
     h += state.extraOpen
       ? `<div class="lbl">Found extra work mid-job?</div><textarea id="extraNotes" rows="5">${esc(state.extraNotes)}</textarea>
         <button class="btn ai" data-act="build-extra">Build extra item with AI</button>${err}`
@@ -524,28 +526,69 @@ function wsJobTab() {
       { read: r === "approved" ? "Approved" : r === "call" ? `Call ${esc(customer())}` : "Declined", cls: r === "approved" ? "green" : "amber",
         sub: r === "call" ? "Talk it through before doing any extra work." : r === "declined" ? "Don't do it. It's noted on the job as advised." : "Go ahead with the extra work." })}
       <div class="totalrow" style="margin:6px 2px 10px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</b></div>
-      <button class="btn primary" data-act="xero-open">Send to Xero</button>
+      ${state.stage === 4 ? invoiceBtn() : `<div class="small" style="margin-bottom:8px">You can create the invoice once the car is ready.</div>`}
       <button class="btn soft" data-act="go-history">View in History</button>`;
   }
   if (state.ws === "approved" && state.stage === 4) {
     h += `<div class="totalrow" style="margin:12px 2px 4px"><span>Final bill (matches approvals)</span><b>${money(sumApproved(q.items))}</b></div>
-      <button class="btn primary" data-act="xero-open">Send to Xero</button>`;
+      ${invoiceBtn()}`;
   }
   return h;
 }
+const invoiceBtn = () => `<button class="btn primary" data-act="inv-open">${state.inv ? "View invoice" : "Create invoice"}</button>`;
 
-// Xero demo: a preview and a simulated send, plus a real CSV laid out for Xero's sales invoice import. There is no connection to Xero.
+// The invoice is built from the driver's approvals, so nothing is retyped and no line can be added by hand. A new charge has to go
+// through the extra-item approval. Until it's sent it follows the approvals; sending freezes a copy in state.inv.
 // Demo prices include GST, as Australian consumer prices must, so GST is one eleventh of the total.
 function invoice() {
+  if (state.inv) return state.inv;
   const q = state.quote, x = state.extra;
   const items = [...q.items, ...(state.extraResult === "approved" ? x.items : [])].filter((i) => i.approved);
-  const lines = items.map((i) => {
+  const lines = items.filter((i) => priceOf(i) != null).map((i) => {
     const hourly = i.kind === "labour" && i.hours && i.rate && Math.abs(i.hours * i.rate - i.price) < 0.005;
-    return { desc: itemLabel(i), qty: hourly ? i.hours : 1, unit: hourly ? i.rate : priceOf(i) || 0, amount: priceOf(i) || 0, hours: hourly };
+    return { desc: itemLabel(i), qty: hourly ? i.hours : 1, unit: hourly ? i.rate : priceOf(i), amount: priceOf(i), hours: hourly };
   });
   const total = lines.reduce((s, l) => s + l.amount, 0), gst = Math.round((total / 11) * 100) / 100;
-  return { number: "INV-1044", contact: customer(), date: new Date(), lines, total, gst, ex: total - gst };
+  return { number: "INV-1044", contact: customer(), car: q.car || "", date: new Date(), lines, total, gst, ex: total - gst,
+    unpriced: items.filter((i) => priceOf(i) == null).map(itemLabel), sentAt: null, deliveredAt: null, viewedAt: null, paidAt: null };
 }
+const invDate = (d) => d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
+const invText = (inv) => `Hi ${inv.contact}, your invoice from ${WORKSHOP} is ready: ${cents(inv.total)}. View it here: repairfair.au/i/8F2K`;
+const resRow = (label, value, sub) => `<div class="res"><span>${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><b>${value}</b></div>`;
+// Shared by both phones. It stays in English whatever language the driver viewed the quote in.
+function invoiceSheet(inv) {
+  return `<div class="sheet inv" lang="en">
+      <div class="inv-head"><div><b>${WORKSHOP}</b><span>ABN ${SAMPLE_ABN} (sample)</span></div><div class="inv-no"><b>Invoice ${inv.number}</b><span>${esc(invDate(inv.date))}</span></div></div>
+      <div class="inv-to"><span>Bill to</span><b>${esc(inv.contact)}</b>${inv.car ? `<small>${esc(inv.car)}</small>` : ""}</div>
+      ${inv.lines.map((l) => resRow(l.desc, cents(l.amount), l.hours ? `${l.qty} hrs at ${cents(l.unit)}` : "")).join("")}
+      ${resRow("GST included (10%)", cents(inv.gst))}
+      ${resRow("Total including GST", cents(inv.total))}
+    </div>
+    <div class="small">Prototype invoice with a sample ABN. It hasn't been checked against tax invoice rules.</div>`;
+}
+function wsInvoice() {
+  const inv = invoice(), who = esc(customer()), paid = !!inv.paidAt;
+  const left = [inv.unpriced.length ? `Left off because no price was agreed: ${esc(inv.unpriced.join(", "))}.` : "",
+    state.extraResult === "call" ? `${who} asked for a call about the extra item, so it isn't on this invoice.` : ""].filter(Boolean).join(" ");
+  const steps = [["Sent", inv.sentAt], ["Delivered", inv.deliveredAt], ["Viewed", inv.viewedAt], ["Paid", inv.paidAt]].filter(([l, t]) => t || l !== "Viewed" || !paid);
+  const top = inv.sentAt
+    ? tracker("Invoice", steps, { read: cents(inv.total), cls: paid ? "green" : "amber", sub: paid ? `Marked paid ${esc(stampOf(inv.paidAt))}.` : `Sent to ${who}, not paid yet.` })
+    : `<div class="cluster"><div class="cl-top"><b>Invoice draft</b><span>${inv.number}</span></div>
+        <div class="readout md">${cents(inv.total)}</div>
+        <div class="cl-sub">Built from ${who}'s approvals, so there's nothing to retype.</div></div>`;
+  return `${top}${left ? `<div class="notice">${left}</div>` : ""}${invoiceSheet(inv)}
+    ${inv.sentAt ? `${paid ? "" : `<button class="btn primary" data-act="inv-paid">Mark as paid</button>
+        <div class="small">This only records that ${who} has paid. RepairFair doesn't take payments.</div>`}
+      <button class="btn soft" data-act="xero-open">Send to Xero</button>
+      <button class="btn soft" data-act="go-history">View in History</button>`
+    : `<div class="small" style="text-align:left;margin:0 2px">Every line comes from ${who}'s approvals, so it can't be edited here. A new charge needs ${who}'s approval as an extra item.</div>
+      <div class="preview"><div class="to"><span>Text message to ${who}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(invText(inv))}</div></div>
+      <button class="btn primary" data-act="inv-send" ${inv.lines.length ? "" : "disabled"}>Send to ${who} by text</button>
+      <div class="small">${inv.lines.length ? "Simulated in this demo. No real text is sent." : "Nothing was approved, so there's nothing to invoice."}</div>`}
+    <button class="btn soft" data-act="inv-close">Back to the job</button>`;
+}
+
+// Xero demo: a preview and a simulated send, plus a real CSV laid out for Xero's sales invoice import. There is no connection to Xero.
 const cents = (n) => "$" + n.toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const auDate = (d) => [d.getDate(), d.getMonth() + 1].map((n) => String(n).padStart(2, "0")).join("/") + "/" + d.getFullYear();
 const XERO_COLUMNS = ["*ContactName", "EmailAddress", "POAddressLine1", "POAddressLine2", "POAddressLine3", "POAddressLine4", "POCity", "PORegion", "POPostalCode", "POCountry",
@@ -573,8 +616,7 @@ function downloadXeroCsv() {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 function wsXero() {
-  const inv = invoice(), sent = state.xero === "sent";
-  const row = (label, value, sub) => `<div class="res"><span>${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><b>${value}</b></div>`;
+  const inv = invoice(), sent = state.xero === "sent", row = resRow;
   return `<div class="demo-flag"><b>Demo only.</b> There's no live connection, and nothing is sent to Xero.</div>
     ${sent ? `<div class="cluster"><div class="cl-top"><b>Sent to Xero (demo)</b><span>${inv.number}</span></div>
         <div class="readout md green">${cents(inv.total)}</div>
@@ -590,7 +632,7 @@ function wsXero() {
     ${sent ? "" : `<button class="btn primary" data-act="xero-send">Send to Xero (demo)</button>`}
     <button class="btn soft" data-act="xero-csv">Download import file (CSV)</button>
     <div class="small">Laid out for Xero's sales invoice import. Choose tax inclusive when importing. Not yet tested in Xero.</div>
-    <button class="btn soft" data-act="xero-close">Back to the job</button>`;
+    <button class="btn soft" data-act="xero-close">Back to the invoice</button>`;
 }
 
 // Fixed bar under a draft: "I've checked this quote" unlocks Send once every flagged gap is handled
@@ -683,11 +725,12 @@ function wsResultsTab() {
     <div class="small">Sample figures for this demo. Today's job adds to them as you go.</div>`;
 }
 
+const invStatus = (inv) => (inv.paidAt ? `Paid ${stampOf(inv.paidAt)}` : `Sent ${stampOf(inv.sentAt)}, not paid yet`);
 function jobTotal(j) { return j.items.filter((i) => i.approved).reduce((s, i) => s + (i.price || 0), 0) + (j.extra && j.extra.decision === "approved" ? j.extra.items.reduce((s, i) => s + (i.price || 0), 0) : 0); }
 
 function wsHistoryTab() {
   const q = state.search.trim().toLowerCase();
-  const jobs = state.history.filter((j) => !q || [j.id, j.customer, j.car, j.job, ...j.items.map((i) => i.name)].join(" ").toLowerCase().includes(q));
+  const jobs = state.history.filter((j) => !q || [j.id, j.customer, j.car, j.job, j.invoice?.number, ...j.items.map((i) => i.name)].join(" ").toLowerCase().includes(q));
   let h = `<input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
   if (!jobs.length) return h + `<div class="small">No jobs match “${esc(state.search)}”.</div>`;
   h += jobs.map((j) => {
@@ -696,12 +739,17 @@ function wsHistoryTab() {
     if (open) {
       d = `<div class="jd"><div class="lbl">Approved items</div>${decisions(j.items)}`;
       if (j.extra) d += `<div class="lbl">Extra work, ${j.extra.decision} <span class="soft">${esc(j.extra.at)}</span></div>${decisions(j.extra.items)}`;
+      if (j.invoice) d += `<div class="lbl">Invoice ${j.invoice.number} <span class="soft">${esc(invStatus(j.invoice))}</span></div>
+        ${decisions(j.invoice.lines.map((l) => ({ name: l.desc, price: l.amount, approved: true })))}
+        <div class="dec"><span class="n">GST included</span><span class="s">${cents(j.invoice.gst)}</span></div>
+        <div class="dec"><span class="n">Total</span><span class="s">${cents(j.invoice.total)}</span></div>`;
       d += `</div>`;
     }
     return `<div class="job ${j.isNew ? "new" : ""}" data-act="job" data-id="${j.id}">
       <div class="jt"><span>${esc(j.job)}${j.isNew ? '<span class="tagnew">New</span>' : ""}</span><span>${money(jobTotal(j))}</span></div>
       <div class="jm">${esc(j.customer)}, ${esc(j.car)}. ${esc(j.date)}, ${j.id}</div>
-      <div class="jp">${ic("check", 16)}Approved by text link, ${esc(j.approvedAt)}${j.extra ? `. Extra ${esc(j.extra.decision)}` : ""}</div>${d}</div>`;
+      <div class="jp">${ic("check", 16)}Approved by text link, ${esc(j.approvedAt)}${j.extra ? `. Extra ${esc(j.extra.decision)}` : ""}</div>
+      ${j.invoice ? `<div class="jp">${ic("check", 16)}Invoice ${j.invoice.number}. ${esc(invStatus(j.invoice))}</div>` : ""}${d}</div>`;
   }).join("");
   return h + `<div class="small">Every approval is timestamped and searchable. No more digging through old books.</div>`;
 }
@@ -884,8 +932,16 @@ function renderDriver() {
       return `<div class="cluster"><div class="cl-top"><b>Your car is ready</b><span>Open until 5:30 pm</span></div>
           <div class="readout green">${money(total)}</div>
           <div class="cl-sub">Final bill. Exactly what you approved, paid at pickup.</div>
-          <div class="cl-foot">${ic("check", 18)}Itemised invoice saved to your service record</div></div>
+          <div class="cl-foot">${ic("check", 18)}Your itemised invoice comes by text</div></div>
         ${drStatus()}`;
+    }
+    case "invoice": {
+      const inv = state.inv;
+      return `<div class="cluster"><div class="cl-top"><b>${inv.paidAt ? "Paid" : "Your invoice"}</b><span>${inv.number}</span></div>
+          <div class="readout ${inv.paidAt ? "green" : ""}">${cents(inv.total)}</div>
+          <div class="cl-sub">${inv.paidAt ? `${WORKSHOP} marked this paid, ${esc(stampOf(inv.paidAt))}.` : `Pay ${WORKSHOP} at pickup.`}</div>
+          <div class="cl-foot">${ic("check", 18)}Only what you approved</div></div>
+        ${invoiceSheet(inv)}`;
     }
   }
   return "";
@@ -896,10 +952,13 @@ function renderDriverChrome() {
   document.querySelector(".dr-phone").classList.toggle("lock", lock);
   $("drTop").innerHTML = lock ? "" : state.dr === "thread"
     ? `<div class="thread-head"><span class="back">‹</span><div class="av">CA</div><div class="nm">City Auto ›</div></div>`
-    : `<div class="urlbar">${ic("lock", 14)}repairfair.au/q/8F2K</div>`;
+    : `<div class="urlbar">${ic("lock", 14)}repairfair.au/${state.dr === "invoice" ? "i" : "q"}/8F2K</div>`;
   $("drBanner").innerHTML = state.drBanner === "ready" ? `<div class="notif" data-act="open-ready"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
       <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your car is ready</div>
       <div class="tx">Your ${esc(carName())} is ready to collect. Tap to view your final bill.</div></div></div>`
+    : state.drBanner === "invoice" ? `<div class="notif" data-act="open-invoice"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
+      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your invoice</div>
+      <div class="tx">${esc(state.inv.number)} for ${esc(cents(state.inv.total))}. Tap to view.</div></div></div>`
     : state.drBanner === "reminder" ? `<div class="notif" data-act="open-book"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
       <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Time for your ${esc(activeFu().item)}</div>
       <div class="tx">Hi ${esc(activeFu().customer)}, want to book it in? Tap to pick a time.</div></div></div>`
@@ -1071,11 +1130,23 @@ document.addEventListener("click", (e) => {
     state.readyBy = new Date(state.readyBy.getTime() + (act === "eta+" ? 15 : -15) * 60000);
     toast(`${customer()} notified: ready ${etaText(state.readyBy)}`);
   }
+  if (act === "inv-open") { state.invOpen = true; $("ws").scrollTop = 0; }
+  if (act === "inv-close") state.invOpen = false;
+  if (act === "inv-send") {
+    if (state.drBanner) { toast(`${customer()} has a message waiting. Send this once it's opened.`); return; }
+    const inv = state.inv = { ...invoice(), sentAt: new Date() };
+    state.history.find((j) => j.id === "J-1044").invoice = inv;
+    fly("packetOut"); $("ws").scrollTop = 0;
+    later(950, () => { inv.deliveredAt = new Date(); state.drBanner = "invoice"; render(); });
+    later(500, () => toast(`Invoice sent to ${customer()}`));
+  }
+  if (act === "open-invoice") { state.drBanner = null; state.dr = "invoice"; state.inv.viewedAt ||= new Date(); }
+  if (act === "inv-paid") { state.inv.paidAt = new Date(); fly("packetOut"); toast(`Invoice ${state.inv.number} marked paid`); }
   if (act === "xero-open") { state.xero = "preview"; $("ws").scrollTop = 0; }
   if (act === "xero-send") { state.xero = "sent"; $("ws").scrollTop = 0; }
   if (act === "xero-close") state.xero = null;
   if (act === "xero-csv") { downloadXeroCsv(); toast("Import file downloaded"); return; }
-  if (act === "go-history") { state.tab = "history"; state.open = "J-1044"; }
+  if (act === "go-history") { state.tab = "history"; state.open = "J-1044"; state.invOpen = false; }
   if (act === "job") state.open = state.open === b.dataset.id ? null : b.dataset.id;
   render();
 });
@@ -1164,7 +1235,7 @@ async function runScene(scene) {
     click('[data-act="checked"]'); await sleep(200);
   };
   $("demoMode").checked = true; badge();
-  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "history", "booked", "xero"];
+  const order = ["draft", "checked", "notified", "thread", "quote", "approved", "extra_draft", "banner", "extra", "done", "ready", "invoice", "invoice_sent", "paid", "history", "booked", "xero"];
   const stop = order.indexOf(scene);
   const steps = [
     async () => { await waitFor(() => document.querySelector('[data-act="build"]')); click('[data-act="build"]'); await waitFor(() => state.ws === "draft"); },
@@ -1178,9 +1249,12 @@ async function runScene(scene) {
     async () => { click('[data-act="open-extra"]'); await sleep(400); },
     async () => { click('[data-act="x-approve"]'); await sleep(900); },
     async () => { click('[data-act="start"]'); await sleep(200); click('[data-act="qc"]'); await sleep(200); click('[data-act="ready"]'); await sleep(1200); click('[data-act="open-ready"]'); await sleep(500); },
+    async () => { click('[data-act="inv-open"]'); await sleep(400); },
+    async () => { click('[data-act="inv-send"]'); await sleep(1200); click('[data-act="open-invoice"]'); await sleep(400); },
+    async () => { click('[data-act="inv-paid"]'); await sleep(400); },
     async () => { click('[data-act="go-history"]'); await sleep(400); },
     async () => { click('#wsTabs [data-tab="followups"]'); await sleep(200); click('[data-act="fu-send"][data-id^="F-1044"]'); await sleep(1200); click('[data-act="open-book"]'); await sleep(400); click('[data-act="book-slot"]'); await sleep(900); },
-    async () => { click('#wsTabs [data-tab="job"]'); await sleep(200); click('[data-act="xero-open"]'); await sleep(300); click('[data-act="xero-send"]'); await sleep(300); },
+    async () => { click('#wsTabs [data-tab="job"]'); await sleep(200); click('[data-act="inv-open"]'); await sleep(200); click('[data-act="xero-open"]'); await sleep(300); click('[data-act="xero-send"]'); await sleep(300); },
   ];
   for (let k = 0; k <= stop; k++) await steps[k]();
   document.body.dataset.sceneReady = "1";

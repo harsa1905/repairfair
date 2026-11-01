@@ -257,7 +257,7 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .tracker { background: linear-gradient(180deg, #0F46BC 0%, var(--cluster) 100%); color: var(--cl-ink); border-radius: 20px; padding: 13px 14px 12px; margin: 2px 0 10px; }
 .tracker .tt { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: flex; justify-content: space-between; gap: 8px; }
 .tracker .tt span:last-child { color: var(--cl-soft); font-weight: 500; }
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; }
+.steps { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; position: relative; }
 .steps::before { content: ""; position: absolute; left: 12%; right: 12%; top: 9px; height: 2px; background: var(--cl-line); }
 .step { text-align: center; position: relative; font-size: 13px; color: var(--cl-soft); font-weight: 500; }
 .step .dot { width: 20px; height: 20px; border-radius: 50%; margin: 0 auto 4px; background: var(--cluster); border: 2px solid var(--cl-off); display: flex; align-items: center; justify-content: center; color: var(--cluster); position: relative; z-index: 1; transition: background .2s var(--ease-out), border-color .2s; }
@@ -523,3 +523,17 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .addons p { font-size: 14px; color: var(--muted); margin: 0 2px 9px; line-height: 1.35; }
 .ph-t { white-space: nowrap; }
 .photos .ph { width: 38px; flex: none; }
+
+/* built-in invoice, on both phones */
+.inv-head { display: flex; justify-content: space-between; gap: 12px; padding: 13px 14px 11px; border-bottom: 1px solid var(--line); }
+.inv-head b { display: block; font-size: 16px; font-weight: 700; color: var(--ink); }
+.inv-head span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.inv-no { text-align: right; }
+.inv-no b { font-size: 14.5px; font-weight: 600; white-space: nowrap; }
+.inv-to { padding: 9px 14px 10px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.inv-to span { display: block; font-size: 13px; color: var(--muted); }
+.inv-to b { font-weight: 600; }
+.inv-to small { display: block; font-size: 13px; color: var(--muted); }
+.inv .res { min-height: 46px; }
+.inv .res b { font-size: 18px; }
+.inv .res:last-child { background: var(--brand-50); }

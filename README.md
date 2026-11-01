@@ -43,8 +43,12 @@ answers, not sales.
 - Extra work found mid-job goes through the same flow and needs the driver's written approval.
 - **Follow-ups:** work the driver says "not now" to becomes a timed reminder, with a link to book a time.
 - **Results:** a screen showing what the workshop gained (sample figures).
-- **Send to Xero:** a draft invoice preview and a CSV laid out for Xero's import. The send is a demo, and the file
-  hasn't been tested in Xero.
+- **Invoice:** once the car is ready, the workshop creates an invoice from the approved lines with no retyping. Declined
+  and "not now" items stay off it, and there's no way to type in a line: a new charge has to go through the extra-item
+  approval. The workshop reviews it, texts it to the driver and marks it paid, and it's kept in History with the approval
+  record. It's a prototype with a sample ABN, and it hasn't been checked against tax invoice rules.
+- **Send to Xero:** an optional export from the invoice, with a draft preview and a CSV laid out for Xero's import. The
+  send is a demo, and the file hasn't been tested in Xero.
 
 **Driver side**
 - Opens the quote from a text link, with no app to download.
@@ -55,11 +59,15 @@ answers, not sales.
 - Can view item names, reasons and urgency labels in Chinese or Vietnamese. These are AI translations, and the English quote
   stays the record. Prices and approvals don't change.
 - Sees the job's progress and the estimated ready time.
+- Gets the invoice by text link, showing only what they approved. It stays in English, whatever language they viewed the
+  quote in.
 - Every approval is timestamped and kept in a searchable job history.
 
 ![Extra work found mid-job, sent for approval](docs/extra-work.png)
 
 ![Searchable job history with timestamped approvals](docs/job-history.png)
+
+![An invoice built from the driver's approvals, on both phones](docs/invoice.png)
 
 ## How it's built
 
@@ -108,13 +116,18 @@ Then open http://localhost:5000 in Chrome or Edge. On Windows you can double-cli
    **Build extra item with AI**, resolve its check the same way, tick **I've checked this extra item**, then
    **Send to Mia for approval**.
 5. Driver: **Approve**. Both phones show the final bill of $470, which matches what was approved.
-6. Workshop: tap **Send to Xero** to preview the draft invoice, then **Send to Xero (demo)**. This is simulated.
+6. Workshop: tap **Start repair**, **Quality check done** and **Mark ready for pickup**. Driver: tap the message saying the
+   car is ready.
+7. Workshop: tap **Create invoice**, check the lines, then **Send to Mia by text**. The total is $470 with $42.73 GST included.
+   Driver: tap the message to open the invoice. Workshop: tap **Mark as paid**, and the driver's invoice updates. This
+   only records the payment. **View in History** shows the invoice with the approval record.
+8. Optional: on the invoice, tap **Send to Xero** to preview the draft, then **Send to Xero (demo)**. This is simulated.
    **Download import file (CSV)** gives a real file laid out for Xero's import, which hasn't been tested in Xero yet.
-7. Optional: Mia's **Not now** items are booked as follow-ups, with the reminder time on each declined row in the
+9. Optional: Mia's **Not now** items are booked as follow-ups, with the reminder time on each declined row in the
    workshop's decisions list (she can tap **Don't remind me**). In the **Follow-ups** tab, tap **Send reminder** on
    Mia's front rotors. Her phone gets the reminder link: she picks one of three times, and the workshop sees it booked
    with the time and value. Past jobs are in **History**, and the workshop's own prices are in **Prices**.
-8. Optional: tap **Results** at the top of the workshop phone to see what the workshop gained. The figures are samples,
+10. Optional: tap **Results** at the top of the workshop phone to see what the workshop gained. The figures are samples,
    and today's job adds to them.
 
 Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (it uses saved examples).
@@ -123,8 +136,9 @@ Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (i
 
 This is a student prototype that runs locally, not a launched product. There are no paying customers. The next step
 is a 10-day pilot with two workshops, with continue and stop criteria set in advance. Names, phone numbers and
-prices in the demo are illustrative. Parts price ranges and Results figures are samples, and texts, booking and Send
-to Xero are simulated. In Demo mode, voice notes add a saved example instead of recording. Translations haven't been checked by fluent speakers, and part names can be wrong.
+prices in the demo are illustrative. Parts price ranges, the ABN and Results figures are samples, and texts, booking and
+Send to Xero are simulated. Invoices are built from approvals but aren't checked against tax invoice rules, and marking
+one paid only records it: no money moves. In Demo mode, voice notes add a saved example instead of recording. Translations haven't been checked by fluent speakers, and part names can be wrong.
 
 ## Team
 
