@@ -88,7 +88,7 @@ These are never shown as results.
 - Half of quotes get a reply within 1 hour.
 - Every charge on the final bill was approved in writing.
 - At least 3 of the 6 workshops put a card on file, with billing starting after their free months.
-- 10 driver approvals a week. Both are targets.
+- Also measure time spent explaining quotes, bills matching approvals, and whether drivers understood. The card on file is the target.
 
 ## Prototype timing test (run last, before the pitch)
 
