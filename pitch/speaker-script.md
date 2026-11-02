@@ -5,47 +5,45 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 | # | Slide | Who | Time |
 |---|---|---|---|
 | 1 | RepairFair | Safaa | 0:10 |
-| 2 | The estimate | Safaa | 0:10 |
-| 3 | The call | Safaa | 0:12 |
-| 4 | The yes | Safaa | 0:14 |
-| 5 | The bill | Safaa | 0:21 |
-| 6 | 1 in 5 | Safaa | 0:18 |
-| 7 | The insight | Safaa | 0:26 |
-| 8 | The solution | Safaa | 0:08 |
-| 9 | Demo | Video | 0:29 |
-| 10 | Mia's new bill | Safaa | 0:14 |
-| 11 | Why now | Safaa | 0:16 |
-| 12 | Traction | Safaa | 0:21 |
-| 13 | Competition | Sameep | 0:24 |
-| 14 | Business model | Sameep | 0:15 |
-| 15 | Market | Sameep | 0:29 |
-| 16 | Team | Sameep | 0:06 |
-| 17 | Ask | Sameep | 0:27 |
+| 2 | The job (estimate, call, yes) | Safaa | 0:36 |
+| 3 | The bill | Safaa | 0:21 |
+| 4 | 1 in 5 | Safaa | 0:18 |
+| 5 | The insight | Safaa | 0:26 |
+| 6 | The solution | Safaa | 0:08 |
+| 7 | Demo | Video | 0:29 |
+| 8 | Same job | Safaa | 0:14 |
+| 9 | Why now | Safaa | 0:16 |
+| 10 | Traction | Safaa | 0:21 |
+| 11 | Competition | Sameep | 0:24 |
+| 12 | Business model | Sameep | 0:15 |
+| 13 | Market | Sameep | 0:29 |
+| 14 | Team | Sameep | 0:06 |
+| 15 | Ask | Sameep | 0:27 |
 
 ## Slide operator
 
 One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video. The pitch will be pre-recorded, so use the same cues to sync the slides to the audio. The bill on slide 5 rolls up for about 1.5 seconds, and the demo video starts by itself.
 
-| Go to slide | Press after |
+| Next | Press after |
 |---|---|
-| 2 | "...line by line." |
-| 3 | "She says yes." |
-| 4 | "...the caliper needs a service." |
-| 5 | "...what she's just approved." |
-| 6 | "...billed eleven hundred and twenty for brakes." |
-| 7 | "...the workshop's own Google page." |
-| 8 | "...the workshop had to absorb it." |
-| 9 | "...start to finish." The video starts by itself. |
-| 10 | The video ends on "...what she approved." |
-| 11 | "...the mechanic has proof." |
-| 12 | "...saved as the record." |
-| 13 | "...that's the next step." |
-| 14 | "...learns to trust a workshop." |
-| 15 | "...fewer phone calls a month." |
-| 16 | "...take on bigger systems." |
-| 17 | "...built a prototype." |
+| Slide 2 | "...line by line." |
+| Card 2 | "She says yes." |
+| Cards 3 and 4 | "...the caliper needs a service." |
+| Slide 3 | "...what she's just approved." |
+| Slide 4 | "...billed eleven hundred and twenty for brakes." |
+| Slide 5 | "...the workshop's own Google page." |
+| Slide 6 | "...the workshop had to absorb it." |
+| Slide 7 | "...start to finish." The video starts by itself. |
+| Slide 8 | The video ends on "...what she approved." |
+| Slide 9 | "...the mechanic has proof." |
+| Slide 10 | "...saved as the record." |
+| Slide 11 | "...that's the next step." |
+| Slide 12 | "...learns to trust a workshop." |
+| Slide 13 | "...fewer phone calls a month." |
+| Slide 14 | "...take on bigger systems." |
+| Slide 15 | "...built a prototype." |
 
-Stop on slide 17 and leave it up for questions. In Q&A, press O and click a backup slide (18–22).
+Stop on slide 15 and leave it up for questions. In Q&A, press O and click a backup slide (16–20).
 
 ## Script
 
@@ -53,73 +51,65 @@ Stop on slide 17 and leave it up for questions. In Q&A, press O and click a back
 
 We're RepairFair. Workshops send quotes by text, and drivers approve them line by line.
 
-**2. The estimate** (Safaa)
+**2. The job** (Safaa)
 
-Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The estimate is three hundred dollars. She says yes.
+Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The estimate is three hundred dollars. She says yes. [Next card.] Mid-morning, her phone rings. It's the workshop, and they're doing the right thing by calling. The rotors are bad too. And the caliper needs a service. [Next cards.] Mia's at work, and the explanation is rushed. She's confused. But she needs her car for the commute, so she says yes. She isn't sure what she's just approved.
 
-**3. The call** (Safaa)
-
-Mid-morning, her phone rings. It's the workshop, and they're doing the right thing by calling. The rotors are bad too. And the caliper needs a service.
-
-**4. The yes** (Safaa)
-
-Mia's at work, and the explanation is rushed. She's confused. But she needs her car for the commute, so she says yes. She isn't sure what she's just approved.
-
-**5. The bill** (Safaa)
+**3. The bill** (Safaa)
 
 When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Was any of it urgent? Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
 
-**6. 1 in 5** (Safaa)
+**4. 1 in 5** (Safaa)
 
 Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in five of them is about this: a surprise bill, work nobody approved, or work nobody needed. And those reviews sit on the workshop's own Google page.
 
-**7. The insight** (Safaa)
+**5. The insight** (Safaa)
 
 But most people trust their local mechanic. So trust isn't the problem. The missing record is. See that call from the workshop's side. The mechanic stops work and gets a rushed yes. The driver can't check it, and the workshop can't prove it. One customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it.
 
-**8. The solution** (Safaa)
+**6. The solution** (Safaa)
 
 So we built RepairFair. Every line, approved in writing. Here's one job, start to finish.
 
-**9. Demo** (Video)
+**7. Demo** (Video)
 
 Plays with its own voice. Stay silent.
 
-**10. Mia's new bill** (Safaa)
+**8. Same job** (Safaa)
 
 Same brakes. Same Mia. This time it's on her phone, so she can read it properly. The pads are urgent and the rotors can wait. Every line on the bill is one she approved, and the mechanic has proof.
 
-**11. Why now** (Safaa)
+**9. Why now** (Safaa)
 
-This works now because AI can turn a mechanic's rough notes into a clear quote in seconds. The mechanic checks it, and it goes out. It's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
+This works now because AI can turn a mechanic's rough notes into a clear quote in seconds. The mechanic checks it, and it goes out. There's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
 
-**12. Traction** (Safaa)
+**10. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. The gap was approving extras, so that's now our core. Two had already lost money on extras. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. The gap was approving extras, so we built around that. Two had already lost money on extras. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
-**13. Competition** (Sameep)
+**11. Competition** (Sameep)
 
 Three of the five workshops we recorded have no workshop software. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We make sure the driver understands, and the workshop can prove it. We believe that's how a new customer learns to trust a workshop.
 
-**14. Business model** (Sameep)
+**12. Business model** (Sameep)
 
 Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. We estimate up to fifty fewer phone calls a month.
 
-**15. Market** (Sameep)
+**13. Market** (Sameep)
 
 Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West, close enough to sign in person. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we take on bigger systems.
 
-**16. Team** (Sameep)
+**14. Team** (Sameep)
 
 We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a prototype.
 
-**17. Ask** (Sameep)
+**15. Ask** (Sameep)
 
 Now we need real workshops. Help us run one pilot: six Inner West garages, three months. We'll measure time explaining quotes, bills matching approvals, and whether drivers understood. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
 ## Demo video script (0:29)
 
-Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`, recorded from the prototype in Demo mode.
+Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`. Re-record it from the latest `app-dev` in Demo mode, because the current file shows the older app.
 
 | Time | On screen | Voiceover |
 |---|---|---|
@@ -127,7 +117,7 @@ Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`, recorded from
 | 0:08–0:12 | Text arrives on Mia's phone | "Mia gets a text link, with no app to install." |
 | 0:12–0:18 | Mia reads the quote and approves | "She sees what's urgent, what can wait, and approves it line by line." |
 | 0:18–0:25 | Extra hose found and sent for approval | "Find something extra mid-job? It needs her written approval too." |
-| 0:25–0:29 | Final bill of $470 | "The final bill matches what she approved." |
+| 0:25–0:29 | Invoice for $470, stamped paid | "The final bill matches what she approved." |
 
 The other features (reminder booking, suggested checks, Send to Xero) are for Q&A, not the video.
 
@@ -143,7 +133,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Why would dodgy workshops use this?** They wouldn't, and they're not our customer. We're for honest workshops, who lose money when a customer says "I never agreed to that". Two of our ten had lost money on extras.
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
-- **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. Its help page says customers can approve or reject each item, and Workshop Hub's Shop plan does the same. So line-by-line approval isn't our difference. Nothing to switch is. We haven't tried either product.
+- **Doesn't Workshop Software already have an approval link?** Yes, on Gold and above, as part of its inspections. Its help page says customers can approve or reject each item, and Workshop Hub's Shop plan does the same. So line-by-line approval isn't our difference. Not needing a full system is. We haven't tried either product.
 - **Who else does this?** Several Australian systems offer customer approval, including Workshop Software, Workshop Hub and OneBookPlus. Workshop Hub also has AI quotes and voice notes. All of them need you to use their system. We start with small workshops that don't have one.
 - **How are you different from Workshop Hub?** It's a full system for running a workshop, and it's live. We're a prototype built around the moment a driver says yes: urgency and a plain reason on each line, their own language, and no full system to learn. We haven't tried its product, so we talk about what we do.
 - **Why pay for a system and for you?** We don't target workshops with a full system first. We start with those that have none, so we're their first tool, not a second bill.
@@ -159,7 +149,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **What will the pilot measure?** Time spent explaining quotes, whether final bills match what was approved, and whether drivers understood what they approved. A driver declining an item isn't success, and a higher bill can be fine if it was authorised. It also tests whether workshops save enough time to justify paying.
 - **You promised a 10-day pilot with two workshops. What happened?** [Sameep: add the real reason.] We don't have pilot results. Say that plainly, then give any written commitments we have.
 - **Your Week 11 feedback form says 6 interviews, 4 trials and 2 willing to pay. Why 10, 6 and 4?** Our interview sheet and Week 11 script both say ten workshops, six would trial and four would pay. We can show the sheet with workshop names removed.
-- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. There's nothing to switch, and there's a free plan. Drivers can also view the quote in their own language in the prototype, though we haven't tested that with customers yet. Next we plan extras-only use and an approval receipt for both sides. We haven't tried competitors' products, so we talk about what we do, not what they lack.
+- **How are you different from workshop software?** We help the driver decide, with urgency, a plain reason and a typical price on each line. Those prices are sample data for now. There's no full system to learn, and there's a free plan. Drivers can also view the quote in their own language in the prototype, though we haven't tested that with customers yet. Next we plan extras-only use and an approval receipt for both sides. We haven't tried competitors' products, so we talk about what we do, not what they lack.
 - **What if the AI gets a quote wrong?** The mechanic checks every quote before it goes out, and the workshop stays responsible for it. AI writes it up, and the mechanic decides.
 - **What would stop a competitor copying you?** Nothing technical. Approvals help sell their higher plans, so they have little reason to offer them cheaply to workshops that won't buy a full system. That's our reasoning, not proof. Our evidence is one MechanicDesk workshop that still ran approvals by phone and messages. Speed in one area is our only head start, so we don't claim a moat yet. The bigger risk is newer, cheaper systems that already bundle approval.
 - **What about EVs?** An EV is just another car to us. It's a vehicle type in the same product, not a second market. The app has no EV option yet, so it's planned.
