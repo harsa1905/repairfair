@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:50). Sameep takes over at competition and closes on the ask (1:41). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:50). Sameep takes over at competition and closes on the ask (1:40). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -8,17 +8,17 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 | 2 | The job (estimate, call, yes) | Safaa | 0:36 |
 | 3 | The bill | Safaa | 0:19 |
 | 4 | 1 in 5 | Safaa | 0:18 |
-| 5 | The insight | Safaa | 0:26 |
+| 5 | The insight | Safaa | 0:23 |
 | 6 | The solution | Safaa | 0:08 |
 | 7 | Demo | Video | 0:29 |
 | 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:16 |
-| 10 | Traction | Safaa | 0:24 |
+| 10 | Traction | Safaa | 0:27 |
 | 11 | Competition | Sameep | 0:18 |
 | 12 | Business model | Sameep | 0:24 |
-| 13 | Market | Sameep | 0:26 |
+| 13 | Market | Sameep | 0:31 |
 | 14 | Team | Sameep | 0:06 |
-| 15 | Ask | Sameep | 0:27 |
+| 15 | Ask | Sameep | 0:21 |
 
 ## Slide operator
 
@@ -40,7 +40,7 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | Slide 11 | "...that's the next step." |
 | Slide 12 | "...the workshop can prove it." |
 | Slide 13 | "...covers the fee." |
-| Slide 14 | "...take on bigger systems." |
+| Slide 14 | "...chains and dealers." |
 | Slide 15 | "...built a prototype." |
 
 Stop on slide 15 and leave it up for questions. In Q&A, press O and click a backup slide (16–20).
@@ -65,7 +65,7 @@ Mia isn't alone. We read over a thousand bad reviews of Sydney mechanics. One in
 
 **5. The insight** (Safaa)
 
-But most people trust their local mechanic. So trust isn't the problem. The missing record is. See that call from the workshop's side. The mechanic stops work and gets a rushed yes. The driver can't check it, and the workshop can't prove it. One customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it.
+But most people trust their local mechanic. So trust isn't the problem. The missing record is. The mechanic stops work and gets a rushed yes. The driver can't check it, and the workshop can't prove it. One customer denied approving a sixty-dollar brake fluid change, and the workshop had to absorb it.
 
 **6. The solution** (Safaa)
 
@@ -85,7 +85,7 @@ This works now because AI can turn a mechanic's rough notes into a clear quote i
 
 **10. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. Two had already lost money on extras. That's who we're for: honest workshops. We're talking to two about a free trial, and they'd decide whether to pay afterwards. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops told us it would save time and paperwork, cut disputes, and build trust with customers. That's who we're for: honest workshops. We're talking to two about a free trial, and they'd decide whether to pay afterwards. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **11. Competition** (Sameep)
 
@@ -97,7 +97,7 @@ Workshops pay forty-nine dollars a month. Drivers pay nothing, and small worksho
 
 **13. Market** (Sameep)
 
-Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we take on bigger systems.
+Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Australia has about twenty-eight thousand independents. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we move past independents to chains and dealers.
 
 **14. Team** (Sameep)
 
@@ -105,7 +105,7 @@ We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a
 
 **15. Ask** (Sameep)
 
-Now we need real workshops. Help us run one pilot: six Inner West garages, three months. We'll measure time explaining quotes, bills matching approvals, and whether drivers understood. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
+Now we need real workshops. Help us run one pilot: six Inner West garages, three months. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
 ## Demo video script (0:29)
 
@@ -154,7 +154,8 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **What would stop a competitor copying you?** Nothing technical. Approvals help sell their higher plans, so they have little reason to offer them cheaply to workshops that won't buy a full system. That's our reasoning, not proof. Our evidence is one MechanicDesk workshop that still ran approvals by phone and messages. Speed in one area is our only head start, so we don't claim a moat yet. The bigger risk is newer, cheaper systems that already bundle approval.
 - **What about EVs?** An EV is just another car to us. It's a vehicle type in the same product, not a second market. The app has no EV option yet, so it's planned.
 - **How do you reach $820k?** It takes about 1,400 paying workshops, so it depends on going national. It's an illustration, not a forecast.
-- **How big can this get?** At $49, even every workshop in Australia is worth about $16.5M a year. That's a solid small business. It only gets bigger through fleets or insurers, and we haven't tested either.
+- **How big can this get?** At $49, every independent in Australia is worth about $16.5M a year, or about $26.5M at $79. Past independents come chains and dealers, which we haven't sized yet. The $10B is what drivers and fleets spend on repairs, not what we'd earn.
+- **Is 28,000 a conservative number?** No. It's AAAA's 27,700 independents, and scaling up NSW licences gives a rough 22,000. At 22,000, $49 is about $12.9M a year. The conservative numbers are the 96 and 607 we found ourselves.
 - **Are there really 28,000 workshops?** About. AAAA says 27,700 independents and IBISWorld says about 29,000 businesses, but that includes sole traders and specialists, so our real market is smaller.
 - **Is the price too low?** It might be. Four workshops said $29–79, so we moved from the $29–49 we showed in Week 11 to $49. We'll log support and training hours for each workshop in the pilot, and test $79 on later workshops.
 - **What does a quote cost you?** About 20c, almost all of it two text messages. The AI is under half a cent. Hosting is about $20–105 a month. These are estimates from price lists, because we haven't deployed yet.

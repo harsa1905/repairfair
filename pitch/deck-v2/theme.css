@@ -230,3 +230,12 @@ h1.ins{font-size:160px}
 .ccard p{margin:0}
 .ccard .okk{margin-top:14px}
 .ccard{height:290px}.ccard.wide{height:290px}
+.money{font-family:var(--display);font-weight:700;font-size:44px;line-height:1.1;color:var(--amber);margin:16px 0 0}
+.mapcol h1.mid{font-size:100px}
+.mapcol .nums.tight{margin-top:14px!important}
+.mapcol .nums.tight b{font-size:104px}
+.mapcol .path{margin-top:18px}
+.mapcol .gate{margin-top:12px;font-size:30px}
+.mapcol .plan{margin-top:6px;font-size:28px}
+.money{font-size:40px}
+.mapcol .plan{white-space:nowrap;font-size:26px}
