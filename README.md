@@ -37,6 +37,7 @@ answers, not sales.
 - Parts can be offered in four quality tiers: Used, Economy, OEM and Premium.
 - The AI only organises what the mechanic wrote. It is told never to invent prices, brands, part numbers or
   warranties, and anything missing is listed for the workshop to confirm before sending.
+- **Job card header:** a sample number plate, the car and the job number sit at the top of the job on both phones.
 - **Mechanic check:** every gap must be fixed or marked to confirm later, and a "needed now" item needs a photo or
   measurement. Sending stays locked until the mechanic signs off.
 - **Price book:** the workshop's own prices, brands and part numbers fill the gaps.
@@ -55,6 +56,8 @@ answers, not sales.
 - Sees the work the car needs first, with add-ons the garage recommends in their own section, so an add-on doesn't read
   like required work.
 - Switches items on or off one by one, and items left off become "not now" for later.
+- Sees where the work is: a car from above in the top panel lights the wheels each item is at, in its urgency colour. It
+  only lights when the item's name clearly says where, so brake fluid and labour stay dark.
 - Reads a plain-English reason for each item and a fair price check against typical ranges.
 - Can view item names, reasons and urgency labels in Chinese or Vietnamese. These are AI translations, and the English quote
   stays the record. Prices and approvals don't change.
@@ -136,7 +139,7 @@ Use **Reset** to start again. If the internet or AI fails, tick **Demo mode** (i
 
 This is a student prototype that runs locally, not a launched product. There are no paying customers. The next step
 is a 10-day pilot with two workshops, with continue and stop criteria set in advance. Names, phone numbers and
-prices in the demo are illustrative. Parts price ranges, the ABN and Results figures are samples, and texts, booking and
+prices in the demo are illustrative. Parts price ranges, the number plate, the ABN and Results figures are samples, and texts, booking and
 Send to Xero are simulated. Invoices are built from approvals but aren't checked against tax invoice rules, and marking
 one paid only records it: no money moves. In Demo mode, voice notes add a saved example instead of recording. Translations haven't been checked by fluent speakers, and part names can be wrong.
 

@@ -106,6 +106,10 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 
 **Voice notes.** The browser records with `MediaRecorder`, and `/api/transcribe` sends the audio to OpenAI and returns text for the notes box. The server keeps the audio in memory for that request only, and the browser drops it, so only the text remains.
 
+**Car diagram.** `carDiagram()` draws a car from above in Mia's panel, as inline SVG with no text on it, so it reads the same in every language. `wheelsOf()` gives an item's wheels only when its name clearly says where, such as "Front brake pads" or "Rear brake hose". Labour, brake fluid and anything unclear get no highlight, and the car is left out if no item has a known place. A wheel lights in the urgency colour of the most urgent item switched on there, and a wheel with its items switched off keeps a ring.
+
+**Job header.** `jobHead()` shows a plate, the car and the job number at the top of the job on both phones. The plate DEMO-1044 is a sample, labelled as one, and its plain look isn't based on any state's design.
+
 **Add-ons.** `drSections()` splits Mia's quote: "optional" items go in their own section, and everything else stays under what the car needs. Only the layout changes, so switches and totals work as before.
 
 **Invoice.** `invoice()` builds the lines from Mia's approvals, so there's nothing to retype, and approved items with no agreed price are left off. The screen has no input for a line, so a new charge has to go through the extra-item approval. `wsInvoice()` shows the draft and the send. Sending freezes a copy in `state.inv` and links it to the job in History, and no new extra can start after that. `invoiceSheet()` draws the same invoice on both phones, in English only. Prices include GST, so GST is one eleventh of the total. The ABN is a sample, and the invoice hasn't been checked against tax invoice rules.
@@ -126,7 +130,7 @@ RepairFair is a small web app. A Python server passes the mechanic's notes to th
 - **No Xero connection.** The send is a demo. Only the CSV download is real.
 - **No payments.** **Mark as paid** only records that the customer paid. The invoice text is simulated like the others, and the ABN is a sample.
 - **No accounts or database.** Everything sits in browser memory, and **Reset** or a page refresh clears it.
-- **Sample data only.** The history, price book, follow-ups, typical part prices and Results figures are invented examples.
+- **Sample data only.** The history, price book, follow-ups, number plate, typical part prices and Results figures are invented examples.
 - **Local only.** It runs on your computer and isn't hosted online.
 
 Taking it to real users would need a database, sign-in, a text-message service such as Twilio, online hosting, and privacy handling for customer details.

@@ -20,6 +20,8 @@ const AI_TIMEOUT_MS = 15000;
 const VOICE_MAX_SECONDS = 60;
 const WORKSHOP = "City Auto";
 const SAMPLE_ABN = "00 000 000 000";
+const SAMPLE_PLATE = "DEMO-1044";  // too long to be a real plate, and always shown with "sample"
+const URGENCY = ["needed_now", "to_confirm", "can_wait", "optional"];
 const PHONE_MASK = "04•• ••• 812";
 
 const SEED_HISTORY = [
@@ -394,6 +396,12 @@ function checkPanel(q, group) {
       return `<div class="ck-row ${r.how || "open"}"><span class="ck-ic"></span><span class="ck-t">${esc(r.text)}</span><span class="ck-a">${acts}</span></div>`;
     }).join("")}</div>`;
 }
+// The top of the job, like a job card. The plate's look isn't based on any state's design.
+function jobHead() {
+  const q = state.quote;
+  return `<div class="jobhead"><span class="plate"><small>sample</small>${SAMPLE_PLATE}</span>
+    <span class="jh-t"><b>${esc(q.car || "Job 1044")}</b><span>${esc(customer())}${q.car ? ", job 1044" : ""}</span></span></div>`;
+}
 function refreshCheck(group) {
   const el = $("checks-" + group);
   if (el) el.innerHTML = checkPanel(doc(group), group);
@@ -472,21 +480,21 @@ function wsQuoteTab() {
       return `<div class="lbl">Mechanic's notes</div><textarea rows="11" disabled>${esc(state.notes)}</textarea>
         <div class="loading"><span class="spin"></span>AI is building the standard quote…</div><div class="skel"></div><div class="skel"></div>`;
     case "draft":
-      return `${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}<div id="checks-quote">${checkPanel(q, "quote")}</div>
-        <div class="lead">${esc(q.job_title)}${q.car ? `, ${esc(q.car)}` : ""}</div>
+      return `${jobHead()}${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ""}<div id="checks-quote">${checkPanel(q, "quote")}</div>
+        <div class="lead">${esc(q.job_title)}</div>
         ${reportedLine(q, "Customer reported")}
         ${q.items.map((it, i) => wsCard(it, i, "quote")).join("")}
         <div class="etaline">${ic("time", 18)}Ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))} if approved now (from labour hours)</div>
         <div class="preview"><div class="to"><span>Text message to ${esc(customer())}</span><span>${PHONE_MASK}</span></div><div class="bubble me">${esc(smsText())}</div></div>
         <button class="btn soft" data-act="edit">Edit notes and rebuild</button>`;
     case "sent":
-      return `${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]],
+      return `${jobHead()}${tracker("Quote", [["Sent", state.sentAt], ["Delivered", state.deliveredAt], ["Viewed", state.viewedAt], ["Approved", null]],
           { read: state.viewedAt ? "Viewing now" : "Waiting", cls: "amber",
             sub: state.viewedAt ? `${esc(customer())} is looking at the quote now.` : `You'll get a notification when ${esc(customer())} responds.`,
             foot: `Checked by you before sending, ${esc(stampOf(q.checkedAt))}` })}
         <div class="lbl">Quote sent</div><div class="sheet">${q.items.map((i) => `<div class="row">${ic(itemIcon(i), 22, "ic " + lightOf(i))}<div><div class="it">${esc(i.name)}</div>${stLabel(i)}</div><span class="price">${money(priceOf(i))}</span></div>`).join("")}</div>`;
     default:
-      return `<div class="cluster"><div class="cl-top"><b>Quote approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+      return `${jobHead()}<div class="cluster"><div class="cl-top"><b>Quote approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
           <div class="readout md green">${money(sumApproved(q.items))}</div>
           <div class="cl-sub">${esc(customer())} approved this quote. The work is now in the Job tab.</div></div>
         <button class="btn primary" data-tab="job">Open the job</button>`;
@@ -501,7 +509,7 @@ function wsJobTab() {
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   if (state.stage == null) return `<div class="blank">${ic("part", 36)}<b>No job in progress</b>A job starts here as soon as a customer approves a quote.</div>`;
   // One panel for the approval (the same lights Mia sees), then the job, then her decisions with their reminders
-  let h = `<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+  let h = `${jobHead()}<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
       <div class="readout green">${money(sumApproved(q.items))}</div>
       <div class="cl-sub">Start the work on the approved items only.</div>
       ${lamps(q.items, "ws")}
@@ -803,8 +811,34 @@ function drSections(q) {
   return `${needs.length ? `<div class="lead" lang="${state.lang}">${esc(tr("What your car needs"))}</div>${list(needs)}` : ""}
     ${addons.length ? `<div class="addons" lang="${state.lang}"><div class="lead">${esc(tr("Optional add-ons"))}</div><p>${esc(tr(ADDON_NOTE))}</p></div>${list(addons)}` : ""}`;
 }
+// Which wheels an item is at, only when its name says so clearly. Brake fluid, labour and anything unclear get no highlight.
+function wheelsOf(it) {
+  const n = it.name.toLowerCase();
+  if (it.kind === "labour" || /fluid|flush|oil|light|lamp|bulb|switch|pedal|booster|master/.test(n)) return [];
+  if (!/\b(brakes?|pads?|rotors?|discs?|shoes?|calipers?|tyres?|tires?)\b/.test(n)) return [];
+  const sides = /\bleft\b/.test(n) ? ["l"] : /\bright\b/.test(n) ? ["r"] : ["l", "r"];
+  return [/\bfront\b/.test(n) && "f", /\brear\b/.test(n) && "r"].filter(Boolean).flatMap((end) => sides.map((s) => end + s));
+}
+// A wheel lights in the urgency colour of the most urgent item switched on there, like the lamps. Quoted but off keeps a ring.
+function wheelClass(items, w) {
+  const here = items.filter((i) => wheelsOf(i).includes(w));
+  const st = URGENCY.find((s) => here.some((i) => i.approved && i.status === s));
+  return `wheel ${here.length ? "quoted" : ""} ${st ? `on ${st}` : ""}`;
+}
+const WHEELS = { fl: [3, 21], fr: [51, 21], rl: [3, 79], rr: [51, 79] };
+// A car from above with its front at the top, like the door warning on a dashboard. Left out when no item has a known place.
+function carDiagram(items) {
+  if (!items.some((i) => wheelsOf(i).length)) return "";
+  return `<svg class="car" viewBox="0 0 64 120" width="64" height="120" role="img" aria-label="Car from above, with the quoted work lit up">
+    <path class="car-body" d="M32 3C20 3 13 7 11.5 17L9.5 48V92C9.5 106 13 116 24 117H40C51 116 54.5 106 54.5 92V48L52.5 17C51 7 44 3 32 3Z"/>
+    <path class="car-glass" d="M17 47C24 42 40 42 47 47L44 59C36 56 28 56 20 59ZM20 92C28 95 36 95 44 92L47 102C38 106 26 106 17 102Z"/>
+    <path class="car-line" d="M20 59V92M44 59V92M10 47L5.5 45M54 47L58.5 45"/>
+    ${Object.entries(WHEELS).map(([w, [x, y]]) => `<rect class="${wheelClass(items, w)}" id="wheel-${w}" x="${x}" y="${y}" width="10" height="21" rx="3.5"/>`).join("")}
+  </svg>`;
+}
 function drQuotePanel(q) {
-  return `<div class="cluster"><div class="cl-top"><b>City Auto</b><span>${esc(carName())}</span></div>
+  const car = carDiagram(q.items);
+  return `<div class="cluster ${car ? "with-car" : ""}"><div class="cl-top"><b>City Auto</b><span>${esc(q.job_title)}</span></div>${car}
     <div class="readout" id="drRead">${money(sumApproved(q.items))}</div>
     <div class="cl-sub" id="drSub">to approve today, out of ${money(sumAll(q.items))} quoted</div>
     ${lamps(q.items, "quote")}
@@ -819,6 +853,7 @@ function toggleItem(group, i) {
   row.classList.toggle("off", !it.approved);
   row.querySelector(".sw").setAttribute("aria-checked", it.approved);
   $(`lamp-${group}-${i}`).classList.toggle("on", it.approved);
+  Object.keys(WHEELS).forEach((w) => $(`wheel-${w}`)?.setAttribute("class", wheelClass(state.quote.items, w)));
   const read = $("drRead");
   read.textContent = money(sumApproved(state.quote.items));
   pulse(read);
@@ -875,7 +910,7 @@ function renderDriver() {
     case "notified": return lockScreen(true);
     case "thread": return thread();
     case "quote":
-      return `${drQuotePanel(q)}${langBar()}
+      return `${jobHead()}${drQuotePanel(q)}${langBar()}
         <div class="etaline">${ic("time", 18)}${q.eta_note ? esc(q.eta_note) : `If you approve now: ready ${esc(etaText(etaFrom(new Date(), labourHrs(q.items, true))))}`}</div>
         ${tbcBox(q)}
         ${reportedLine(q, "You told us")}
