@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:42). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:09 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:51). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -14,7 +14,7 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 | 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:15 |
 | 10 | Traction | Safaa | 0:27 |
-| 11 | Competition | Sameep | 0:20 |
+| 11 | Competition | Sameep | 0:29 |
 | 12 | Business model | Sameep | 0:24 |
 | 13 | Market | Sameep | 0:28 |
 | 14 | Team | Sameep | 0:09 |
@@ -89,7 +89,7 @@ We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops
 
 **11. Competition** (Sameep)
 
-We're for small workshops that still run approvals on paper, phone calls, email and messages. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We make sure the driver understands, and the workshop can prove it.
+We're for small workshops that still run approvals on paper, phone calls, email and messages. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We checked four. None we found shows the quote in the driver's own language. But they're live, and we're still a prototype. We make sure the driver understands, and the workshop can prove it.
 
 **12. Business model** (Sameep)
 
