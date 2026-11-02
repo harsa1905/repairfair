@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:11 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:48). Sameep takes over at competition and closes on the ask (1:54). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:27 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:48). Sameep takes over at competition and closes on the ask (1:54). The video takes 0:45. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -10,7 +10,7 @@ The story takes about 5:11 with pauses. Safaa opens and tells Mia's story throug
 | 4 | 1 in 5 | Safaa | 0:18 |
 | 5 | The insight | Safaa | 0:23 |
 | 6 | The solution | Safaa | 0:08 |
-| 7 | Demo | Video | 0:29 |
+| 7 | Demo | Video | 0:45 |
 | 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:15 |
 | 10 | Traction | Safaa | 0:26 |
@@ -34,7 +34,7 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | Slide 5 | "...the workshop's own Google page." |
 | Slide 6 | "...the workshop had to absorb it." |
 | Slide 7 | "...start to finish." The video starts by itself. |
-| Slide 8 | The video ends on "...what she approved." |
+| Slide 8 | The video ends on "...one she said yes to." |
 | Slide 9 | "...the mechanic has proof." |
 | Slide 10 | "...saved as the record." |
 | Slide 11 | "...that's the next step." |
@@ -107,17 +107,21 @@ We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a
 
 Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Two workshops have already agreed to trial it. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
-## Demo video script (0:29)
+## Demo video script (0:45)
 
-Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`. Re-record it from the latest `app-dev` in Demo mode, because the current file shows the older app.
+Voice: Emma on ElevenLabs. The video is `deck-v2/assets/demo.mp4`, recorded on 3 Nov 2026 from the latest app in Demo mode. A caption names each step, and the phone not in use is dimmed. The Chinese wording hasn't been checked by a fluent speaker.
 
 | Time | On screen | Voiceover |
 |---|---|---|
-| 0:00–0:08 | Mechanic finishes notes, AI builds the quote, mechanic checks it | "A mechanic types rough notes. AI turns them into a clear, itemised quote, and the mechanic checks it." |
-| 0:08–0:12 | Text arrives on Mia's phone | "Mia gets a text link, with no app to install." |
-| 0:12–0:18 | Mia reads the quote and approves | "She sees what's urgent, what can wait, and approves it line by line." |
-| 0:18–0:25 | Extra hose found and sent for approval | "Find something extra mid-job? It needs her written approval too." |
-| 0:25–0:29 | Invoice for $470, stamped paid | "The final bill matches what she approved." |
+| 0:00–0:03 | Mechanic types rough notes | "A mechanic types rough notes." |
+| 0:03–0:11 | AI builds the quote, and the mechanic checks it and sends it | "AI turns them into a clear, itemised quote, and the mechanic checks every line before it goes." |
+| 0:11–0:15 | Text arrives on Mia's phone | "Mia gets a text link. There's no app to install." |
+| 0:15–0:20 | Mia reads what's urgent and why | "She sees what's urgent, what can wait, and why." |
+| 0:20–0:25 | The quote switches to Chinese and back | "She can even read it in her own language." |
+| 0:25–0:28 | Mia approves $340 | "She approves it, line by line." |
+| 0:28–0:35 | Extra hose found and approved | "Found something extra mid-job? It needs her written approval too." |
+| 0:35–0:41 | Car ready, invoice created and sent | "When the car's ready, the approved lines become the invoice." |
+| 0:41–0:45 | Invoice for $470, marked paid | "Every dollar on the bill is one she said yes to." |
 
 The other features (reminder booking, suggested checks, Send to Xero) are for Q&A, not the video.
 
