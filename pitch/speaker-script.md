@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:27 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:48). Sameep takes over at competition and closes on the ask (1:54). The video takes 0:45. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:27 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:48). Charles takes over at competition and closes on the ask (1:54). The video takes 0:45. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -14,15 +14,15 @@ The story takes about 5:27 with pauses. Safaa opens and tells Mia's story throug
 | 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:15 |
 | 10 | Traction | Safaa | 0:26 |
-| 11 | Competition | Sameep | 0:29 |
-| 12 | Business model | Sameep | 0:24 |
-| 13 | Market | Sameep | 0:28 |
-| 14 | Team | Sameep | 0:09 |
-| 15 | Ask | Sameep | 0:24 |
+| 11 | Competition | Charles | 0:29 |
+| 12 | Business model | Charles | 0:24 |
+| 13 | Market | Charles | 0:28 |
+| 14 | Team | Charles | 0:09 |
+| 15 | Ask | Charles | 0:24 |
 
 ## Slide operator
 
-One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video. We present live, so run the HTML deck from the laptop, not the PDF. Slide 2 needs two extra presses for its cards. The bill on slide 3 rolls up for about 1.5 seconds, and the demo video starts by itself on slide 7.
+One team member runs the slides, so Safaa and Charles only talk. Press the right arrow as you hear the cue. Don't press during the video. We present live, so run the HTML deck from the laptop, not the PDF. Slide 2 needs two extra presses for its cards. The bill on slide 3 rolls up for about 1.5 seconds, and the demo video starts by itself on slide 7.
 
 | Next | Press after |
 |---|---|
@@ -85,25 +85,25 @@ This works now because AI can turn a mechanic's rough notes into a clear quote i
 
 **10. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops told us it would save time and paperwork, cut disputes, and build trust with customers. That's who we're for: honest workshops. Two have agreed to a free trial, and we're talking to more. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops told us it would save time and paperwork, cut disputes, and build trust with customers. That's who we're for: honest workshops. Two have agreed to a free trial, and we're talking to more. We haven't got paying customers yet, and that's the next step. [Hand over to Charles.]
 
-**11. Competition** (Sameep)
+**11. Competition** (Charles)
 
 We're for small workshops that still run approvals on paper, phone calls, email and messages. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We checked four. None we found shows the quote in the driver's own language. But they're live, and we're still a prototype. We make sure the driver understands, and the workshop can prove it.
 
-**12. Business model** (Sameep)
+**12. Business model** (Charles)
 
 Workshops pay forty-nine dollars a month. Drivers pay nothing, and small workshops start free. We believe a customer who understands says yes faster. You get paid for the extras, make up to fifty fewer calls a month by our estimate, and a "not now" comes back as a reminder. One hour of that work covers the fee.
 
-**13. Market** (Sameep)
+**13. Market** (Charles)
 
 We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Sydney comes once the pilot hits its target. Then a light system, a trusted network of garages, and a membership tier with parts supply, including hard-to-find parts sourced direct from overseas. With that network behind us, we move past independents and take on the big players head-on.
 
-**14. Team** (Sameep)
+**14. Team** (Charles)
 
-We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a prototype. Sameep has also sourced car parts from China.
+We're Group 8. We've interviewed ten workshops and built a prototype. Our teammate Sameep has also sourced car parts from China.
 
-**15. Ask** (Sameep)
+**15. Ask** (Charles)
 
 Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Two workshops have already agreed to trial it. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
