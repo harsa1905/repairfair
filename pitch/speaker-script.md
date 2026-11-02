@@ -24,7 +24,7 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 
 ## Slide operator
 
-One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video.
+One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video. The pitch will be pre-recorded, so use the same cues to sync the slides to the audio. The bill on slide 5 rolls up for about 1.5 seconds, and the demo video starts by itself.
 
 | Go to slide | Press after |
 |---|---|
