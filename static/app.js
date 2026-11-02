@@ -14,11 +14,11 @@ Hose options: economy $45 12 months, OEM $70 12 months.
 Labour 0.5 hr at $120/hr.`;
 
 const LANGS = [["en", "English"], ["zh-Hans", "中文"], ["vi", "Tiếng Việt"]];
-const ADDON_NOTE = "City Auto recommends these, but your car doesn't need them today. They stay off unless you add them.";
+const ADDON_NOTE = "Local Workshop recommends these, but your car doesn't need them today. They stay off unless you add them.";
 const STATUS = { needed_now: "Needed now", can_wait: "Can wait", optional: "Optional", to_confirm: "To confirm" };
 const AI_TIMEOUT_MS = 15000;
 const VOICE_MAX_SECONDS = 60;
-const WORKSHOP = "City Auto";
+const WORKSHOP = "Local Workshop";
 const SAMPLE_ABN = "00 000 000 000";
 const SAMPLE_PLATE = "DEMO-1044";  // too long to be a real plate, and always shown with "sample"
 const URGENCY = ["needed_now", "to_confirm", "can_wait", "optional"];
@@ -865,12 +865,12 @@ function keyOn() {
 }
 function drQuotePanel(q) {
   const car = carDiagram(q.items, "quote");
-  return `<div class="cluster ${car ? "with-car" : ""}"><div class="cl-top"><b>City Auto</b><span>${esc(q.job_title)}</span></div>${car}
+  return `<div class="cluster ${car ? "with-car" : ""}"><div class="cl-top"><b>Local Workshop</b><span>${esc(q.job_title)}</span></div>${car}
     <div class="readout odo" id="drRead" role="img" aria-label="${money(sumApproved(q.items))}">${odoHTML(sumApproved(q.items))}</div>
     <div class="cl-sub" id="drSub">to approve today, out of ${money(sumAll(q.items))} quoted</div>
     ${tach(q)}
     ${lamps(q.items, "quote")}
-    <div class="cl-foot">${ic("check", 18)}Checked by a City Auto mechanic before it was sent</div>
+    <div class="cl-foot">${ic("check", 18)}Checked by a Local Workshop mechanic before it was sent</div>
     ${fairSummary(q.items) ? `<div class="cl-foot">${ic("check", 18)}${fairSummary(q.items)}</div>` : ""}</div>`;
 }
 // Flip an item without re-rendering, so the switch slides and its light fades rather than snapping
@@ -895,18 +895,18 @@ function drFollowups() {
   return `<div class="lbl">Not now, but not forgotten</div><div class="sheet fu">${fs.map((f) => `<div class="fu-row ${f.status}">
       <div class="fu-t"><b>${esc(f.item)}</b><span>${f.status === "booked" ? `Booked ${esc(slotText(f.bookedAt))}` : f.status === "sent" ? "Reminder sent" : f.status === "off" ? "No reminder" : `We'll text you around ${esc(whenOf(f.due))}`}</span></div>
       ${f.status === "booked" || f.status === "sent" ? "" : `<button class="ck-link" data-act="fu-toggle" data-id="${f.id}">${f.status === "off" ? "Remind me" : "Don't remind me"}</button>`}</div>`).join("")}
-    <div class="small" style="text-align:left">Nothing is booked. City Auto just checks in when it's due.</div></div>`;
+    <div class="small" style="text-align:left">Nothing is booked. Local Workshop just checks in when it's due.</div></div>`;
 }
 
 function tbcBox(q) {
   const list = tbcList(q);
-  return list.length ? `<div class="missing"><b>City Auto will confirm before starting</b>${list.map(esc).join("<br>")}</div>` : "";
+  return list.length ? `<div class="missing"><b>Local Workshop will confirm before starting</b>${list.map(esc).join("<br>")}</div>` : "";
 }
 
 function lockScreen(withNotif) {
   const now = new Date();
   const notif = withNotif ? `<div class="notif" data-act="open-thread"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
-      <div class="top"><span>Messages</span><span>now</span></div><div class="ti">City Auto</div>
+      <div class="top"><span>Messages</span><span>now</span></div><div class="ti">Local Workshop</div>
       <div class="tx">Hi ${esc(customer())}, your quote for the ${esc(carName())} is ready. Please review and approve…</div></div></div>
       <div class="tapme">Tap to open</div>` : "";
   return `<div class="lockscreen"><div class="d">${now.toLocaleDateString("en-AU", { weekday: "long", day: "numeric", month: "long" }).replace(",", "")}</div>
@@ -918,7 +918,7 @@ function thread() {
   const need = q.items.filter((i) => i.status === "needed_now").length;
   const wait = q.items.length - need;
   return `<div class="thread"><div class="tstamp">Today ${timeOf(state.sentAt)}</div>
-    <div class="bubble">Hi ${esc(customer())}, it's City Auto. Your quote for the ${esc(carName())} is ready. Please review and approve below.</div>
+    <div class="bubble">Hi ${esc(customer())}, it's Local Workshop. Your quote for the ${esc(carName())} is ready. Please review and approve below.</div>
     <div class="linkcard" data-act="open-quote"><div class="lc-top"><img src="/static/logo-mark.png" alt=""><div><div class="lc-k">RepairFair quote</div><div class="lc-t">${esc(q.job_title)}</div></div></div>
       <div class="lc-b"><div class="row2">${need ? `<span class="key needed_now"><i></i>${need} needed now</span>` : ""}${wait ? `<span class="key can_wait"><i></i>${wait} other item${wait > 1 ? "s" : ""}</span>` : ""}</div>
       <span class="cta">View and approve</span><div class="dom">repairfair.au</div></div></div>
@@ -949,7 +949,7 @@ function renderDriver() {
     case "approved":
       return `<div class="cluster with-car"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>${carDiagram(q.items, "done")}
           <div class="readout green">${money(sumApproved(q.items))}</div>
-          <div class="cl-sub">City Auto has your approval in writing.</div>
+          <div class="cl-sub">Local Workshop has your approval in writing.</div>
           ${lamps(q.items, "done")}
           <div class="cl-foot">${ic("check", 18)}Saved to your service record, ${esc(stampOf(state.approvedAt))}</div></div>
         ${drStatus()}
@@ -958,15 +958,15 @@ function renderDriver() {
     case "extra":
       return `<div class="cluster with-car"><div class="cl-top"><b>Found mid-job</b><span>${esc(q.job_title)}</span></div>${carDiagram(x.items.map((it) => ({ ...it, approved: true })), "extra")}
           <div class="readout">${money(sumAll(x.items))}</div>
-          <div class="cl-sub"><b>${esc(x.items[0].name)}</b> needs your OK before City Auto continues.</div>
+          <div class="cl-sub"><b>${esc(x.items[0].name)}</b> needs your OK before Local Workshop continues.</div>
           ${lamps(x.items.map((it) => ({ ...it, approved: true })), "extra")}</div>
-        ${langBar()}<div class="bigphoto"><span>${ic("camera", 18)}Photo from City Auto</span><span>tap to enlarge</span></div>
+        ${langBar()}<div class="bigphoto"><span>${ic("camera", 18)}Photo from Local Workshop</span><span>tap to enlarge</span></div>
         ${tbcBox(x)}<div class="sheet" lang="${state.lang}">${x.items.map((it, i) => drRow(it, i, "extra", false)).join("")}</div>
         <div class="small">The workshop won't start this until you decide.</div>`;
     case "extra_done": {
       const r = state.extraResult;
-      const m = r === "approved" ? "Extra work approved" : r === "call" ? "City Auto will call you" : "Extra work declined";
-      const s = r === "approved" ? "Saved with your quote." : r === "call" ? "Nothing extra starts until you agree." : "City Auto won't do it.";
+      const m = r === "approved" ? "Extra work approved" : r === "call" ? "Local Workshop will call you" : "Extra work declined";
+      const s = r === "approved" ? "Saved with your quote." : r === "call" ? "Nothing extra starts until you agree." : "Local Workshop won't do it.";
       return `<div class="cluster"><div class="cl-top"><b>${m}</b>${r === "call" ? ic("phone", 18) : ""}</div>
           <div class="readout ${r === "approved" ? "green" : ""}">${money(sumApproved(q.items) + (r === "approved" ? sumApproved(x.items) : 0))}</div>
           <div class="cl-sub">Your final bill. ${s}</div>
@@ -976,7 +976,7 @@ function renderDriver() {
     }
     case "book": {
       const f = activeFu();
-      return `<div class="cluster"><div class="cl-top"><b>City Auto</b><span>${esc(f.car)}</span></div>
+      return `<div class="cluster"><div class="cl-top"><b>Local Workshop</b><span>${esc(f.car)}</span></div>
           <div class="readout md">${money(f.price)}</div>
           <div class="cl-sub"><b>${esc(f.item)}</b>, advised on your ${esc(f.advised.split(" · ")[0])} job.</div></div>
         <div class="lead">Pick a time that suits you</div>
@@ -988,7 +988,7 @@ function renderDriver() {
       const f = activeFu();
       return `<div class="cluster"><div class="cl-top"><b>You're booked in</b><span>${esc(f.car)}</span></div>
           <div class="readout md green">${esc(dayOf(f.bookedAt))}</div>
-          <div class="cl-sub">${esc(timeOf(f.bookedAt))} at City Auto for ${esc(f.item)}.</div></div>
+          <div class="cl-sub">${esc(timeOf(f.bookedAt))} at Local Workshop for ${esc(f.item)}.</div></div>
         <button class="btn soft" data-act="book-done">Done</button>`;
     }
     case "ready": {
@@ -1015,19 +1015,19 @@ function renderDriverChrome() {
   const lock = state.dr === "home" || state.dr === "notified";
   document.querySelector(".dr-phone").classList.toggle("lock", lock);
   $("drTop").innerHTML = lock ? "" : state.dr === "thread"
-    ? `<div class="thread-head"><span class="back">‹</span><div class="av">CA</div><div class="nm">City Auto ›</div></div>`
+    ? `<div class="thread-head"><span class="back">‹</span><div class="av">LW</div><div class="nm">Local Workshop ›</div></div>`
     : `<div class="urlbar">${ic("lock", 14)}repairfair.au/${state.dr === "invoice" ? "i" : "q"}/8F2K</div>`;
   $("drBanner").innerHTML = state.drBanner === "ready" ? `<div class="notif" data-act="open-ready"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
-      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your car is ready</div>
+      <div class="top"><span>Messages, Local Workshop</span><span>now</span></div><div class="ti">Your car is ready</div>
       <div class="tx">Your ${esc(carName())} is ready to collect. Tap to view your final bill.</div></div></div>`
     : state.drBanner === "invoice" ? `<div class="notif" data-act="open-invoice"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
-      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Your invoice</div>
+      <div class="top"><span>Messages, Local Workshop</span><span>now</span></div><div class="ti">Your invoice</div>
       <div class="tx">${esc(state.inv.number)} for ${esc(cents(state.inv.total))}. Tap to view.</div></div></div>`
     : state.drBanner === "reminder" ? `<div class="notif" data-act="open-book"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
-      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">Time for your ${esc(activeFu().item)}</div>
+      <div class="top"><span>Messages, Local Workshop</span><span>now</span></div><div class="ti">Time for your ${esc(activeFu().item)}</div>
       <div class="tx">Hi ${esc(activeFu().customer)}, want to book it in? Tap to pick a time.</div></div></div>`
     : state.drBanner === "extra" ? `<div class="notif" data-act="open-extra"><div class="app">${ic("msg", 22)}</div><div style="flex:1">
-      <div class="top"><span>Messages, City Auto</span><span>now</span></div><div class="ti">We found something</div>
+      <div class="top"><span>Messages, Local Workshop</span><span>now</span></div><div class="ti">We found something</div>
       <div class="tx">${esc(state.extra.items[0].name)}: needs your OK before we continue. Tap to view.</div></div></div>` : "";
   const d = $("drDock");
   if (state.dr === "quote") {
@@ -1058,7 +1058,7 @@ function render() {
   lastDr = state.dr;
   renderDriverChrome();
   renderWsDock();
-  $("wsTitle").textContent = state.quote ? `City Auto, ${state.quote.job_title.toLowerCase()}` : "City Auto";
+  $("wsTitle").textContent = state.quote ? `Local Workshop, ${state.quote.job_title.toLowerCase()}` : "Local Workshop";
 }
 
 function fly(id) { const el = $(id); el.classList.remove("go"); void el.offsetWidth; el.classList.add("go"); }
@@ -1089,7 +1089,7 @@ function bookFollowups() {
   });
 }
 const ourFollowups = () => state.followups.filter((f) => f.ours);
-const reminderText = (f) => `Hi ${f.customer}, it's City Auto. When we did your ${f.advised.split(" · ")[0]} we advised: ${f.item}${f.price != null ? ` (${money(f.price)})` : ""}. Want to book it in? Pick a time: repairfair.au/b/7K3D. Reply STOP to opt out.`;
+const reminderText = (f) => `Hi ${f.customer}, it's Local Workshop. When we did your ${f.advised.split(" · ")[0]} we advised: ${f.item}${f.price != null ? ` (${money(f.price)})` : ""}. Want to book it in? Pick a time: repairfair.au/b/7K3D. Reply STOP to opt out.`;
 const activeFu = () => state.followups.find((f) => f.id === state.fuActive);
 const slotText = (t) => `${dayOf(t)}, ${timeOf(t)}`;
 // Three times to offer from a reminder link, on the next open days. This isn't a calendar: the workshop just sees what was picked.

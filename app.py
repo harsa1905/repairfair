@@ -95,7 +95,7 @@ You get a JSON list of English strings. Return JSON only: {{"translations": ["..
 
 Rules:
 - Use plain words a driver would use. Use the usual local term for each car part.
-- Keep every number and unit exactly as written, and keep brand names and part numbers.
+- Keep every number and unit exactly as written, and keep brand names, part numbers and the workshop name Local Workshop in English.
 - Don't add, remove or explain anything. Don't add advice, prices or warnings."""
 
 
