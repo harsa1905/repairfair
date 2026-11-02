@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:50). Sameep takes over at competition and closes on the ask (1:42). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:00 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:42). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -12,12 +12,12 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 | 6 | The solution | Safaa | 0:08 |
 | 7 | Demo | Video | 0:29 |
 | 8 | Same job | Safaa | 0:13 |
-| 9 | Why now | Safaa | 0:16 |
+| 9 | Why now | Safaa | 0:15 |
 | 10 | Traction | Safaa | 0:27 |
 | 11 | Competition | Sameep | 0:20 |
 | 12 | Business model | Sameep | 0:24 |
-| 13 | Market | Sameep | 0:31 |
-| 14 | Team | Sameep | 0:06 |
+| 13 | Market | Sameep | 0:28 |
+| 14 | Team | Sameep | 0:09 |
 | 15 | Ask | Sameep | 0:21 |
 
 ## Slide operator
@@ -40,8 +40,8 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | Slide 11 | "...that's the next step." |
 | Slide 12 | "...the workshop can prove it." |
 | Slide 13 | "...covers the fee." |
-| Slide 14 | "...chains and dealers." |
-| Slide 15 | "...built a prototype." |
+| Slide 14 | "...the big players head-on." |
+| Slide 15 | "...sourced car parts from China." |
 
 Stop on slide 15 and leave it up for questions. In Q&A, press O and click a backup slide (16–20).
 
@@ -81,7 +81,7 @@ Same brakes. This time it's on her phone, so she can read it properly. The pads 
 
 **9. Why now** (Safaa)
 
-This works now because AI can turn a mechanic's rough notes into a clear quote in seconds. The mechanic checks it, and it goes out. There's no new paperwork. The notes they already write become the quote, and the driver's yes is saved as the record.
+This works now because AI can turn a mechanic's rough notes into a clear quote in seconds. The mechanic checks it, and it goes out. The notes they already write become the quote, and the driver's yes is saved as the record.
 
 **10. Traction** (Safaa)
 
@@ -97,11 +97,11 @@ Workshops pay forty-nine dollars a month. Drivers pay nothing, and small worksho
 
 **13. Market** (Sameep)
 
-Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Australia has about twenty-eight thousand independents. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we move past independents to chains and dealers.
+We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Sydney comes once the pilot hits its target. Then a light system, a trusted network of garages, and parts supply, including hard-to-find parts sourced direct from overseas. With that network behind us, we move past independents and take on the big players head-on.
 
 **14. Team** (Sameep)
 
-We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a prototype.
+We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a prototype. Sameep has also sourced car parts from China.
 
 **15. Ask** (Sameep)
 
@@ -157,13 +157,13 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **How big can this get?** At $49, every independent in Australia is worth about $16.5M a year, or about $26.5M at $79. Past independents come chains and dealers, which we haven't sized yet. The $10B is what drivers and fleets spend on repairs, not what we'd earn.
 - **Is 28,000 a conservative number?** No. It's AAAA's 27,700 independents, and scaling up NSW licences gives a rough 22,000. At 22,000, $49 is about $12.9M a year. The conservative numbers are the 96 and 607 we found ourselves.
 - **Are there really 28,000 workshops?** About. AAAA says 27,700 independents and IBISWorld says about 29,000 businesses, but that includes sole traders and specialists, so our real market is smaller.
-- **Is the price too low?** It might be. Four workshops said $29–79, so we moved from the $29–49 we showed in Week 11 to $49. We'll log support and training hours for each workshop in the pilot, and test $79 on later workshops.
+- **Is the price too low?** It might be. As the network and parts supply add value, we'd raise prices for new workshops, while founding workshops keep $49. Four workshops said $29–79, so we moved from the $29–49 we showed in Week 11 to $49. We'll log support and training hours for each workshop in the pilot, and test $79 on later workshops.
 - **What does a quote cost you?** About 20c, almost all of it two text messages. The AI is under half a cent. Hosting is about $20–105 a month. These are estimates from price lists, because we haven't deployed yet.
 - **Where does fifty fewer calls come from?** It's an estimate, not a measurement. We assume 100 quotes a month, and about half need a mid-job approval, based on 5 of 10 bills rising more than 10% in our driver interviews. "Up to" matters, because some customers will still want to talk. If each call takes about five minutes, that's roughly four hours, before counting the minute or so each app approval takes. The pilot would measure the real time.
 - **What are your margins?** At 100 quotes a month, we keep about $25 of the $49, roughly half, before card fees and support. The 100 quotes is an assumption.
 - **What stops one busy workshop costing you more than $49?** Pro includes 300 texts a month, about 150 quotes, then 12c a text. Without a limit we'd lose money from about 245 quotes.
 - **When do you make money?** Founding workshops start paying after six months, and the free plan stops at 20 quotes. The offer costs about $4,300 for 30 workshops, which is illustrative.
-- **Why not take a cut of each job?** We'd earn more when drivers say yes. A flat fee keeps us neutral.
+- **Why not take a cut of each job?** We'd earn more when drivers say yes. A flat fee keeps us neutral. Parts supply later would be a separate service to workshops, not a cut of the jobs drivers approve.
 - **Is 607 all of Sydney?** No, it's the workshops we found across 21 councils, so it's a minimum. The real number is much higher.
 - **Do fleets or insurers want this?** Not now. We haven't spoken to any, and the pilot stays on workshops as the payers. If we get there, fleets come first, because the business paying isn't the driver, so it has Mia's problem. Insurers are mostly crash repairs, so they're a possible later option.
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
@@ -171,3 +171,6 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Do workshops have to enter jobs twice?** Paper workshops don't: in the prototype, the approved quote becomes the invoice. The Xero export file hasn't been tested in Xero, and we don't connect to MYOB. Workshops with full software would enter jobs twice, because we haven't built a direct connection.
 - **Have any workshops signed up?** We're talking to two about a free trial, and they'd decide whether to pay afterwards. Neither has committed in writing yet.
 - **Would paper workshops really pay?** We don't know for sure. Four workshops said they'd pay, and two of those already use workshop software. In our notes, the pen-and-paper workshop said no and two on templates didn't commit. The pilot needs to test this.
+- **Isn't selling parts a conflict of interest?** It could be, so we'd keep it separate. Workshops would buy parts at clear prices, and drivers would still see every line and approve it. We won't take a cut of the jobs drivers approve.
+- **Aren't cheap imported parts risky, especially brakes?** Yes, so quality comes first. We'd start with rare and hard-to-find parts from vetted suppliers, and only list parts that meet Australian standards, with a clear warranty.
+- **Can you really compete with the big players?** Not today. We start where they don't fit: small workshops on paper, calls and messages. Once our garage network and parts supply are big enough, we compete head-on. Sameep's experience sourcing parts is part of that edge.
