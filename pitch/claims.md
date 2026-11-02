@@ -90,6 +90,7 @@ These are never shown as results.
 - Every charge on the final bill was approved in writing.
 - At least 3 of the 6 workshops put a card on file, with billing starting after their free months.
 - Also measure time spent explaining quotes, bills matching approvals, and whether drivers understood. The card on file is the target.
+- Trial: two workshops agreed to a free trial (3 Nov 2026), and the team is talking to more. One came through a team member's personal contact. Names stay internal. Keep the written approvals.
 - Why workshops would pay: "save time" and "cut disputes" are in the interview sheet. "Paperwork" and "build trust with customers" come from Sameep's own conversations with the workshops, not the sheet.
 - Test the belief that transparency helps with new customers: compare how often new and regular customers approve work.
 

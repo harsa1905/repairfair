@@ -1,6 +1,6 @@
 # RepairFair speaker script (5 minutes, two presenters)
 
-The story takes about 5:09 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:49). Sameep takes over at competition and closes on the ask (1:51). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
+The story takes about 5:11 with pauses. Safaa opens and tells Mia's story through to the workshops' response (2:48). Sameep takes over at competition and closes on the ask (1:54). The video takes 0:29. Leave the slides to carry the numbers, and pause after the $1,120.
 
 | # | Slide | Who | Time |
 |---|---|---|---|
@@ -13,12 +13,12 @@ The story takes about 5:09 with pauses. Safaa opens and tells Mia's story throug
 | 7 | Demo | Video | 0:29 |
 | 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:15 |
-| 10 | Traction | Safaa | 0:27 |
+| 10 | Traction | Safaa | 0:26 |
 | 11 | Competition | Sameep | 0:29 |
 | 12 | Business model | Sameep | 0:24 |
 | 13 | Market | Sameep | 0:28 |
 | 14 | Team | Sameep | 0:09 |
-| 15 | Ask | Sameep | 0:21 |
+| 15 | Ask | Sameep | 0:24 |
 
 ## Slide operator
 
@@ -85,7 +85,7 @@ This works now because AI can turn a mechanic's rough notes into a clear quote i
 
 **10. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops told us it would save time and paperwork, cut disputes, and build trust with customers. That's who we're for: honest workshops. We're talking to two about a free trial, and they'd decide whether to pay afterwards. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. Workshops told us it would save time and paperwork, cut disputes, and build trust with customers. That's who we're for: honest workshops. Two have agreed to a free trial, and we're talking to more. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **11. Competition** (Sameep)
 
@@ -105,7 +105,7 @@ We're Safaa and Sameep, for Group 8. We've interviewed ten workshops and built a
 
 **15. Ask** (Sameep)
 
-Now we need real workshops. Help us run one pilot: six Inner West garages, three months. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
+Now we need real workshops. Help us run one pilot: six Inner West garages, three months. Two workshops have already agreed to trial it. It's a success if three of them put a card on file. Because the next time someone like Mia walks up to that counter, the bill shouldn't be a surprise.
 
 ## Demo video script (0:29)
 
@@ -169,7 +169,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
 - **Is the invoice a real tax invoice?** Not yet. It's a prototype invoice with a sample ABN, and it hasn't been checked against tax invoice rules. It's built only from approved lines, and marking it paid moves no money.
 - **Do workshops have to enter jobs twice?** Paper workshops don't: in the prototype, the approved quote becomes the invoice. The Xero export file hasn't been tested in Xero, and we don't connect to MYOB. Workshops with full software would enter jobs twice, because we haven't built a direct connection.
-- **Have any workshops signed up?** We're talking to two about a free trial, and they'd decide whether to pay afterwards. Neither has committed in writing yet.
+- **Have any workshops signed up?** Two have agreed to a free trial, and they'll decide whether to pay afterwards. Neither has paid yet. We're talking to more. One came through a team member's personal contact, so say that if asked. We don't name either workshop.
 - **Would paper workshops really pay?** We don't know for sure. Four workshops said they'd pay, and two of those already use workshop software. In our notes, the pen-and-paper workshop said no and two on templates didn't commit. The pilot needs to test this.
 - **Isn't selling parts a conflict of interest?** It's a membership tier, not a cut of each job. Workshops pay a higher flat monthly fee for access to our parts suppliers, so we earn nothing more when a driver says yes. Drivers still see every line and approve it.
 - **Aren't cheap imported parts risky, especially brakes?** Yes, so quality comes first. We'd start with rare and hard-to-find parts from vetted suppliers, and only list parts that meet Australian standards, with a clear warranty.
