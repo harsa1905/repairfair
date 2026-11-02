@@ -540,7 +540,9 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 
 /* job card header: a sample plate, the car and the job */
 .jobhead { display: flex; align-items: center; gap: 10px; margin: 2px 2px 10px; }
-.plate { flex: none; display: inline-flex; flex-direction: column; align-items: center; background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 2px 8px 4px; color: var(--ink); font: 700 17px/1 var(--display); letter-spacing: .6px; white-space: nowrap; }
+.plate { position: relative; flex: none; display: inline-flex; flex-direction: column; align-items: center; background: #fff; border: 1.5px solid var(--ink); border-radius: 6px; padding: 2px 13px 4px; color: var(--ink); font: 700 17px/1 var(--display); letter-spacing: .6px; white-space: nowrap; text-shadow: 0 1px 0 #fff; box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3px var(--line); }
+.plate::before, .plate::after { content: ""; position: absolute; top: 50%; width: 4px; height: 4px; margin-top: -2px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--faint) 75%); }
+.plate::before { left: 5px; } .plate::after { right: 5px; }
 .plate small { font-family: Barlow, sans-serif; font-size: 11px; font-weight: 600; line-height: 1.2; color: var(--muted); letter-spacing: 0; }
 .jh-t { min-width: 0; line-height: 1.25; }
 .jh-t b { display: block; font-size: 15px; font-weight: 600; color: var(--ink); }
@@ -556,4 +558,54 @@ textarea:disabled { color: var(--muted); background: var(--grey-bg); }
 .wheel { fill: var(--cl-off); stroke: var(--cluster); stroke-width: 1.5; transition: fill .2s var(--ease-out), stroke .2s var(--ease-out); }
 .wheel.quoted { fill: var(--cluster); stroke: var(--cl-soft); }
 .wheel.on { stroke: var(--cluster); }
-.wheel.on.needed_now { fill: var(--lit-red); } .wheel.on.can_wait { fill: var(--lit-amber); } .wheel.on.optional { fill: var(--lit-green); } .wheel.on.to_confirm { fill: var(--cl-ink); }
+.wheel.on.needed_now { fill: var(--lit-red); color: var(--lit-red); } .wheel.on.can_wait { fill: var(--lit-amber); color: var(--lit-amber); } .wheel.on.optional { fill: var(--lit-green); color: var(--lit-green); } .wheel.on.to_confirm { fill: var(--cl-ink); color: var(--cl-ink); }
+
+/* the dashboard: lit lamps glow, and the panel has an edge like a moulded binnacle */
+:root { --cl-well: #06296F; }
+.cluster { box-shadow: inset 0 1px 0 rgba(255,255,255,.2), inset 0 -3px 8px rgba(3,18,60,.3); }
+.lamp.on .i { filter: drop-shadow(0 0 5px currentColor); }
+.wheel.on { filter: drop-shadow(0 0 3px currentColor); }
+
+/* odometer total: each digit is a drum in a dark window */
+.readout.odo { display: flex; align-items: center; gap: 3px; font-size: 46px; letter-spacing: 0; }
+.odo-c { padding-right: 2px; }
+.drum { display: inline-block; width: .64em; height: 1.2em; overflow: hidden; border-radius: 6px; background: linear-gradient(180deg, #031A4D 0%, var(--cl-well) 26%, #0A3796 50%, var(--cl-well) 74%, #031A4D 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.14); }
+.reel { display: block; }
+.reel i { display: block; height: 1.2em; line-height: 1.2em; text-align: center; font-style: normal; }
+
+/* rev counter strip */
+.tach { display: flex; align-items: flex-end; gap: 3px; height: 13px; margin-top: 9px; }
+.with-car .tach { margin-right: 74px; }
+.tach i { flex: 1; height: 8px; border-radius: 1px; background: var(--cl-off); opacity: .55; transition: background .12s var(--ease-out) calc(var(--k) * 7ms), opacity .12s var(--ease-out) calc(var(--k) * 7ms); }
+.tach i:nth-child(6n+1) { height: 13px; }
+.tach i.on { background: var(--cl-ink); opacity: 1; }
+
+/* key on: every light up for a moment */
+.keyon .lamp { color: var(--cl-ink); }
+.keyon .wheel { fill: var(--cl-ink); stroke: var(--cluster); }
+.keyon .tach i { background: var(--cl-ink); opacity: 1; }
+
+/* rubber stamps */
+.rubber { display: inline-block; rotate: var(--tilt, -3deg); padding: 3px 8px 4px; border: 2px solid currentColor; border-radius: 5px; color: var(--brand-700); text-align: center; line-height: 1.1; filter: url(#ink); }
+.rubber b { display: block; font: 700 13.5px/1.15 var(--display); letter-spacing: .9px; text-transform: uppercase; white-space: nowrap; }
+.rubber small { display: block; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.rubber.green { color: var(--green-t); }
+
+/* paper: a perforated job card and a punched logbook */
+.notes-card { position: relative; padding-top: 19px; }
+.notes-card::before { content: ""; position: absolute; top: 8px; left: 14px; right: 14px; height: 5px; background: radial-gradient(circle, var(--grey-bg) 2px, transparent 2.5px) 0 0 / 11px 5px repeat-x; }
+.nc-top { align-items: center; }
+.nc-top small { display: block; font-size: 13px; color: var(--muted); }
+.log-title { margin-top: 2px; font: 600 21px/1.2 var(--display); }
+.job { padding-left: 36px; background: radial-gradient(circle at 13px 24px, var(--grey-bg) 4.5px, transparent 5px), radial-gradient(circle at 13px calc(100% - 24px), var(--grey-bg) 4.5px, transparent 5px), linear-gradient(90deg, transparent 26px, var(--brand-100) 26px 27.5px, transparent 27.5px), #fff; }
+.job .jd { margin-left: -22px; padding-left: 0; background: #fff; }
+.log-stamps { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 9px 0 3px 1px; }
+
+/* invoice: a torn-off bottom edge, with the stamp on the bill-to line */
+.sheet.inv { border-radius: 16px 16px 0 0; -webkit-mask: radial-gradient(circle 5px at 8px 100%, transparent 96%, #000) 0 0 / 16px 100%; mask: radial-gradient(circle 5px at 8px 100%, transparent 96%, #000) 0 0 / 16px 100%; }
+.inv .res:last-child { padding-bottom: 14px; }
+.inv-to { position: relative; }
+.inv-to .rubber { position: absolute; right: 16px; top: 12px; }
+.inv-to .rubber b { font-size: 21px; letter-spacing: 2px; }
+.tach + .lights { margin-top: 6px; }
+.notes-card textarea { min-height: 168px; }

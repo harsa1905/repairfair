@@ -22,6 +22,7 @@ const WORKSHOP = "City Auto";
 const SAMPLE_ABN = "00 000 000 000";
 const SAMPLE_PLATE = "DEMO-1044";  // too long to be a real plate, and always shown with "sample"
 const URGENCY = ["needed_now", "to_confirm", "can_wait", "optional"];
+const TACH_TICKS = 34;
 const PHONE_MASK = "04•• ••• 812";
 
 const SEED_HISTORY = [
@@ -73,7 +74,7 @@ const fresh = () => ({
   tab: "quote", ws: "compose", dr: "home", drBanner: null, stage: null, stageAt: {}, readyBy: null,
   notes: DEFAULT_NOTES, extraNotes: DEFAULT_EXTRA, reported: DEFAULT_REPORTED, suggest: null, suggesting: false,
   voice: { mode: "idle", source: null },
-  quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
+  shown: 0, quote: null, extra: null, source: null, extraSource: null, notice: null, extraNotice: null,
   err: null, extraResult: null,
   sentAt: null, deliveredAt: null, viewedAt: null, approvedAt: null, xero: null, inv: null, invOpen: false,
   lang: "en", trans: {}, transSource: null, transNotice: null, translating: false,
@@ -397,9 +398,10 @@ function checkPanel(q, group) {
     }).join("")}</div>`;
 }
 // The top of the job, like a job card. The plate's look isn't based on any state's design.
+const plate = () => `<span class="plate"><small>sample</small>${SAMPLE_PLATE}</span>`;
 function jobHead() {
   const q = state.quote;
-  return `<div class="jobhead"><span class="plate"><small>sample</small>${SAMPLE_PLATE}</span>
+  return `<div class="jobhead">${plate()}
     <span class="jh-t"><b>${esc(q.car || "Job 1044")}</b><span>${esc(customer())}${q.car ? ", job 1044" : ""}</span></span></div>`;
 }
 function refreshCheck(group) {
@@ -473,7 +475,7 @@ function wsQuoteTab() {
   switch (state.ws) {
     case "compose":
       // The notes fill the screen like a job card; the build button sits in the dock below
-      return `${wsReported()}<label class="notes-card"><span class="nc-top"><b>Mechanic's notes</b><span>Job 1044, checked in 8:05 am</span></span>
+      return `${wsReported()}<label class="notes-card"><span class="nc-top"><span><b>Mechanic's notes</b><small>Job 1044, checked in 8:05 am</small></span>${plate()}</span>
           <textarea id="notes">${esc(state.notes)}</textarea>
           <span class="photos"><span class="ph">${ic("camera", 18)}</span><span class="ph">${ic("camera", 18)}</span><span class="ph-t">2 photos</span>${voiceControl()}</span>${voiceDone()}</label>${err}`;
     case "loading":
@@ -509,7 +511,8 @@ function wsJobTab() {
   const err = state.err ? `<div class="err">${esc(state.err)}<button class="btn soft" data-act="use-demo">Use saved examples</button></div>` : "";
   if (state.stage == null) return `<div class="blank">${ic("part", 36)}<b>No job in progress</b>A job starts here as soon as a customer approves a quote.</div>`;
   // One panel for the approval (the same lights Mia sees), then the job, then her decisions with their reminders
-  let h = `${jobHead()}<div class="cluster"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>
+  const car = carDiagram([...q.items, ...(state.xSentAt ? x.items : [])], "job");
+  let h = `${jobHead()}<div class="cluster ${car ? "with-car" : ""}"><div class="cl-top"><b>${esc(customer())} approved</b><span>${esc(timeOf(state.approvedAt))}</span></div>${car}
       <div class="readout green">${money(sumApproved(q.items))}</div>
       <div class="cl-sub">Start the work on the approved items only.</div>
       ${lamps(q.items, "ws")}
@@ -562,12 +565,14 @@ function invoice() {
 }
 const invDate = (d) => d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" });
 const invText = (inv) => `Hi ${inv.contact}, your invoice from ${WORKSHOP} is ready: ${cents(inv.total)}. View it here: repairfair.au/i/8F2K`;
+// A rubber stamp, inked by the #ink filter in index.html
+const rubber = (big, small, tilt, cls = "") => `<span class="rubber ${cls}" style="--tilt:${tilt}deg"><b>${esc(big)}</b>${small ? `<small>${esc(small)}</small>` : ""}</span>`;
 const resRow = (label, value, sub) => `<div class="res"><span>${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ""}</span><b>${value}</b></div>`;
 // Shared by both phones. It stays in English whatever language the driver viewed the quote in.
 function invoiceSheet(inv) {
   return `<div class="sheet inv" lang="en">
       <div class="inv-head"><div><b>${WORKSHOP}</b><span>ABN ${SAMPLE_ABN} (sample)</span></div><div class="inv-no"><b>Invoice ${inv.number}</b><span>${esc(invDate(inv.date))}</span></div></div>
-      <div class="inv-to"><span>Bill to</span><b>${esc(inv.contact)}</b>${inv.car ? `<small>${esc(inv.car)}</small>` : ""}</div>
+      <div class="inv-to"><span>Bill to</span><b>${esc(inv.contact)}</b>${inv.car ? `<small>${esc(inv.car)}</small>` : ""}${inv.paidAt ? rubber("Paid", dayOf(inv.paidAt), -7, "green") : ""}</div>
       ${inv.lines.map((l) => resRow(l.desc, cents(l.amount), l.hours ? `${l.qty} hrs at ${cents(l.unit)}` : "")).join("")}
       ${resRow("GST included (10%)", cents(inv.gst))}
       ${resRow("Total including GST", cents(inv.total))}
@@ -739,9 +744,9 @@ function jobTotal(j) { return j.items.filter((i) => i.approved).reduce((s, i) =>
 function wsHistoryTab() {
   const q = state.search.trim().toLowerCase();
   const jobs = state.history.filter((j) => !q || [j.id, j.customer, j.car, j.job, j.invoice?.number, ...j.items.map((i) => i.name)].join(" ").toLowerCase().includes(q));
-  let h = `<input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
+  let h = `<div class="lbl log-title">Job logbook</div><input class="search" id="search" placeholder="Search customer, car, job or item" value="${esc(state.search)}">`;
   if (!jobs.length) return h + `<div class="small">No jobs match “${esc(state.search)}”.</div>`;
-  h += jobs.map((j) => {
+  h += jobs.map((j, k) => {
     const open = state.open === j.id;
     let d = "";
     if (open) {
@@ -756,7 +761,8 @@ function wsHistoryTab() {
     return `<div class="job ${j.isNew ? "new" : ""}" data-act="job" data-id="${j.id}">
       <div class="jt"><span>${esc(j.job)}${j.isNew ? '<span class="tagnew">New</span>' : ""}</span><span>${money(jobTotal(j))}</span></div>
       <div class="jm">${esc(j.customer)}, ${esc(j.car)}. ${esc(j.date)}, ${j.id}</div>
-      <div class="jp">${ic("check", 16)}Approved by text link, ${esc(j.approvedAt)}${j.extra ? `. Extra ${esc(j.extra.decision)}` : ""}</div>
+      <div class="log-stamps">${rubber("Approved by text", j.approvedAt, [-2, 1.5, -1, 2][k % 4])}${j.invoice?.paidAt ? rubber("Paid", j.invoice.number, -6, "green") : ""}</div>
+      ${j.extra ? `<div class="jp">${ic("check", 16)}Extra ${esc(j.extra.decision)}, ${esc(j.extra.at)}</div>` : ""}
       ${j.invoice ? `<div class="jp">${ic("check", 16)}Invoice ${j.invoice.number}. ${esc(invStatus(j.invoice))}</div>` : ""}${d}</div>`;
   }).join("");
   return h + `<div class="small">Every approval is timestamped and searchable. No more digging through old books.</div>`;
@@ -827,20 +833,42 @@ function wheelClass(items, w) {
 }
 const WHEELS = { fl: [3, 21], fr: [51, 21], rl: [3, 79], rr: [51, 79] };
 // A car from above with its front at the top, like the door warning on a dashboard. Left out when no item has a known place.
-function carDiagram(items) {
+function carDiagram(items, group) {
   if (!items.some((i) => wheelsOf(i).length)) return "";
   return `<svg class="car" viewBox="0 0 64 120" width="64" height="120" role="img" aria-label="Car from above, with the quoted work lit up">
     <path class="car-body" d="M32 3C20 3 13 7 11.5 17L9.5 48V92C9.5 106 13 116 24 117H40C51 116 54.5 106 54.5 92V48L52.5 17C51 7 44 3 32 3Z"/>
     <path class="car-glass" d="M17 47C24 42 40 42 47 47L44 59C36 56 28 56 20 59ZM20 92C28 95 36 95 44 92L47 102C38 106 26 106 17 102Z"/>
     <path class="car-line" d="M20 59V92M44 59V92M10 47L5.5 45M54 47L58.5 45"/>
-    ${Object.entries(WHEELS).map(([w, [x, y]]) => `<rect class="${wheelClass(items, w)}" id="wheel-${w}" x="${x}" y="${y}" width="10" height="21" rx="3.5"/>`).join("")}
+    ${Object.entries(WHEELS).map(([w, [x, y]]) => `<rect class="${wheelClass(items, w)}" id="wheel-${group}-${w}" x="${x}" y="${y}" width="10" height="21" rx="3.5"/>`).join("")}
   </svg>`;
 }
+// The total reads like an odometer: each digit is a drum, and its reel rolls to the new number.
+const odoHTML = (n) => [...money(n)].map((c) => (/\d/.test(c)
+  ? `<span class="drum" aria-hidden="true"><span class="reel" style="transform:translateY(-${c}0%)">${[..."0123456789"].map((d) => `<i>${d}</i>`).join("")}</span></span>`
+  : `<span class="odo-c" aria-hidden="true">${c}</span>`)).join("");
+function rollTotal() {
+  const el = $("drRead"), n = state.quote ? sumApproved(state.quote.items) : 0;
+  if (!el || n === state.shown) return;
+  const reels = [...el.querySelectorAll(".reel")], from = money(state.shown).replace(/\D/g, "").padStart(reels.length, "0").slice(-reels.length);
+  const to = money(n).replace(/\D/g, "");
+  state.shown = n;
+  if (M && !still) reels.forEach((r, k) => M.animate(r, { transform: [`translateY(-${from[k]}0%)`, `translateY(-${to[k]}0%)`] }, { duration: 0.6, delay: (reels.length - k) * 0.05, ease: EASE_OUT }));
+}
+// A strip of ticks like a rev counter, filled to the share of the quote being approved
+const tachLit = (q) => (sumAll(q.items) ? Math.round((sumApproved(q.items) / sumAll(q.items)) * TACH_TICKS) : 0);
+const tach = (q) => `<div class="tach" id="drTach" aria-hidden="true">${Array.from({ length: TACH_TICKS }, (_, k) => `<i class="${k < tachLit(q) ? "on" : ""}" style="--k:${k}"></i>`).join("")}</div>`;
+// Turning the key: every light comes on for a moment and the strip sweeps up, then they settle on the real state.
+function keyOn() {
+  const panel = $("dr").querySelector(".cluster");
+  later(120, () => panel.classList.add("keyon"));
+  later(820, () => panel.classList.remove("keyon"));
+}
 function drQuotePanel(q) {
-  const car = carDiagram(q.items);
+  const car = carDiagram(q.items, "quote");
   return `<div class="cluster ${car ? "with-car" : ""}"><div class="cl-top"><b>City Auto</b><span>${esc(q.job_title)}</span></div>${car}
-    <div class="readout" id="drRead">${money(sumApproved(q.items))}</div>
+    <div class="readout odo" id="drRead" role="img" aria-label="${money(sumApproved(q.items))}">${odoHTML(sumApproved(q.items))}</div>
     <div class="cl-sub" id="drSub">to approve today, out of ${money(sumAll(q.items))} quoted</div>
+    ${tach(q)}
     ${lamps(q.items, "quote")}
     <div class="cl-foot">${ic("check", 18)}Checked by a City Auto mechanic before it was sent</div>
     ${fairSummary(q.items) ? `<div class="cl-foot">${ic("check", 18)}${fairSummary(q.items)}</div>` : ""}</div>`;
@@ -853,10 +881,11 @@ function toggleItem(group, i) {
   row.classList.toggle("off", !it.approved);
   row.querySelector(".sw").setAttribute("aria-checked", it.approved);
   $(`lamp-${group}-${i}`).classList.toggle("on", it.approved);
-  Object.keys(WHEELS).forEach((w) => $(`wheel-${w}`)?.setAttribute("class", wheelClass(state.quote.items, w)));
-  const read = $("drRead");
-  read.textContent = money(sumApproved(state.quote.items));
-  pulse(read);
+  Object.keys(WHEELS).forEach((w) => $(`wheel-quote-${w}`)?.setAttribute("class", wheelClass(state.quote.items, w)));
+  const read = $("drRead"), total = sumApproved(state.quote.items), lit = tachLit(state.quote);
+  read.innerHTML = odoHTML(total); read.setAttribute("aria-label", money(total));
+  rollTotal();
+  [...$("drTach").children].forEach((t, k) => t.classList.toggle("on", k < lit));
   renderDriverChrome();
 }
 
@@ -918,7 +947,7 @@ function renderDriver() {
         <div class="small">Nothing starts until you approve. Your approval is saved with the quote.</div>
         <div class="small">Typical part prices are sample data for this demo. The labour range comes from published workshop rates.</div>`;
     case "approved":
-      return `<div class="cluster"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>
+      return `<div class="cluster with-car"><div class="cl-top"><b>You approved</b><span>${esc(carName())}</span></div>${carDiagram(q.items, "done")}
           <div class="readout green">${money(sumApproved(q.items))}</div>
           <div class="cl-sub">City Auto has your approval in writing.</div>
           ${lamps(q.items, "done")}
@@ -927,7 +956,7 @@ function renderDriver() {
         <div class="lbl">Your decisions</div><div class="sheet">${decisions(decItems(q.items))}</div>
         ${drFollowups()}`;
     case "extra":
-      return `<div class="cluster"><div class="cl-top"><b>Found mid-job</b><span>${esc(q.job_title)}</span></div>
+      return `<div class="cluster with-car"><div class="cl-top"><b>Found mid-job</b><span>${esc(q.job_title)}</span></div>${carDiagram(x.items.map((it) => ({ ...it, approved: true })), "extra")}
           <div class="readout">${money(sumAll(x.items))}</div>
           <div class="cl-sub"><b>${esc(x.items[0].name)}</b> needs your OK before City Auto continues.</div>
           ${lamps(x.items.map((it) => ({ ...it, approved: true })), "extra")}</div>
@@ -1024,6 +1053,8 @@ function render() {
   const drChanged = state.dr !== lastDr;
   $("dr").innerHTML = `<div>${renderDriver()}</div>`;
   if (drChanged) { $("dr").scrollTop = 0; enter($("dr").firstElementChild); }
+  if (drChanged && state.dr === "quote" && !still) keyOn();
+  rollTotal();
   lastDr = state.dr;
   renderDriverChrome();
   renderWsDock();
@@ -1039,7 +1070,11 @@ function enter(el) {
   if (!M || still || !el) return;
   M.animate([...el.children], { opacity: [0, 1], transform: ["translateY(8px)", "none"] }, { duration: 0.28, delay: M.stagger(0.035), ease: EASE_OUT });
 }
-function pulse(el) { if (M && !still && el) M.animate(el, { opacity: [0.4, 1], transform: ["translateY(-4px)", "none"] }, { duration: 0.2, ease: EASE_OUT }); }
+// A stamp lands hard and fast
+function thump() {
+  if (still) return;
+  document.querySelectorAll(".inv .rubber").forEach((s) => s.animate([{ scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1 }], { duration: 200, easing: "cubic-bezier(.5,0,.9,.4)" }));
+}
 const doc = (name) => (name === "extra" ? state.extra : state.quote);
 const grp = (name) => doc(name).items;
 
@@ -1176,7 +1211,7 @@ document.addEventListener("click", (e) => {
     later(500, () => toast(`Invoice sent to ${customer()}`));
   }
   if (act === "open-invoice") { state.drBanner = null; state.dr = "invoice"; state.inv.viewedAt ||= new Date(); }
-  if (act === "inv-paid") { state.inv.paidAt = new Date(); fly("packetOut"); toast(`Invoice ${state.inv.number} marked paid`); }
+  if (act === "inv-paid") { state.inv.paidAt = new Date(); fly("packetOut"); toast(`Invoice ${state.inv.number} marked paid`); render(); thump(); return; }
   if (act === "xero-open") { state.xero = "preview"; $("ws").scrollTop = 0; }
   if (act === "xero-send") { state.xero = "sent"; $("ws").scrollTop = 0; }
   if (act === "xero-close") state.xero = null;

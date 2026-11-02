@@ -84,7 +84,9 @@ answers, not sales.
 - **Offline:** fonts (Barlow, SIL Open Font License) and the Motion animation library (MIT) are stored in
   `static/vendor/`.
 - **Design:** each screen leads with a deep blue "instrument panel" showing the number that matters and warning
-  lights, above plain lists with normal phone controls. Colour only means urgency or state.
+  lights, above plain lists with normal phone controls. Colour only means urgency or state. The car details are hand-built
+  in CSS and SVG: odometer digits that roll, a rev counter strip, lights that sweep on like turning the key, a paper job
+  card, a punched logbook and inked rubber stamps.
 - Built with AI coding assistance (Claude Code).
 
 For a plain-English guide to the setup, see [docs/how-it-works.md](docs/how-it-works.md).
