@@ -22,7 +22,7 @@ The story takes about 5:11 with pauses. Safaa opens and tells Mia's story throug
 
 ## Slide operator
 
-One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video. The pitch will be pre-recorded, so use the same cues to sync the slides to the audio. The bill on slide 5 rolls up for about 1.5 seconds, and the demo video starts by itself.
+One team member runs the slides, so Safaa and Sameep only talk. Press the right arrow as you hear the cue. Don't press during the video. We present live, so run the HTML deck from the laptop, not the PDF. Slide 2 needs two extra presses for its cards. The bill on slide 3 rolls up for about 1.5 seconds, and the demo video starts by itself on slide 7.
 
 | Next | Press after |
 |---|---|
@@ -129,7 +129,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Isn't this already required?** NSW advice is to get a quote in writing, and repairers must only do authorised work. We make that record easy to create and keep.
 - **Isn't another startup doing this?** Yes, there are recent startups offering full workshop systems. That's a good sign the problem is real. They replace your system, and we add one step.
 - **Aren't you more expensive than Workshop Software?** Our $49 is below its plans, but for a workshop already on one, it's an extra cost. Don't say "we're cheaper". If you're on a top-tier system, we're probably not for you yet. Our first customers are the workshops on paper or basic software. For them it's about what Workshop Software's two-way texting add-on costs alone, with nothing to switch.
-- **How many workshops have no software?** Of the five workshops where we recorded it, three had no workshop software. That's a small sample, so we wouldn't scale it up, but they're our first customers.
+- **How many workshops have no software?** Of the five workshops where we recorded it, three had no workshop software. That's a small sample, so we wouldn't scale it up.
 - **Why would dodgy workshops use this?** They wouldn't, and they're not our customer. We're for honest workshops, who lose money when a customer says "I never agreed to that". Two of our ten had lost money on extras.
 - **Isn't 1 in 5 a small share of all reviews?** Yes. Bad reviews are about 7% of all reviews, so it's about 1.4% overall. It shows what people complain about, not how often it happens. For how often, five of ten bills in our driver interviews rose by more than 10%, which is a small sample.
 - **Do drivers choose garages because of this?** We have no evidence they do. Only 1 of 25 drivers got a second quote, so we sell to workshops, not to drivers shopping around.
