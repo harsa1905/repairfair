@@ -6,17 +6,17 @@ The story takes about 5:00 with pauses. Safaa opens and tells Mia's story throug
 |---|---|---|---|
 | 1 | RepairFair | Safaa | 0:10 |
 | 2 | The job (estimate, call, yes) | Safaa | 0:36 |
-| 3 | The bill | Safaa | 0:21 |
+| 3 | The bill | Safaa | 0:19 |
 | 4 | 1 in 5 | Safaa | 0:18 |
 | 5 | The insight | Safaa | 0:26 |
 | 6 | The solution | Safaa | 0:08 |
 | 7 | Demo | Video | 0:29 |
-| 8 | Same job | Safaa | 0:14 |
+| 8 | Same job | Safaa | 0:13 |
 | 9 | Why now | Safaa | 0:16 |
-| 10 | Traction | Safaa | 0:21 |
-| 11 | Competition | Sameep | 0:24 |
-| 12 | Business model | Sameep | 0:15 |
-| 13 | Market | Sameep | 0:29 |
+| 10 | Traction | Safaa | 0:24 |
+| 11 | Competition | Sameep | 0:18 |
+| 12 | Business model | Sameep | 0:24 |
+| 13 | Market | Sameep | 0:26 |
 | 14 | Team | Sameep | 0:06 |
 | 15 | Ask | Sameep | 0:27 |
 
@@ -38,8 +38,8 @@ One team member runs the slides, so Safaa and Sameep only talk. Press the right 
 | Slide 9 | "...the mechanic has proof." |
 | Slide 10 | "...saved as the record." |
 | Slide 11 | "...that's the next step." |
-| Slide 12 | "...learns to trust a workshop." |
-| Slide 13 | "...fewer phone calls a month." |
+| Slide 12 | "...the workshop can prove it." |
+| Slide 13 | "...covers the fee." |
 | Slide 14 | "...take on bigger systems." |
 | Slide 15 | "...built a prototype." |
 
@@ -57,7 +57,7 @@ Meet Mia. Her brakes need doing, so she drops her car at a local workshop. The e
 
 **3. The bill** (Safaa)
 
-When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Was any of it urgent? Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
+When she picks it up, the bill is eleven hundred and twenty. [Pause.] What did she actually approve? Mia's made up. The numbers aren't: a Sydney driver really was quoted three hundred and billed eleven hundred and twenty for brakes.
 
 **4. 1 in 5** (Safaa)
 
@@ -77,7 +77,7 @@ Plays with its own voice. Stay silent.
 
 **8. Same job** (Safaa)
 
-Same brakes. Same Mia. This time it's on her phone, so she can read it properly. The pads are urgent and the rotors can wait. Every line on the bill is one she approved, and the mechanic has proof.
+Same brakes. This time it's on her phone, so she can read it properly. The pads are urgent and the rotors can wait. Every line on the bill is one she approved, and the mechanic has proof.
 
 **9. Why now** (Safaa)
 
@@ -85,19 +85,19 @@ This works now because AI can turn a mechanic's rough notes into a clear quote i
 
 **10. Traction** (Safaa)
 
-We took it to ten workshops. Six want to try it. Four said they'd pay. The gap was approving extras, so we built around that. Two had already lost money on extras. That's who we're for: honest workshops. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
+We took it to ten workshops. Six want to try it. Four said they'd pay. Two had already lost money on extras. That's who we're for: honest workshops. We're talking to two about a free trial, and they'd decide whether to pay afterwards. We haven't got paying customers yet, and that's the next step. [Hand over to Sameep.]
 
 **11. Competition** (Sameep)
 
-Three of the five workshops we recorded have no workshop software. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We make sure the driver understands, and the workshop can prove it. We believe that's how a new customer learns to trust a workshop.
+Three of the five workshops we recorded have no workshop software. We replace their paper quote, the phone call and the paper invoice. Others offer approval, but only inside a full system. We make sure the driver understands, and the workshop can prove it.
 
 **12. Business model** (Sameep)
 
-Workshops pay forty-nine dollars a month. Drivers pay nothing. Small workshops start free, up to twenty quotes, and busy ones outgrow that. We estimate up to fifty fewer phone calls a month.
+Workshops pay forty-nine dollars a month. Drivers pay nothing, and small workshops start free. We believe a customer who understands says yes faster. You get paid for the extras, make up to fifty fewer calls a month by our estimate, and a "not now" comes back as a reminder. One hour of that work covers the fee.
 
 **13. Market** (Sameep)
 
-Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West, close enough to sign in person. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we take on bigger systems.
+Car servicing and repairs are a ten-billion-dollar market. We start with six pilot workshops, then thirty from the ninety-six we've found in the Inner West. Sydney comes once the pilot hits its target. Then a light system, and a trusted network of garages with free tools for drivers. That's how we take on bigger systems.
 
 **14. Team** (Sameep)
 
@@ -143,7 +143,7 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **What will you do with the data?** With consent from workshops and drivers, approval records could show which garages quote clearly and how prices compare. Workshops couldn't pay for a better ranking, or the trust goes. It's a plan for later, not something we've built.
 - **How do drivers benefit?** They stay free. Later we plan a car history across garages, a way to find trusted garages, a fair-price check from real jobs, and verified reviews. Only 1 of 25 drivers got a second quote, so drivers may not shop around. That's why it's a later stage.
 - **Why not just use a cheap full system like OneBookPlus?** Many workshops should, if they're happy to switch. OneBookPlus's approval add-on can cost less than we do. Our customers are workshops that won't change what they use, such as paper, or accounting software like Xero or MYOB. We haven't proven that a simpler start beats that, and we don't know how many of these workshops exist. The pilot will test it.
-- **Why would a workshop pay if the problem is the driver's?** It's one phone call with two victims. The workshop gets paid for extras because it can prove the yes, and two of ten had lost money on them. It spends less time chasing customers, and three of ten struggle to reach them. Work a driver declines becomes a reminder, not a lost job.
+- **Why would a workshop pay if the problem is the driver's?** Because a confused customer costs the workshop money. A customer who understands the quote can say yes in writing, and we believe they'll do it faster. The workshop gets paid for the extras, because it can prove the yes, and two of ten had lost money on them. It spends less time chasing, and three of ten struggle to reach customers. A "not now" becomes a reminder, not a lost job. One hour of that work covers the fee, by our estimate.
 - **Won't customers just reject more work?** Maybe, and we don't know yet. Declined items become reminders, and the pilot will show what happens.
 - **Do pilot garages pay?** Not during the pilot. Our target is three of six putting a card on file by the end, with billing starting after their free months. That's a target, not a result.
 - **What will the pilot measure?** Time spent explaining quotes, whether final bills match what was approved, and whether drivers understood what they approved. A driver declining an item isn't success, and a higher bill can be fine if it was authorised. It also tests whether workshops save enough time to justify paying.
@@ -168,3 +168,4 @@ The other features (reminder booking, suggested checks, Send to Xero) are for Q&
 - **Is the Xero connection real?** Not yet. The demo shows the planned flow.
 - **Is the invoice a real tax invoice?** Not yet. It's a prototype invoice with a sample ABN, and it hasn't been checked against tax invoice rules. It's built only from approved lines, and marking it paid moves no money.
 - **Do workshops have to enter jobs twice?** Paper workshops don't: in the prototype, the approved quote becomes the invoice. The Xero export file hasn't been tested in Xero, and we don't connect to MYOB. Workshops with full software would enter jobs twice, because we haven't built a direct connection.
+- **Have any workshops signed up?** We're talking to two about a free trial, and they'd decide whether to pay afterwards. Neither has committed in writing yet.
